@@ -1,0 +1,1358 @@
+\documentclass[9pt]{beamer}
+\mode<presentation>
+{
+  \usetheme{Warsaw}
+  \usecolortheme{crane}
+  \setbeamercovered{transparent}
+}
+
+%\usepackage{pseudocode}
+
+\usepackage[english]{babel}
+\usepackage[latin1]{inputenc}
+\usepackage{times}
+\usepackage[T1]{fontenc}
+\usepackage{verbatim}
+
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsfonts}
+\usepackage{pxfonts}
+%\usepackage{dsfont}
+%\usepackage{yfonts}
+\usepackage{amsthm}
+\usepackage{graphicx}
+
+\usepackage{bussproofs}
+\usepackage{proof}
+
+\usepackage{fancybox}
+\usepackage{fancyvrb}
+
+
+\usepackage{commands}
+
+
+% Sequent Calculus Proof Settings
+\EnableBpAbbreviations
+\def\fCenter{\mbox{\ $\vdash$\ }}
+
+
+% *************** Some colour definitions ***************
+\usepackage{color}
+
+\definecolor{greenyellow}   {cmyk}{0.15, 0   , 0.69, 0   }
+\definecolor{yellow}        {cmyk}{0   , 0   , 1   , 0   }
+\definecolor{goldenrod}     {cmyk}{0   , 0.10, 0.84, 0   }
+\definecolor{dandelion}     {cmyk}{0   , 0.29, 0.84, 0   }
+\definecolor{apricot}       {cmyk}{0   , 0.32, 0.52, 0   }
+\definecolor{peach}         {cmyk}{0   , 0.50, 0.70, 0   }
+\definecolor{melon}         {cmyk}{0   , 0.46, 0.50, 0   }
+\definecolor{yelloworange}  {cmyk}{0   , 0.42, 1   , 0   }
+\definecolor{orange}        {cmyk}{0   , 0.61, 0.87, 0   }
+\definecolor{burntorange}   {cmyk}{0   , 0.51, 1   , 0   }
+\definecolor{bittersweet}   {cmyk}{0   , 0.75, 1   , 0.24}
+\definecolor{redorange}     {cmyk}{0   , 0.77, 0.87, 0   }
+\definecolor{mahogany}      {cmyk}{0   , 0.85, 0.87, 0.35}
+\definecolor{maroon}        {cmyk}{0   , 0.87, 0.68, 0.32}
+\definecolor{brickred}      {cmyk}{0   , 0.89, 0.94, 0.28}
+\definecolor{red}           {cmyk}{0   , 1   , 1   , 0   }
+\definecolor{orangered}     {cmyk}{0   , 1   , 0.50, 0   }
+\definecolor{rubinered}     {cmyk}{0   , 1   , 0.13, 0   }
+\definecolor{wildstrawberry}{cmyk}{0   , 0.96, 0.39, 0   }
+\definecolor{salmon}        {cmyk}{0   , 0.53, 0.38, 0   }
+\definecolor{carnationpink} {cmyk}{0   , 0.63, 0   , 0   }
+\definecolor{magenta}       {cmyk}{0   , 1   , 0   , 0   }
+\definecolor{violetred}     {cmyk}{0   , 0.81, 0   , 0   }
+\definecolor{rhodamine}     {cmyk}{0   , 0.82, 0   , 0   }
+\definecolor{mulberry}      {cmyk}{0.34, 0.90, 0   , 0.02}
+\definecolor{redviolet}     {cmyk}{0.07, 0.90, 0   , 0.34}
+\definecolor{fuchsia}       {cmyk}{0.47, 0.91, 0   , 0.08}
+\definecolor{lavender}      {cmyk}{0   , 0.48, 0   , 0   }
+\definecolor{thistle}       {cmyk}{0.12, 0.59, 0   , 0   }
+\definecolor{orchid}        {cmyk}{0.32, 0.64, 0   , 0   }
+\definecolor{darkorchid}    {cmyk}{0.40, 0.80, 0.20, 0   }
+\definecolor{purple}        {cmyk}{0.45, 0.86, 0   , 0   }
+\definecolor{plum}          {cmyk}{0.50, 1   , 0   , 0   }
+\definecolor{violet}        {cmyk}{0.79, 0.88, 0   , 0   }
+\definecolor{royalpurple}   {cmyk}{0.75, 0.90, 0   , 0   }
+\definecolor{blueviolet}    {cmyk}{0.86, 0.91, 0   , 0.04}
+\definecolor{periwinkle}    {cmyk}{0.57, 0.55, 0   , 0   }
+\definecolor{cadetblue}     {cmyk}{0.62, 0.57, 0.23, 0   }
+\definecolor{cornflowerblue}{cmyk}{0.65, 0.13, 0   , 0   }
+\definecolor{midnightblue}  {cmyk}{0.98, 0.13, 0   , 0.43}
+\definecolor{navyblue}      {cmyk}{0.94, 0.54, 0   , 0   }
+\definecolor{royalblue}     {cmyk}{1   , 0.50, 0   , 0   }
+\definecolor{blue}          {cmyk}{1   , 1   , 0   , 0   }
+\definecolor{cerulean}      {cmyk}{0.94, 0.11, 0   , 0   }
+\definecolor{cyan}          {cmyk}{1   , 0   , 0   , 0   }
+\definecolor{processblue}   {cmyk}{0.96, 0   , 0   , 0   }
+\definecolor{skyblue}       {cmyk}{0.62, 0   , 0.12, 0   }
+\definecolor{turquoise}     {cmyk}{0.85, 0   , 0.20, 0   }
+\definecolor{tealblue}      {cmyk}{0.86, 0   , 0.34, 0.02}
+\definecolor{aquamarine}    {cmyk}{0.82, 0   , 0.30, 0   }
+\definecolor{bluegreen}     {cmyk}{0.85, 0   , 0.33, 0   }
+\definecolor{emerald}       {cmyk}{1   , 0   , 0.50, 0   }
+\definecolor{junglegreen}   {cmyk}{0.99, 0   , 0.52, 0   }
+\definecolor{seagreen}      {cmyk}{0.69, 0   , 0.50, 0   }
+\definecolor{green}         {cmyk}{1   , 0   , 1   , 0   }
+\definecolor{forestgreen}   {cmyk}{0.91, 0   , 0.88, 0.12}
+\definecolor{pinegreen}     {cmyk}{0.92, 0   , 0.59, 0.25}
+\definecolor{limegreen}     {cmyk}{0.50, 0   , 1   , 0   }
+\definecolor{yellowgreen}   {cmyk}{0.44, 0   , 0.74, 0   }
+\definecolor{springgreen}   {cmyk}{0.26, 0   , 0.76, 0   }
+\definecolor{olivegreen}    {cmyk}{0.64, 0   , 0.95, 0.40}
+\definecolor{rawsienna}     {cmyk}{0   , 0.72, 1   , 0.45}
+\definecolor{sepia}         {cmyk}{0   , 0.83, 1   , 0.70}
+\definecolor{brown}         {cmyk}{0   , 0.81, 1   , 0.60}
+\definecolor{tan}           {cmyk}{0.14, 0.42, 0.56, 0   }
+\definecolor{gray}          {cmyk}{0   , 0   , 0   , 0.50}
+\definecolor{black}         {cmyk}{0   , 0   , 0   , 1   }
+\definecolor{white}         {cmyk}{0   , 0   , 0   , 0   } 
+
+
+\newcommand{\hl}[1]{{\color{brickred} #1}}
+
+\newcommand{\mypause}{\pause}
+%\newcommand{\mypause}{}
+
+\title[Techniques for Proof Compression]{Techniques for Proof Compression}
+
+\author{Bruno Woltzenlogel Paleo}
+
+\institute[] {
+  \inst{}%
+}
+
+\date[27.06.13]
+{2013 June 27th}
+
+\begin{document}
+
+\begin{frame}
+  \titlepage
+\end{frame}
+
+
+\newcommand{\C}{\mathcal{C}}
+\newcommand{\CurryHoward}{\mathcal{I}}
+\newcommand{\ND}{$\textbf{ND}$}
+\newcommand{\NDd}{$\textbf{NDc}$}
+%\newcommand{\NDd}{$\textbf{ND}_\textbf{d}$}
+\newenvironment{calculus}{\begin{center}\begin{Sbox}\begin{minipage}{0.95\textwidth}}{\end{minipage}\end{Sbox}\fbox{\TheSbox}\end{center}}
+
+
+\newcommand{\tP}[1]{\xi[#1]}
+\newcommand{\tN}[1]{\zeta[#1]}
+\newcommand{\eS}{\epsilon}
+
+\newcommand{\AtPosition}{\textrm{At}}
+
+\begin{frame}{Motivations for Proof Compression}
+\begin{itemize}
+\item Sat/SMT-solvers, ATPs, proof assistants\ldots
+	\begin{itemize}
+	\item best techniques to find proofs do not necessarily find the best proofs
+	\item proofs can be redundant 
+	\end{itemize}
+\mypause
+\item Proof compression techniques may lead to: 
+	\begin{itemize}
+	\item smaller proof libraries
+	\item faster proof checking
+	\item smaller unsat cores
+	\item better interpolants
+	\item easier exchange of knowledge
+	\item discovery of interesting mathematical definitions and lemmas
+	\end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Techniques for Proof Compression}
+\begin{itemize}
+\item Sequent Calculus
+	\begin{itemize}
+	\item \emph{Cut-elimination}
+	\item \emph{Cut-introduction}
+	\end{itemize}
+\item Natural Deduction
+	\begin{itemize}
+	\item \alert{\emph{Allowing \emph{contextual} inferences}}
+	\end{itemize}
+\item Propositional Resolution
+	\begin{itemize}
+	\item \alert{\emph{Recycle Pivots (with Intersection)}}
+	\item \alert{\emph{Lower Units}}
+	\item \alert{Reduce\&Reconstruct}
+	\item \alert{Split}
+	\end{itemize}
+\end{itemize}
+\end{frame}
+
+
+
+
+% \begin{frame}{Why Deep Inference? Why Natural Deduction?}
+% \begin{itemize}
+% \item Sat/SMT-solvers and first-order ATPs do reason deeply \\
+% \mypause
+% \item e.g. preprocessing techniques change formulas deeply:
+% $$
+% \neg \neg \ex x. P(x) \vee \all y. Q(y)
+% \quad \longmapsto \quad
+% P(c_{sk}) \vee Q(v)
+% $$
+% %
+% \mypause
+% \item ATPs are not trusted and are hard to verify
+% \mypause
+% \item Verify the output proofs instead
+% \mypause
+% \item Replay the proofs in trusted proof assistants 
+% \mypause
+% \item ATP proofs are coarse-grained \\
+% 		(several (deep) steps hidden in a single inference)
+% \mypause
+% \item Finer-grained proofs may be desirable \\ (faster to check/replay, more informative)
+% \mypause
+% \item Fine-grained ATP proofs would need \alert{deep} inference rules
+% \mypause
+% \item Popular proof assistants follow a \emph{shallow} \alert{natural deduction} style
+% \mypause
+% \item Replaying deep inference in shallow natural deduction is \\ unnatural, inefficient and lengthy
+% \mypause
+% \item Therefore, \alert{contextual natural deduction}!
+% \end{itemize}
+% \end{frame}
+
+
+
+
+
+\begin{frame}{Natural Deduction}
+\begin{figure}[h!]
+\begin{calculus}
+\begin{prooftree}
+\AXC{$ $} \RightLabel{$axiom$}
+\UIC{$ \Gamma, A \seq A$}
+\end{prooftree}
+\begin{prooftree}
+\AXC{$ \Gamma, A \seq B$} \RightLabel{$\imp_I$}
+\UIC{$ \Gamma \seq A \imp B$}
+\end{prooftree}
+\begin{prooftree}
+\AXC{$ \Gamma \seq A \imp B $}
+		\AXC{$ \Gamma \seq A$} \RightLabel{$\imp_E$}
+	\BIC{$ \Gamma \seq B$}
+\end{prooftree}
+\end{calculus}
+\caption{The natural deduction calculus \ND}
+\label{figure:ND}
+\end{figure}
+\end{frame}
+ 
+
+\begin{frame}{Natural Deduction}{An example: double negation elimination}
+
+Double negation elimination axiom schema:
+$$
+dne : \neg \neg F \imp F
+$$
+
+Deriving $(A \imp B) \imp C$ from $(\neg \neg A \imp B) \imp C$   in {\ND}:
+
+\begin{footnotesize}
+\begin{prooftree}
+\AXC{$(\neg \neg A \imp B) \imp C \seq (\neg \neg A \imp B) \imp C $} \RightLabel{$\imp_E$}
+    \AXC{$A \imp B \seq A \imp B$}
+	  \AXC{$ \seq \neg \neg A \imp A$} 
+		  \AXC{$\neg \neg A \seq \neg \neg A$}  \RightLabel{$\imp_E$}
+	      \BIC{$ \neg \neg A \seq A$} \RightLabel{$\imp_E$}
+	\BIC{$ A \imp B, \neg \neg A \seq B$} \RightLabel{$\imp_I$}
+	\UIC{$ A \imp B \seq \neg \neg A \imp B$} \RightLabel{$\imp_E$}
+  \BIC{$ (\neg \neg A \imp B) \imp C, A \imp B \seq C$} \RightLabel{$\imp_I$}
+  \UIC{$ (\neg \neg A \imp B) \imp C \seq (A \imp B) \imp C$}
+\end{prooftree}
+\end{footnotesize}
+\end{frame}
+
+
+
+\begin{frame}{Contextual Natural Deduction}
+\begin{figure}[h!]
+\label{figure:NDd}
+\begin{calculus}
+\begin{prooftree}
+\AXC{$ $} \RightLabel{$axiom$}
+\UIC{$ \Gamma, A \seq A$}
+\end{prooftree}
+\begin{prooftree}
+\AXC{$ \Gamma, A \seq \C_{\pi}[B]$} \RightLabel{$\imp_I (\pi)$}
+\UIC{$ \Gamma \seq \C_{\pi}[A \imp B]$}
+\end{prooftree}
+\begin{prooftree}
+\AXC{$ \Gamma \seq \C^1_{\pi_1}[A \imp B]$}
+		\AXC{$ \Gamma \seq \C^2_{\pi_2}[A]$} \RightLabel{$\imp_E^{\rightharpoonup} (\pi_1;\pi_2)$}
+	\BIC{$ \Gamma \seq \C^1_{\pi_1}[\C^2_{\pi_2}[B]]$}
+\end{prooftree}
+\begin{prooftree}
+\AXC{$ \Gamma \seq \C^1_{\pi_1}[A \imp B]$} 
+		\AXC{$ \Gamma \seq \C^2_{\pi_2}[A]$}\RightLabel{$\imp_E^{\leftharpoonup} (\pi_1;\pi_2)$}
+	\BIC{$ \Gamma \seq \C^2_{\pi_2}[\C^1_{\pi_1}[B]]$}
+\end{prooftree}
+\begin{center}
+\textbf{Note:} $\pi$, $\pi_1$ and $\pi_2$ must be positive positions.
+\end{center}
+\end{calculus}
+\caption{The contextual natural deduction calculus {\NDd}}
+\end{figure} 
+\end{frame}
+
+\begin{frame}{Comparing {\ND} and {\NDd}}{Double Negation Elimination}
+
+Double negation elimination axiom schema:
+$$
+dne : \neg \neg F \imp F
+$$
+
+Deriving $(A \imp B) \imp C$ from $(\neg \neg A \imp B) \imp C$ in {\NDd}:
+
+\begin{footnotesize}
+\begin{prooftree}
+\AXC{$ \seq \neg \neg A \imp A$} 
+		\AXC{$ (\neg \neg A \imp B) \imp C \seq (\neg \neg A \imp B) \imp C$} \RightLabel{$\imp_E^{\leftharpoonup} (\eS; 11)$}
+	\BIC{$ (\neg \neg A \imp B) \imp C  \seq (A \imp B) \imp C$}
+\end{prooftree}
+\end{footnotesize}
+
+\medskip
+\medskip
+\medskip
+And in {\ND}:
+
+\begin{footnotesize}
+\begin{prooftree}
+\AXC{$(\neg \neg A \imp B) \imp C \seq (\neg \neg A \imp B) \imp C $} \RightLabel{$\imp_E$}
+    \AXC{$A \imp B \seq A \imp B$}
+	  \AXC{$ \seq \neg \neg A \imp A$} 
+		  \AXC{$\neg \neg A \seq \neg \neg A$}  \RightLabel{$\imp_E$}
+	      \BIC{$ \neg \neg A \seq A$} \RightLabel{$\imp_E$}
+	\BIC{$ A \imp B, \neg \neg A \seq B$} \RightLabel{$\imp_I$}
+	\UIC{$ A \imp B \seq \neg \neg A \imp B$} \RightLabel{$\imp_E$}
+  \BIC{$ (\neg \neg A \imp B) \imp C, A \imp B \seq C$} \RightLabel{$\imp_I$}
+  \UIC{$ (\neg \neg A \imp B) \imp C \seq (A \imp B) \imp C$}
+\end{prooftree}
+\end{footnotesize}
+\end{frame}
+
+
+\begin{frame}{Comparing {\ND} and {\NDd}}{Skolemization}
+
+Skolemization axiom schema:
+$$
+sk : \ex x. F[x] \imp F[f_{sk}(x_1,\ldots,x_n)]
+$$
+where $x_1,\ldots,x_n$ free-variables of $F$ and $f_{sk}$ new skolem symbol.
+
+\medskip
+\medskip
+
+Deriving skolemization $(A \imp B) \imp P(c)$ from $(A \imp B) \imp \ex x. P(x)$ in {\NDd}:
+
+\begin{footnotesize}
+\begin{prooftree}
+\AXC{$ \seq \ex x. P(x) \imp P(c)$} 
+		\AXC{$ (A \imp B) \imp \ex x. P(x) \seq (A \imp B) \imp \ex x. P(x)$} \RightLabel{$\imp_E^{\leftharpoonup} (\eS;0)$}
+	\BIC{$  (A \imp B) \imp \ex x. P(x)  \seq  (A \imp B) \imp P(c)$}
+\end{prooftree}
+\end{footnotesize}
+
+\medskip
+\medskip
+\medskip
+And in {\ND}:
+
+\begin{footnotesize}
+\begin{prooftree}
+\AXC{$ \seq \ex x. P(x) \imp P(c)$} 
+	\AXC{$ \ldots \seq A \imp B$}
+			\AXC{$ \ldots \seq (A \imp B) \imp \ex x. P(x) $} \RightLabel{$\imp_E$}
+		\BIC{$ (A \imp B) \imp \ex x. P(x), A \imp B \seq \ex x. P(x)$} \RightLabel{$\imp_E$}
+	\BIC{$A \imp B, (A \imp B) \imp \ex x. P(x)  \seq P(c)$} \RightLabel{$\imp_I$}
+	\UIC{$(A \imp B) \imp \ex x. P(x)  \seq \lambda c^{A \imp B}.  (A \imp B) \imp P(c)$}
+\end{prooftree}
+\end{footnotesize}
+\end{frame}
+
+
+
+\begin{frame}{Curry-Howard Isomorphism}{Natural Deduction}
+\begin{figure}[h!]
+\begin{calculus}
+\begin{prooftree}
+\AXC{$ $} \RightLabel{$axiom$}
+\UIC{$ \Gamma, a: A \seq a: A$}
+\end{prooftree}
+\begin{prooftree}
+\AXC{$ \Gamma, a: A \seq b: B$} \RightLabel{$\imp_I$}
+\UIC{$ \Gamma \seq \lambda a^A. b : A \imp B$}
+\end{prooftree}
+\begin{prooftree}
+\AXC{$ \Gamma \seq f: A \imp B $}
+		\AXC{$ \Gamma \seq a: A$} \RightLabel{$\imp_E$}
+	\BIC{$ \Gamma \seq (f \ a) : B$}
+\end{prooftree}
+\end{calculus}
+\caption{The natural deduction calculus \ND}
+\label{figure:ND}
+\end{figure}
+\end{frame}
+ 
+
+
+\begin{frame}{Curry-Howard Isomorphism}{Contextual Natural Deduction {\NDd}}
+\begin{figure}[h!]
+\label{figure:NDd}
+\begin{calculus}
+\begin{prooftree}
+\AXC{$ $} \RightLabel{$axiom$}
+\UIC{$ \Gamma, a: A \seq a: A$}
+\end{prooftree}
+\begin{prooftree}
+\AXC{$ \Gamma, a: A \seq b: \C_{\pi}[B]$} \RightLabel{$\imp_I (\pi)$}
+\UIC{$ \Gamma \seq \lambda_{\pi} a^A. b : \C_{\pi}[A \imp B]$}
+\end{prooftree}
+\begin{prooftree}
+\AXC{$ \Gamma \seq f: \C^1_{\pi_1}[A \imp B]$}
+		\AXC{$ \Gamma \seq a: \C^2_{\pi_2}[A]$} \RightLabel{$\imp_E^{\rightharpoonup} (\pi_1;\pi_2)$}
+	\BIC{$ \Gamma \seq (f \ a)^{\rightharpoonup}_{(\pi_1;\pi_2)} : \C^1_{\pi_1}[\C^2_{\pi_2}[B]]$}
+\end{prooftree}
+\begin{prooftree}
+\AXC{$ \Gamma \seq f: \C^1_{\pi_1}[A \imp B]$} 
+		\AXC{$ \Gamma \seq a: \C^2_{\pi_2}[A]$}\RightLabel{$\imp_E^{\leftharpoonup} (\pi_1;\pi_2)$}
+	\BIC{$ \Gamma \seq (f \ a)^{\leftharpoonup}_{(\pi_1;\pi_2)} : \C^2_{\pi_2}[\C^1_{\pi_1}[B]]$}
+\end{prooftree}
+\begin{center}
+\textbf{Note:} $\pi$, $\pi_1$ and $\pi_2$ must be positive positions.
+\end{center}
+\end{calculus}
+\caption{The contextual natural deduction calculus {\NDd}}
+\end{figure} 
+\end{frame}
+
+
+
+\begin{frame}{Example}{Double Negation Elimination}
+
+Deriving $(A \imp B) \imp C$ from $(\neg \neg A \imp B) \imp C$ in {\NDd}:
+
+\begin{footnotesize}
+\begin{prooftree}
+\AXC{$ \seq dne: \neg \neg A \imp A$} 
+		\AXC{$ a: \ldots \seq a: (\neg \neg A \imp B) \imp C$} \RightLabel{$\imp_E^{\leftharpoonup} (\eS; 11)$}
+	\BIC{$ a: (\neg \neg A \imp B) \imp C  \seq \alert{(dne \ a)^{\leftharpoonup}_{(\eS;11)}} : (A \imp B) \imp C$}
+\end{prooftree}
+\end{footnotesize}
+
+\medskip
+\medskip
+\medskip
+And in {\ND}:
+
+\begin{footnotesize}
+\begin{prooftree}
+\AXC{$a: \ldots \seq a: (\neg \neg A \imp B) \imp C $} \RightLabel{$\imp_E$}
+    \AXC{$c : \ldots \seq c: A \imp B$}
+	  \AXC{$ \seq dne: \neg \neg A \imp A$} 
+		  \AXC{$d: \ldots \seq d: \neg \neg A$}  \RightLabel{$\imp_E$}
+	      \BIC{$ d: \ldots \seq (dne \ d): A$} \RightLabel{$\imp_E$}
+	\BIC{$ d: \ldots, c: \ldots \seq (c \ (dne \ d)): B$} \RightLabel{$\imp_I$}
+	\UIC{$ c: \ldots \seq \lambda d^{\neg \neg A}.(c \ (dne \ d)): \neg \neg A \imp B$} \RightLabel{$\imp_E$}
+  \BIC{$ a: \ldots, c: \ldots \seq (a \ \lambda d.(c \ (dne \ d))): C$} \RightLabel{$\imp_I$}
+  \UIC{$ a: (\neg \neg A \imp B) \imp C \seq \alert{\lambda c^{A \imp B}. (a \ \lambda d^{\neg \neg A}.(c \ (dne \ d)))}: (A \imp B) \imp C$}
+\end{prooftree}
+\end{footnotesize}
+\end{frame}
+
+
+
+\begin{frame}{Example}{Skolemization}
+
+Deriving skolemization $(A \imp B) \imp P(c)$ from $(A \imp B) \imp \ex x. P(x)$ in {\NDd}:
+
+\begin{footnotesize}
+\begin{prooftree}
+\AXC{$ \seq sk: \ex x. P(x) \imp P(c)$} 
+		\AXC{$ a: \ldots \seq a: (A \imp B) \imp \ex x. P(x)$} \RightLabel{$\imp_E^{\leftharpoonup} (\eS;0)$}
+	\BIC{$ a: (A \imp B) \imp \ex x. P(x)  \seq \alert{(sk \ a)^{\leftharpoonup}_{(\eS;0)}} : (A \imp B) \imp P(c)$}
+\end{prooftree}
+\end{footnotesize}
+
+\medskip
+\medskip
+\medskip
+And in {\ND}:
+
+\begin{footnotesize}
+\begin{prooftree}
+\AXC{$ \seq sk: \ex x. P(x) \imp P(c)$} 
+	\AXC{$c : \ldots \seq c: A \imp B$}
+			\AXC{$a: \ldots \seq a: (A \imp B) \imp \ex x. P(x) $} \RightLabel{$\imp_E$}
+		\BIC{$ a : (A \imp B) \imp \ex x. P(x), c: A \imp B \seq (a \ c): \ex x. P(x)$} \RightLabel{$\imp_E$}
+	\BIC{$c: A \imp B, a: (A \imp B) \imp \ex x. P(x)  \seq (sk \ (a \ c)) : P(c)$} \RightLabel{$\imp_I$}
+	\UIC{$a : (A \imp B) \imp \ex x. P(x)  \seq \alert{\lambda c^{A\imp B}.  (sk \ (a \ c))} : (A \imp B) \imp P(c)$}
+\end{prooftree}
+\end{footnotesize}
+\end{frame}
+
+
+\begin{frame}{Completeness}
+
+\begin{theorem}[Completeness]
+\label{theorem:Completeness}
+If $T$ is provable in \ND, then $T$ is provable in \NDd.
+\end{theorem}
+
+\begin{definition}[Translation of $\lambda$-terms into $\lambda^d$-terms]
+\begin{itemize}
+\item $\tN{v} \defEq v$ (for a variable $v$).
+%
+\item $\tN{\lambda v^T. t} \defEq \lambda_{\eS} v^T. \tN{t}$ 
+\item $\tN{(m \ n)} \defEq (\tN{m} \ \tN{n})_{(\eS;\eS)}$
+\end{itemize}
+\end{definition}
+\end{frame}
+
+
+\begin{frame}{Soundness}
+
+\begin{theorem}[Soundness]
+\label{theorem:Soundness}
+If $T$ is provable in \NDd, then $T$ is provable in \ND.
+\end{theorem}
+\end{frame}
+
+
+\begin{frame}{(Un)Soundness}{Translating $\lambda^d$-terms into $\lambda$-terms}
+
+\begin{itemize}
+\item If $t$ is an $(\rightharpoonup)$-application of the form $(f \ a)^{\rightharpoonup}_{(\pi_1;\pi_2)}$, the translation is defined by two successive inductions, firstly on the position $\pi_1$ and then (when $\pi_1 = \eS$) on $\pi_2$, according to the cases below:
+	\begin{itemize}
+	\item If $\pi_1 = 0\pi$, it is the case that $t$ matches $(f^{C \imp D} \ a)^{\rightharpoonup}_{(0\pi;\pi_2)}$, and then
+	$$\tP{t} \defEq \lambda c^C. \tP{((f \ c) \ a))^{\rightharpoonup}_{(\pi;\pi_2)}}$$
+	%
+	\item If $\pi_1 = 1\pi'$, then there is at least one occurrence of the digit $1$ in $\pi'$, since $\pi_1$ is positive and $\pi'$ is negative. Therefore, $\pi_1$ is necessarily of the form $10\ldots01\pi$ and $t$ matches $(f^{(C_1 \imp \ldots C_n \imp (T_{\pi}[A \imp B] \imp D_1)) \imp D_2} \ a)^{\rightharpoonup}_{(10\ldots01\pi;\pi_2)}$. Then
+	\begin{scriptsize}
+	$$\tP{t} \defEq \lambda k^{C_1 \imp \ldots C_n \imp (T_{\pi}[B] \imp D_1)}. (f \ \lambda c_1^{C_1} \ldots c_n^{C_n}. \lambda h^{T_{\pi}[A \imp B]}. (k \ c_1 \ldots c_n \ \tP{(h \ a)^{\rightharpoonup}_{(\pi;\pi_2)}})$$
+	\end{scriptsize}
+	%	
+	\item If $\pi_1 = \eS$ and $\pi_2 = 0\pi$, it is the case that $t$ matches $(f \ a^{C \imp D})^{\rightharpoonup}_{(\eS;0\pi)}$, and then
+	$$\tP{t} \defEq \lambda c^C. \tP{(f \ (a \ c))^{\rightharpoonup}_{(\eS;\pi)}}$$
+	%
+	\item  If $\pi_1 = \eS$ and $\pi_2 = 1\pi'$, then there is at least one occurrence of the digit $1$ in $\pi'$, since $\pi_2$ is positive and $\pi'$ is negative. Therefore, $\pi_2$ is of the form $10\ldots01\pi$ and $t$ matches $(f^{A \imp B} \ a^{(C_1 \imp \ldots C_n \imp (T_{\pi}[A] \imp D_1))\imp D_2})^{\rightharpoonup}_{(\eS;10\ldots01\pi)}$. Then
+	\begin{scriptsize}
+	$$\tP{t} \defEq \lambda k^{C_1 \imp \ldots C_n \imp (T_{\pi}[B] \imp D_1)}. (a \ \lambda c_1^{C_1} \ldots c_n^{C_n}. \lambda h^{T_{\pi}[A]}. (k \ c_1 \ldots c_n \ \tP{(f \ h)^{\rightharpoonup}_{(\eS;\pi)}}))$$
+	\end{scriptsize}
+	%
+	\item If $\pi_1 = \pi_2 = \eS$, it is the case that $t$ matches $(f \ a)^{\rightharpoonup}_{(\eS;\eS)}$, and then
+	$$\tP{t} \defEq (\tP{f} \ \tP{a})$$
+	\end{itemize}
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}{(Un)Soundness}{Translating $\lambda^d$-terms into $\lambda$-terms}
+
+\begin{itemize}
+\item If $t$ is an $(\leftharpoonup)$-application of the form $(f \ a)^{\leftharpoonup}_{(\pi_1;\pi_2)}$, the translation is analogous to the previous case for $(f \ a)^{\rightharpoonup}_{(\pi_1;\pi_2)}$, but the induction is made firstly on the position $\pi_2$ and only then (when $\pi_2 = \eS$) on $\pi_1$. For the sake of clarity, all cases are shown below:
+	\begin{itemize}
+	\item If $\pi_2 = 0\pi$, it is the case that $t$ matches $(f \ a^{C \imp D})^{\leftharpoonup}_{(\pi_1;0\pi)}$, and then
+	$$\tP{t} \defEq \lambda c^C. \tP{(f \ (a \ c))^{\leftharpoonup}_{(\pi_1;\pi)}}$$
+	%
+	\item If $\pi_2 = 1\pi'$, then there is at least one occurrence of the digit $1$ in $\pi'$, since $\pi_2$ is positive and $\pi'$ is negative. Therefore, $\pi_2$ is necessarily of the form $10\ldots01\pi$ and $t$ matches $(f \ a^{(C_1 \imp \ldots C_n \imp (T_{\pi}[A] \imp D_1))\imp D_2})^{\leftharpoonup}_{(\pi_1;10\ldots01\pi)}$. Then
+	\begin{scriptsize}
+	$$\tP{t} \defEq \lambda k^{C_1 \imp \ldots C_n \imp (T_{\pi}[B] \imp D_1)}. (a \ \lambda c_1^{C_1} \ldots c_n^{C_n}. \lambda h^{T_{\pi}[A]}. (k \ c_1 \ldots c_n \ \tP{(f \ h)^{\leftharpoonup}_{(\pi_1;\pi)}}))$$
+	\end{scriptsize}
+	%	
+	\item If $\pi_2 = \eS$ and $\pi_1 = 0\pi$, it is the case that $t$ matches $(f^{C \imp D} \ a)^{\leftharpoonup}_{(0\pi;\eS)}$, and then
+	$$\tP{t} \defEq \lambda c^C. \tP{((f \ c) \ a)^{\leftharpoonup}_{(\pi;\eS)}}$$
+	%
+	\item  If $\pi_2 = \eS$ and $\pi_1 = 1\pi'$, then there is at least one occurrence of the digit $1$ in $\pi'$, since $\pi_1$ is positive and $\pi'$ is negative. Consequently, $\pi_1$ is of the form $10\ldots01\pi$ and $t$ matches $(f^{(C_1 \imp \ldots C_n \imp (T_{\pi}[A \imp B] \imp D_1)) \imp D_2} \ a)^{\leftharpoonup}_{(10\ldots01\pi;\eS)}$. Then
+	\begin{scriptsize}
+	$$\tP{t} \defEq \lambda k^{C_1 \imp \ldots C_n \imp (T_{\pi}[B] \imp D_1)}. (f \ \lambda c_1^{C_1} \ldots c_n^{C_n}. \lambda h^{T_{\pi}[A \imp B]}. (k \ c_1 \ldots c_n \ \tP{(h \ a)^{\leftharpoonup}_{(\pi;\eS)}})$$
+	\end{scriptsize}
+	%
+	\item If $\pi_2 = \pi_1 = \eS$, it is the case that $t$ matches $(f \ a)^{\leftharpoonup}_{(\eS;\eS)}$, and then
+	$$\tP{t} \defEq (\tP{f} \ \tP{a})$$	
+	\end{itemize}
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}{(Un)Soundness}{Translating $\lambda^d$-terms into $\lambda$-terms}
+
+\begin{itemize}
+\item If $t$ is a variable, then $\tP{t} \defEq t$
+%
+\item If $t$ is an abstraction of the form $\lambda_{\pi} a^A. b$, the translation is defined by induction on the position $\pi$, according to the cases below:
+	\begin{itemize}
+	\item If $\pi = 0\pi'$, it is the case that $t$ matches $\lambda_{0\pi'} a^A. b^{C \imp D}$, and then
+	$$\tP{t} \defEq \lambda c^C. \tP{\lambda_{\pi'} a^A. (b c)}$$
+	%
+	\item If $\pi = 1\pi'$, then there is at least one occurrence of the digit $1$ in $\pi'$, since $\pi$ is positive and $\pi'$ is negative. Therefore, $\pi$ is necessarily of the form $10\ldots01\pi''$ and $t$ matches $\lambda_{10\ldots01\pi''} a^A. f^{(C_1 \imp \ldots C_n \imp (T_{\pi''}[B] \imp D_1)) \imp D_2}$. Then
+	\begin{scriptsize}
+	$$\tP{t} \defEq \lambda k^{C_1 \imp \ldots C_n \imp (T_{\pi''}[A \imp B] \imp D_1)}. (f \ \lambda c_1^{C_1} \ldots c_n^{C_n}. \lambda h^{T_{\pi''}[B]}. (k \ c_1 \ldots c_n \ \tP{\lambda_{\pi''} a^A. h})$$
+	\end{scriptsize}
+	%	
+	\item If $\pi = \eS$, it is the case that $t$ matches $\lambda_{\eS} a. f$, and then
+	$$\tP{t} \defEq \lambda a. \tP{f}$$
+	\end{itemize}
+\end{itemize}
+
+\end{frame}
+
+
+\begin{frame}{(Un)Soundness}{Translating $\lambda^d$-terms into $\lambda$-terms}
+
+\begin{itemize}
+\item If $t$ is a variable, then $\tP{t} \defEq t$
+%
+\item If $t$ is an abstraction of the form $\lambda_{\pi} a^A. b$, the translation is defined by induction on the position $\pi$, according to the cases below:
+	\begin{itemize}
+	\item If $\pi = 0\pi'$, it is the case that $t$ matches $\lambda_{0\pi'} a^A. b^{C \imp D}$, and then
+	$$\tP{t} \defEq \lambda c^C. \tP{\lambda_{\pi'} a^A. (b c)}$$
+	%
+	\item If $\pi = 1\pi'$, then there is at least one occurrence of the digit $1$ in $\pi'$, since $\pi$ is positive and $\pi'$ is negative. Therefore, $\pi$ is necessarily of the form $10\ldots01\pi''$ and $t$ matches $\lambda_{10\ldots01\pi''} a^A. f^{(C_1 \imp \ldots C_n \imp (T_{\pi''}[B] \imp D_1)) \imp D_2}$. Then
+	\begin{scriptsize}
+	\alert{$$\tP{t} \defEq \lambda k^{C_1 \imp \ldots C_n \imp (T_{\pi''}[A \imp B] \imp D_1)}. (f \ \lambda c_1^{C_1} \ldots c_n^{C_n}. \lambda h^{T_{\pi''}[B]}. (k \ c_1 \ldots c_n \ \tP{\lambda_{\pi''} a^A. h})$$}
+	\end{scriptsize}
+	%	
+	\item If $\pi = \eS$, it is the case that $t$ matches $\lambda_{\eS} a. f$, and then
+	$$\tP{t} \defEq \lambda a. \tP{f}$$
+	\end{itemize}
+\end{itemize}
+
+\begin{center}
+\alert{
+\textbf{Intuitionistic Contextual Soundness Condition:} \\
+If $\pi$ contains the digit $1$, then $a$ is not allowed to occur in $f$.
+}
+\end{center}
+\end{frame}
+
+
+\begin{frame}{From Intuitionistic to Classical Logic}{Proving Peirce's Law and the Double Negation Elimination Principle}
+
+%\begin{footnotesize}
+\begin{prooftree}
+	\AXC{$ $} \RightLabel{$axiom$}
+	\UIC{$p: P, a: (Q \imp P) \seq p: P$} \RightLabel{$\imp_I$}
+	\UIC{$p: P \seq \lambda a^{(Q \imp P)}. p : (Q \imp P) \imp P$} \RightLabel{$\imp_I (11)$}
+	\UIC{$\seq \lambda_{11} p^P. \lambda a^{(Q \imp P)}. p :  ((P \imp Q) \imp P) \imp P$}
+\end{prooftree}
+%\end{footnotesize}
+
+\medskip
+
+%\begin{footnotesize}
+\begin{prooftree}
+	\AXC{$ $} \RightLabel{$axiom$}
+	\UIC{$p: P, a: (\bot \imp \bot) \seq p: P$} \RightLabel{$\imp_I$}
+	\UIC{$p: P \seq \lambda a^{(\bot \imp \bot)}. p : (\bot \imp \bot) \imp P$} \RightLabel{$\imp_I (11)$}
+	\UIC{$\seq \lambda_{11} p^P. \lambda a^{(\bot \imp \bot)}. p :  ((P \imp \bot) \imp \bot) \imp P$}
+\end{prooftree}
+%\end{footnotesize}
+
+\end{frame}
+
+
+\begin{frame}{From Intuitionistic to Classical Logic}{Three Ways}
+
+\begin{itemize}
+\item Add classical principles as axioms to shallow natural deduction
+\item Use a multi-conclusion natural deduction calculus
+\item \alert{Allow unrestricted contextual natural deduction inference rules}
+\end{itemize}
+
+\end{frame}
+
+
+\newcommand{\sub}[3]{#1[#2\backslash#3]}
+\newcommand{\unfold}{\rightsquigarrow_{\delta}} % unfolding
+\newcommand{\br}{\rightsquigarrow_{\beta}} % beta reduction
+\newcommand{\unfoldbeta}{\rightsquigarrow_{\beta\delta}}
+
+\begin{frame}{Normalization}
+
+\begin{large}
+$$
+(\lambda a^A.f \  t') \br \sub{f}{a}{t'}
+$$
+
+$$
+(\lambda_0 a^A. f \ t')_{(0;\eS)} \rightsquigarrow^{?} \sub{f}{a}{t'}
+$$
+
+$$
+(\lambda b^B. \lambda a^A. (f \ b) \ t')_{(0;\eS)} \rightsquigarrow^{?} \lambda b^B. (\sub{f}{a}{t'} \ b)
+$$
+\end{large}
+\end{frame}
+
+\begin{frame}{Unfolding}
+\begin{figure}[h!]
+\begin{calculus}
+$$
+\infer{\lambda c^C. \lambda_{\pi} a^A. (b c)}
+{\lambda_{0\pi} a^A. b^{C \imp D}}
+$$
+
+$$
+\infer{ \lambda k^{C_1 \imp \ldots C_n \imp (T_{\pi}[A \imp B] \imp D_1)}. (f \ \lambda c_1^{C_1} \ldots c_n^{C_n}. \lambda h^{T_{\pi}[B]}. (k \ c_1 \ldots c_n \ \lambda_{\pi} a^A. h)}
+{ \lambda_{10\ldots01\pi} a^A. f^{(C_1 \imp \ldots C_n \imp (T_{\pi}[B] \imp D_1)) \imp D_2} }
+$$
+\end{calculus}
+\caption{Unfolding Contextual Abstractions}
+\label{figure:Unfolding}
+\end{figure}
+
+\begin{figure}[h!]
+\begin{calculus}
+$$
+\infer{ \lambda c^C. ((f \ c) \ a))^{\rightharpoonup}_{(\pi;\pi_2)} }
+{(f^{C \imp D} \ a)^{\rightharpoonup}_{(0\pi;\pi_2)}}
+%
+\qquad
+%
+\infer{ \lambda c^C. (f \ (a \ c))^{\leftharpoonup}_{(\pi_1;\pi)} }
+{ (f \ a^{C \imp D})^{\leftharpoonup}_{(\pi_1;0\pi)} }
+$$
+
+$$
+\infer{ \lambda c^C. (f \ (a \ c))^{\rightharpoonup}_{(\eS;\pi)} }
+{ (f \ a^{C \imp D})^{\rightharpoonup}_{(\eS;0\pi)} }
+%
+\qquad
+%
+\infer{ \lambda c^C. ((f \ c) \ a)^{\leftharpoonup}_{(\pi;\eS)} }
+{ (f^{C \imp D} \ a)^{\leftharpoonup}_{(0\pi;\eS)} }
+$$
+\end{calculus}
+\caption{Unfolding Contextual Applications with Position Starting with $0$}
+\label{figure:Unfolding}
+\end{figure}
+\end{frame}
+
+\begin{frame}{Unfolding}
+\begin{figure}[h!]
+\begin{calculus}
+$$
+\infer{ \lambda k^{C_1 \imp \ldots C_n \imp (T_{\pi}[B] \imp D_1)}. (f \ \lambda c_1^{C_1} \ldots c_n^{C_n}. \lambda h^{T_{\pi}[A \imp B]}. (k \ c_1 \ldots c_n \ (h \ a)^{\rightharpoonup}_{(\pi;\pi_2)}) }
+{(f^{(C_1 \imp \ldots C_n \imp (T_{\pi}[A \imp B] \imp D_1)) \imp D_2} \ a)^{\rightharpoonup}_{(10\ldots01\pi;\pi_2)} }
+$$
+
+$$
+\infer{ \lambda k^{C_1 \imp \ldots C_n \imp (T_{\pi}[B] \imp D_1)}. (a \ \lambda c_1^{C_1} \ldots c_n^{C_n}. \lambda h^{T_{\pi}[A]}. (k \ c_1 \ldots c_n \ (f \ h)^{\leftharpoonup}_{(\pi_1;\pi)})) }
+{ (f \ a^{(C_1 \imp \ldots C_n \imp (T_{\pi}[A] \imp D_1))\imp D_2})^{\leftharpoonup}_{(\pi_1;10\ldots01\pi)} }
+$$
+
+$$
+\infer{ \lambda k^{C_1 \imp \ldots C_n \imp (T_{\pi}[B] \imp D_1)}. (a \ \lambda c_1^{C_1} \ldots c_n^{C_n}. \lambda h^{T_{\pi}[A]}. (k \ c_1 \ldots c_n \ (f \ h)^{\rightharpoonup}_{(\eS;\pi)})) }
+{ (f^{A \imp B} \ a^{(C_1 \imp \ldots C_n \imp (T_{\pi}[A] \imp D_1))\imp D_2})^{\rightharpoonup}_{(\eS;10\ldots01\pi)} }
+$$
+
+$$
+\infer{ \lambda k^{C_1 \imp \ldots C_n \imp (T_{\pi}[B] \imp D_1)}. (f \ \lambda c_1^{C_1} \ldots c_n^{C_n}. \lambda h^{T_{\pi}[A \imp B]}. (k \ c_1 \ldots c_n \ (h \ a)^{\leftharpoonup}_{(\pi;\eS)}) }
+{ (f^{(C_1 \imp \ldots C_n \imp (T_{\pi}[A \imp B] \imp D_1)) \imp D_2} \ a)^{\leftharpoonup}_{(10\ldots01\pi;\eS)} }
+$$
+\end{calculus}
+\caption{Unfolding Contextual Applications with Position Starting with $1$}
+\label{figure:Unfolding}
+\end{figure}
+\end{frame}
+
+
+\begin{frame}{Unfolding and Beta-Reduction}{Example}
+\begin{align*}
+(\lambda_0 a^A. (\lambda_0 b^B.h \ a) \ t')_{(0;\eS)} & \unfold && (\lambda b_1^B. \lambda a^A. ((\lambda_0 b^B.h \ a) \ b_1) \ t')_{(0;\eS)}  \\
+				  & \unfold &&  \lambda b_2^B.((\lambda b_1^B. \lambda a^A. ((\lambda_0 b^B.h \ a) \ b_1) \ b_2) \ t') \\
+				  & \br && \lambda b_2^B. (\lambda a^A. ((\lambda_0 b^B.h \ a) \ b_2) \ t')  \\
+				  & \br && \lambda b_2^B. ((\lambda_0 b^B.h \ t') \ b_2)  \\
+				  & =_{\eta} && (\lambda_0 b^B.h \ t')
+\end{align*} 
+\end{frame}
+
+\begin{frame}{Unfolding}{Some Theorems}
+\begin{itemize}
+\item $\unfold$ is terminating. 
+\begin{itemize}
+\item For all unfolding rules, the sum of the sizes of all positions decreases.
+\end{itemize}
+%
+\mypause
+\item $\unfold$ is locally confluent. 
+\begin{itemize}
+\item There are no critical pairs.
+\end{itemize}
+%
+\mypause
+\item $\unfold$ is confluent. 
+%\begin{itemize}
+%\item By Newman's Lemma \cite{Newman} applied to Theorems \ref{theorem:Termination} and \ref{theorem:LocalConfluence}.
+%\end{itemize}
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}{Beta-Unfolding}
+\begin{itemize}
+\item $\unfoldbeta$ is weakly normalizing.
+	\begin{itemize}
+	\item Just unfold first and beta-reduce later.
+	\end{itemize}
+\mypause
+\item $\unfoldbeta$ is terminating.
+	% \begin{itemize}
+	% \item $\br$ is terminating. $\unfold$ is terminating. Furthermore,
+	% $\unfold$ has neither \emph{duplicating} nor \emph{collapsing} rules. These would be sufficient conditions for their union $\unfoldbeta$ to be also 					terminating, \alert{if both TRSs were first-order}.
+	% \end{itemize}
+\mypause
+\item $\unfoldbeta$ is confluent.
+	% \begin{itemize}
+	% \item $\br$ is confluent. $\unfold$ is confluent. Confluence is a modular 
+	% property for first-order TRSs, but \alert{not necessarily modular for 
+	% higher-order TRSs}. Nevertheless, the \alert{critical-pair lemma} holds for 
+	% some kinds of higher-order TRSs\ldots
+	% \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Quadratic Compressibility}
+\begin{center}
+In the best cases,\\
+\alert{{\NDd}-proofs can be quadratically smaller than smallest {\ND}-proofs.}
+
+\medskip
+\medskip
+
+\mypause
+
+There is a sequence of theorems $F_n$ whose \\
+smallest {\ND}-proofs $\psi_n$ grow at least quadratically (i.e. $s(\psi_n) \in \Omega(n^2)$),\\ 
+while there are \\ 
+{\NDd}-proofs $\psi^d_n$ of $F_n$ growing at most linearly (i.e. $s(\psi^d_n) \in O(n)$).
+\end{center}
+\end{frame}
+
+\begin{frame}{Quadratic Compressibility}{Measuring the Size of Types, Terms and Proofs}
+\begin{definition}[Size of a Type]
+\begin{itemize}
+ \item $s(A) \defEq 1$ (if $A$ is an atomic type)
+ \item $s(T_1 \imp T_2) \defEq 1 + s(T_1) + s(T_2)$
+\end{itemize}
+%\hfill\QED
+\end{definition}
+
+\begin{definition}[Size of a $\lambda$-term]
+\begin{itemize}
+ \item $s(v) \defEq 1$ (if $v$ is a variable)
+ \item $s(\lambda v^T. t') \defEq 2 + s(T) + s(t')$
+ \item $s((m \ n)) \defEq 1 + s(m) + s(n)$ 
+\end{itemize}
+%\hfill\QED
+\end{definition}
+
+\begin{definition}[Size of a $\lambda^d$-term]
+\begin{itemize}
+ \item $s(v) \defEq 1$ (if $v$ is a variable)
+ \item $s(\lambda_{\pi} v^T. t') \defEq 2 + s(T) + s(t') + s(\pi)$
+ \item $s((m \ n)^{\rightharpoonup}_{{\pi_1;\pi_2}}) \defEq 1 + s(m) + s(n) + s(\pi_1) + s(\pi_2)$
+  \item $s((m \ n)^{\leftharpoonup}_{{\pi_1;\pi_2}}) \defEq 1 + s(m) + s(n) + s(\pi_1) + s(\pi_2)$
+\end{itemize}
+%\hfill\QED
+\end{definition}
+
+%\begin{definition}
+%The \emph{size} $s(\psi)$ of a {\ND} proof $\psi$ is $s(\CurryHoward(\psi))$. The \emph{size} $s(\psi)$ of a {\NDd} proof $\psi$ is $s(\CurryHoward_d(\psi))$. 
+%%\hfill\QED
+%\end{definition}
+\end{frame}
+
+\begin{frame}{Quadratic Compressibility}{Proof}
+\noindent
+Let $F_n \defEq T^n(A \imp B) \imp ( A \imp T^n(B) )$ where:
+\begin{align*}
+T^0(F) & \defEq F \\
+T^n(F) & \defEq (T^{n-1}(F) \imp D_{2n-1}) \imp D_{2n}
+\end{align*}
+
+\smallskip
+
+\mypause
+
+\noindent
+Let $\psi^d_n \defEq \CurryHoward_d^{-1}(t^d_n)$ where:
+$$
+t^d_n \defEq \lambda f^{T^n(A \imp B)}. \lambda a^A. (f \ a)_{(\underbrace{11\ldots 1}_{2n}; \eS)}
+$$
+
+
+\mypause
+
+\noindent
+Let $\psi_n \defEq \CurryHoward^{-1}(t_n)$ where:
+$$
+t_n \defEq \xi(t^d_n)
+$$
+
+\mypause
+
+\noindent
+Note that $\psi_k$ is a smallest {\ND}-proof of $F_k$. Any {\ND}-proof of $F_k$ must (at least) decompose $F_k$ until the subformulas $A \imp B$ and $A$ are obtained and then apply $A \imp B$ to $A$. $\psi_k$ does exactly this and nothing more.
+\end{frame}
+
+
+\begin{frame}{Quadratic Compressibility}{Proof}
+By definition, $s(\psi^d_n) = s(t^d_n)$, and $s(t^d_n)$ is computed below:
+
+\medskip
+\begin{small}
+\begin{align*}
+s(t^d_n) & = s(\lambda f^{T^n(A \imp B)}. \lambda a^A. (f \ a)_{(\underbrace{11\ldots 1}_{2n}; \eS)})  \\
+ & = 2 + s(T^n(A \imp B)) + s(\lambda a^A. (f \ a)_{(11\ldots 1; \eS)})  \\
+				  & = 2 + (3 + 4n) + s(\lambda a^A. (f \ a)_{(11\ldots 1; \eS)}) \\
+				  & = 5 + 4n + (2 + s(A) + s((f \ a)_{(11\ldots 1; \eS)})) \\
+				  & = 8 + 4n + s((f \ a)_{(11\ldots 1; \eS)}) \\	
+				  & = 8 + 4n + (1 + s(f) + s(a) + s(\underbrace{11\ldots 1}_{2n}) + s(\eS)) \\			  
+				  & = 8 + 4n + (3 + 2n + 0) \\			  
+				  & = 11 + 6n \\					
+\end{align*} 
+\end{small}
+Therefore, \alert{$s(t^d_n) \in O(n)$}.
+\end{frame}
+
+
+\begin{frame}{Quadratic Compressibility}{Proof}
+By definition, $s(\psi_n) = s(t_n)$, and $s(t_n)$ is computed below:
+
+\medskip
+\begin{small}
+\begin{align*}
+s(t_n) & = s(\xi(\lambda f^{T^n(A \imp B)}. \lambda a^A. (f \ a)_{(\underbrace{11\ldots 1}_{2n}; \eS)}))  \\
+& = s(\lambda f^{T^n(A \imp B)}. \lambda a^A. \xi((f \ a)_{(11\ldots 1; \eS)}))  \\
+& = 2 + s(T^n(A \imp B)) + 2 + s(A) + s(\xi((f \ a)_{(11\ldots 1; \eS)}))  \\
+& = 8 + 4n + s(\xi((f \ a)_{(\underbrace{11\ldots 1}_{2n}; \eS)}))  \\
+%& \defEq && 8 + 4n + q(n)  
+\end{align*} 
+\end{small}
+\end{frame}
+
+
+\begin{frame}{Quadratic Compressibility}{Proof}
+$
+s(t_n) = 8 + 4n + s(\xi((f \ a)_{(\underbrace{11\ldots 1}_{2n}; \eS)}))
+$. \ \  Let $q(n) \defEq s(\xi((f \ a)_{(\underbrace{11\ldots 1}_{2n}; \eS)}))$. Then:
+\begin{small}
+\begin{align*}
+q(0) & = s(\xi((f \ a)_{(\eS; \eS)}))  =  3 \\
+	   & \\
+q(n) & = s(\xi((f \ a)_{(\underbrace{1111\ldots 1}_{2n}; \eS)}))  \\
+ & = s( \lambda_k^{T^{n-1}(B) \imp D_{2n-1}}.(f \ \lambda h^{T^{n-1}(A\imp B)}.\xi((h \ a)_{(\underbrace{11\ldots 1}_{2n-2}; \eS)})))  \\
+ & = 2 + s(T^{n-1}(B) \imp D_{2n-1}) + s((f \ \lambda h^{T^{n-1}(A\imp B)}.\xi((h \ a)_{(11\ldots 1; \eS)})))  \\
+ & = 2 + 4(n-1) + 3 + s((f \ \lambda h^{T^{n-1}(A\imp B)}.\xi((h \ a)_{(11\ldots 1; \eS)})))  \\
+ & = 1 + 4n + s((f \ \lambda h^{T^{n-1}(A\imp B)}.\xi((h \ a)_{(11\ldots 1; \eS)})))  \\
+ & = 1 + 4n + 2 + s(\lambda h^{T^{n-1}(A\imp B)}.\xi((h \ a)_{(11\ldots 1; \eS)}))  \\
+ & = 3 + 4n + s(\lambda h^{T^{n-1}(A\imp B)}.\xi((h \ a)_{(11\ldots 1; \eS)}))  \\
+ & = 5 + 4n + s(T^{n-1}(A\imp B)) + s(\xi((h \ a)_{(\underbrace{11\ldots 1}_{2n-2}; \eS)})) = 4 + 8n + q(n-1) 
+% & = 5 + 4n + 4(n-1) + 3 + q(n-1)  \\
+% & = 4 + 8n + q(n-1)  \\
+\end{align*} 
+\end{small}
+\end{frame}
+
+
+\begin{frame}{Quadratic Compressibility}{Proof}
+$$
+s(t_n) = 8 + 4n + q(n)
+$$
+
+\medskip
+
+\begin{align*}
+q(0) & =   3 \\
+	   & \\
+q(n) & =  4 + 8n + q(n-1)
+\end{align*} 
+
+\medskip
+\medskip
+%\noindent
+Solving the recurrence relation above gives the following closed-form for $q$:
+$$
+q(n) = 4n^2 + 8n + 3
+$$
+%
+
+\medskip
+\noindent
+Therefore, \alert{$s(\psi_n) \in \Omega(n^2)$}.
+\end{frame}
+
+% \begin{frame}{The Proof Compressibility and Compression Problems}
+% \begin{itemize}
+% \item The compressibility decision problem:
+% \begin{itemize}
+% 	\item \textbf{input:} a theorem $T$ and a {\ND}({\bf d})-proof $\psi$ of $T$.
+% 	\item \textbf{output:} 
+% 	\begin{itemize}
+% 		\item \emph{yes}, if there is an {\NDd}-proof $d(\psi)$ of $T$ s.t. $s(d(\psi)) < s(\psi)$.
+% 		\item \emph{no}, otherwise.
+% 	\end{itemize}
+% 	\mypause
+% 	\item Decidable
+% 	\mypause
+% 	\item Complexity: in $NP$
+% \end{itemize}
+% \mypause
+% \item The compression function problem:
+% \begin{itemize}
+% 	\item \textbf{input:} a theorem $T$ and a {\ND}({\bf d})-proof $\psi$ of $T$.
+% 	\item \textbf{output:} an {\NDd}-proof $d(\psi)$ of $T$ s.t. 
+% 	\begin{itemize}
+% 		\item for any {\NDd}-proof $\psi'$ of $T$, $s(d(\psi)) \leq s(\psi')$.
+% 	\end{itemize}
+% 	\mypause
+% 	\item Computable
+% %	\item Complexity: in $FNP^{NP}$
+% \end{itemize}
+% \end{itemize}
+% \end{frame}
+
+% \begin{frame}{The Proof Compressibility and Compression Problems}
+% \begin{itemize}
+% \item The compressibility decision problem \alert{(restricted to folding)}:
+% \begin{itemize}
+% 	\item \textbf{input:} a theorem $T$ and a {\ND}({\bf d})-proof $\psi$ of $T$.
+% 	\item \textbf{output:} 
+% 	\begin{itemize}
+% 		\item \emph{yes}, if there is an {\NDd}-proof $d(\psi)$ of $T$ s.t. $s(d(\psi)) < s(\psi)$ and \alert{$d(\psi) \unfold \psi$}.
+% 		\item \emph{no}, otherwise.
+% 	\end{itemize}
+% \end{itemize}
+% \item The compression function problem \alert{(restricted to folding)}:
+% \begin{itemize}
+% 	\item \textbf{input:} a theorem $T$ and a {\ND}({\bf d})-proof $\psi$ of $T$.
+% 	\item \textbf{output:} an {\NDd}-proof $d(\psi)$ of $T$ s.t. 
+% 	\begin{itemize}
+% 		\item for any {\NDd}-proof $\psi'$ of $T$, $s(d(\psi)) \leq s(\psi')$.
+% 		\item \alert{$d(\psi) \unfold \psi$}
+% 	\end{itemize}
+% \end{itemize}
+% \end{itemize}
+% \end{frame}
+
+\begin{frame}{Proof Compression by Folding}
+\begin{itemize}
+\item $\unfold^{-1}$ is terminating
+\begin{itemize}
+	\item The term size decreases with every inverse rewriting step.
+\end{itemize}
+\mypause
+\item $\unfold^{-1}$ is not confluent
+\begin{itemize}
+	\item Let $f: A\imp B$ and $a: (A \imp D) \imp E$. Then: 
+	\begin{itemize}
+		\item $\lambda k^{B \imp D}. (a \ \lambda h^A.(k \ (f \ h))) \quad \unfold^{-1} \quad (f \ a)_{(\eS ; 11)}$
+		\item $\lambda k^{B \imp D}. (a \ \lambda h^A.(k \ (f \ h))) \quad \unfold^{-1} \quad \lambda k^{B \imp D}. (a \ (k \ f)_{(\eS ; 0)})$
+	\end{itemize}
+\end{itemize}
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}{Just Folding is not Enough!}
+$$
+h_{ab}: A \imp B \qquad h_{bc} : B \imp C \qquad h_{ade} : (A \imp D) \imp E
+$$
+
+\medskip
+\medskip
+
+$$
+\lambda h_{cd}^{C \imp D}. (h_{ade} \ \lambda h_a^A.(h_{cd} \ (h_{bc} \ (h_{ab} \ h_a))))  :  (C \imp D) \imp E
+$$
+
+\medskip
+
+\mypause
+
+\begin{center}
+\alert{Normal form w.r.t. $\unfold^{-1}$.}
+
+\mypause
+
+Yet, there are smaller $\lambda^d$-terms:
+\end{center}
+
+$$
+(h_{bc} \ (h_{ab} \ h_{ade})_{(\eS ; 11)})_{(\eS ; 11)}  % :  (C \imp D) \imp E
+$$
+
+$$
+((h_{bc} \ h_{ab})_{(\eS ; 0)} \ h_{ade})_{(\eS ; 11)}  %:  (C \imp D) \imp E
+$$
+
+\medskip
+\medskip
+
+\mypause
+
+\begin{center}
+To obtain them, we need \alert{folding + beta expansion}
+\end{center}
+\end{frame}
+
+
+
+\begin{frame}{Proof Compression by Folding and Beta Expansion}
+
+$$
+h_{ab}: A \imp B \qquad h_{bc} : B \imp C \qquad h_{ade} : (A \imp D) \imp E
+$$
+
+\medskip
+\medskip
+
+%\begin{small}
+\begin{align*}
+t & \defEq \lambda h_{cd}^{C \imp D}. (h_{ade} \ \lambda h_a^A.(h_{cd} \ (h_{bc} \ (h_{ab} \ h_a)))) \\
+& \br^{-1}  \lambda h_{cd}^{C \imp D}. (h_{ade} \ \lambda h_a^A.(\alert{\lambda k_b^B}. (h_{cd} \ (h_{bc} \ \alert{k_b}))  \ (h_{ab} \ h_a))) \\
+& \br^{-1}  \lambda h_{cd}^{C \imp D}. (\alert{\lambda k_{bd}^{B \imp D}}. (h_{ade}  \ \lambda h_a^A.(\alert{k_{bd}}  \ (h_{ab} \ h_a))) \ \alert{\lambda k_b^B}. (h_{cd} \ (h_{bc} \ \alert{k_b}))) \\
+& \unfold^{-1}  (h_{bc} \ \alert{\lambda k_{bd}^{B \imp D}}. (h_{ade}  \ \lambda h_a^A.(\alert{k_{bd}}  \ (h_{ab} \ h_a))))_{(\eS ; 11)} \\
+& \unfold^{-1}  (h_{bc} \ (h_{ab} \ h_{ade})_{(\eS ; 11)})_{(\eS ; 11)} 
+\end{align*}
+%\end{small}
+
+\mypause
+
+%\begin{small}
+\begin{align*}
+t & \defEq \lambda h_{cd}^{C \imp D}. (h_{ade} \ \lambda h_a^A.(h_{cd} \ (h_{bc} \ (h_{ab} \ h_a)))) \\
+& \br^{-1} \lambda h_{cd}^{C \imp D}. (h_{ade} \ \lambda h_a^A.(h_{cd} \ (\alert{\lambda k_a^A}. (h_{bc} \ (h_{ab} \ \alert{k_a})) \ h_a))) \\
+& \unfold^{-1}  (\alert{\lambda k_a^A}.(h_{bc} \ (h_{ab} \ \alert{k_a})) \ h_{ade})_{(\eS ; 11)} \\
+& \unfold^{-1}  ((h_{bc} \ h_{ab})_{(\eS ; 0)} \ h_{ade})_{(\eS ; 11)} 
+\end{align*}
+%\end{small}
+\end{frame}
+
+
+\begin{frame}{Proof Compression by Folding and Beta Expansion}
+\begin{itemize}
+\item $\unfoldbeta^{-1}$ is not terminating
+\begin{itemize}
+	\item Because beta expansion is not terminating
+\end{itemize}
+\mypause
+\item $\unfoldbeta^{-1}$ is not confluent
+\begin{itemize}
+	\item By the examples in the previous slide
+\end{itemize}
+\end{itemize}
+\end{frame}
+
+
+% \begin{frame}{Preliminary Implementation Remarks}
+
+% \begin{itemize}
+% \item The calculi and a simple generic theorem prover were implemented in ResK
+
+% \item A few hundreds of small and quite shallow theorems were generated
+
+% \item Contextual proofs were in average 5\% smaller than shallow proofs
+
+% \item Smaller prrofs are expected for deeper theorems
+
+% \item But deeper theorems need more efficient computation of candidate positions
+% \end{itemize}
+
+% \end{frame}
+
+
+% \begin{frame}{Other Deep Inference Systems}{\ND}
+
+
+% \begin{scriptsize}
+% \begin{prooftree}
+% \AXC{$ (B \imp C) \seq (B \imp C)$}
+%     \AXC{$ (A \imp B) \seq (A \imp B)$} 
+%     		\AXC{$A \seq A$} \RightLabel{$\imp_E$}
+% 	    \BIC{$ (A \imp B), A \seq B$} \RightLabel{$\imp_E$}
+%   \BIC{$(A \imp B), (B \imp C), A \seq C$} \RightLabel{$\imp_I$}
+%   \UIC{$(A \imp B), (B \imp C) \seq (A \imp C)$} \RightLabel{$\imp_I$}
+%   \UIC{$(A \imp B) \seq  (B \imp C) \imp (A \imp C)$} \RightLabel{$\imp_I$}
+%   \UIC{$\seq (A \imp B) \imp ((B \imp C) \imp (A \imp C))$}
+% \end{prooftree}
+% \end{scriptsize}
+
+
+% $$
+% \lambda h^{A\imp B}. \lambda k^{B \imp C}. \lambda a^{A}. (k \ (h \ a))
+% $$
+
+% \end{frame}
+
+% \begin{frame}{Other Deep Inference Systems}{\NDd}
+
+% \begin{scriptsize}
+% \begin{prooftree}
+% \AXC{$ (B \imp C) \seq (B \imp C)$}
+%     \AXC{$ (A \imp B) \seq (A \imp B)$} \RightLabel{$\imp_E (\eS;0)$}
+%   \BIC{$(A \imp B), (B \imp C) \seq (A \imp C)$} \RightLabel{$\imp_I$}
+%   \UIC{$(A \imp B) \seq  (B \imp C) \imp (A \imp C)$} \RightLabel{$\imp_I$}
+%   \UIC{$\seq (A \imp B) \imp ((B \imp C) \imp (A \imp C))$}
+% \end{prooftree}
+% \end{scriptsize}
+
+% And the proof above can be represented by the $\lambda^c$-term: 
+% $$
+% \lambda h^{A\imp B}. \lambda k^{B \imp C}. (k \ h)_{(\eS;0)}
+% $$
+
+% \end{frame}
+
+% \begin{frame}{Other Deep Inference Systems}{Tiu's}
+
+% \newcommand{\la}{\langle}
+% \newcommand{\ra}{\rangle}
+% \begin{scriptsize}
+% \begin{prooftree}
+%   \AXC{$\top $} \RightLabel{$i$}
+%   \UIC{$\la \la A; C \ra ; \la A; C \ra \ra $} \RightLabel{$=_{unit}$}
+%   \UIC{$\la \la A; \la \top ; C \ra \ra ; \la A; C \ra \ra$} \RightLabel{$i$}
+%   \UIC{$\la \la A; \la \la B ; B \ra ; C \ra \ra ; \la A; C \ra \ra$} \RightLabel{$s i c \uparrow$}
+%   \UIC{$\la \la A; \la ( B , \la B ; C \ra ) ; \la A; C \ra \ra$} \RightLabel{$s c \uparrow$}
+%   \UIC{$\la (\la A; B \ra , \la B ; C \ra ) ; \la A; C \ra \ra$} \RightLabel{$=_{currying}$}
+%   \UIC{$\la \la A; B \ra ; \la \la B ; C \ra  ; \la A; C \ra \ra \ra$}
+% \end{prooftree}
+% \end{scriptsize}
+
+% \end{frame}
+
+% \begin{frame}{Other Deep Inference Systems}{Bruennler-McKinley's}
+
+% \begin{scriptsize}
+% \begin{prooftree}
+%   \AXC{$\top $} \RightLabel{$i$}
+%   \UIC{$(A\imp B) \imp (\top \wedge (A \imp B))$} \RightLabel{$w_2$}
+%   \UIC{$(A\imp B) \imp (A \imp B)$} \RightLabel{$i$}
+%   \UIC{$(A\imp B) \imp ((B \imp C) \imp ((A \imp B) \wedge (B \imp C)))$} \RightLabel{$c$}
+%   \UIC{$(A\imp B) \imp ((B \imp C) \imp (((A \imp B) \wedge (B \imp C)) \wedge ((A \imp B) \wedge (B \imp C))))$} \RightLabel{$w_2$}
+%   \UIC{$(A\imp B) \imp ((B \imp C) \imp ((B \imp C) \wedge ((A \imp B) \wedge (B \imp C))))$} \RightLabel{$w_1$}
+%   \UIC{$(A\imp B) \imp ((B \imp C) \imp ((B \imp C) \wedge (A \imp B)))$} \RightLabel{$i$}
+%   \UIC{$(A\imp B) \imp ((B \imp C) \imp (A \imp   (((B \imp C) \wedge (A \imp B)) \wedge A)   ) )$} \RightLabel{$c$}
+%   \UIC{$(A\imp B) \imp ((B \imp C) \imp (A \imp  ( (((B \imp C) \wedge (A \imp B)) \wedge A) \wedge (((B \imp C) \wedge (A \imp B)) \wedge A) )  ) )$} \RightLabel{$w_2$}
+%   \UIC{$(A\imp B) \imp ((B \imp C) \imp (A \imp  ( (((B \imp C) \wedge (A \imp B)) \wedge A) \wedge ( (A \imp B) \wedge A) )  ) )$} \RightLabel{$w_1$}
+%   \UIC{$(A\imp B) \imp ((B \imp C) \imp (A \imp  ( ((B \imp C) \wedge A) \wedge ( (A \imp B) \wedge A) )  ) )$} \RightLabel{$w_1$}
+%   \UIC{$(A\imp B) \imp ((B \imp C) \imp (A \imp  ( (B \imp C) \wedge ( (A \imp B) \wedge A) )  ) )$} \RightLabel{$e$}
+%   \UIC{$(A\imp B) \imp ((B \imp C) \imp (A \imp  ( (B \imp C) \wedge  B  )  ) )$} \RightLabel{$e$}
+%   \UIC{$(A\imp B) \imp ((B \imp C) \imp (A \imp  C)   ) $}
+% \end{prooftree}
+% \end{scriptsize}
+
+% \begin{scriptsize}
+% $$
+% i^{A \imp B}.(id \imp (w_2. i^{B \imp C}.(id \imp (c.(w_2 \wedge w_1).i^A .(id \imp (c.( ((w_1 \wedge id). w_1 ) \wedge (w_2 \wedge id) ).(id \wedge e).e))))))
+% $$
+% \end{scriptsize}
+
+% \end{frame}
+
+% \begin{frame}{Other Deep Inference Systems}{Gundersen's}
+
+% \begin{scriptsize}
+% \begin{prooftree}
+%   \AXC{$\top $} \RightLabel{$i$}
+%   \UIC{$(A\imp B) \imp (\top \wedge (A \imp B))$} \RightLabel{$\equiv$}
+%   \UIC{$(A\imp B) \imp (A \imp B)$} \RightLabel{$i$}
+%   \UIC{$(A\imp B) \imp ((B \imp C) \imp ((B \imp C) \wedge (A \imp B)))$} \RightLabel{$i$}
+%   \UIC{$(A\imp B) \imp ((B \imp C) \imp (A \imp  ( (B \imp C) \wedge  (A \imp B) \wedge A )  ) )$} \RightLabel{$e$}
+%   \UIC{$(A\imp B) \imp ((B \imp C) \imp (A \imp  ( (B \imp C) \wedge  B  )  ) )$} \RightLabel{$e$}
+%   \UIC{$(A\imp B) \imp ((B \imp C) \imp (A \imp  C)   ) $}
+% \end{prooftree}
+% \end{scriptsize}
+
+% $$
+% \lambda h^{A\imp B}. \lambda k^{B \imp C}. \lambda a^{A}. (k) \ (h) \ a
+% $$
+% \end{frame}
+
+% \begin{frame}{Other Deep Inference Systems}{Guenot's}
+
+% \begin{scriptsize}
+% \begin{prooftree}
+%   \AXC{$\top $} \RightLabel{$i$}
+%   \UIC{$(\top \imp (A \imp C)) \imp (A \imp C)$} \RightLabel{$\equiv_u$}
+%   \UIC{$(A \imp C) \imp (A \imp C)$} \RightLabel{$i$}
+%   \UIC{$(((A \imp B) \imp B) \imp C) \imp (A \imp C)$} \RightLabel{$s$}
+%   \UIC{$(A \imp B) \imp ((B \imp C) \imp (A \imp C))$} 
+% \end{prooftree}
+% \end{scriptsize}
+% \end{frame}
+
+\begin{frame}{Propositional Resolution}
+
+
+\end{frame}
+
+\begin{frame}{Current Work}
+
+\begin{itemize}
+\item Contextual Natural Deduction:
+	\begin{itemize}
+	\item go beyond the implicational fragment
+	\mypause
+	\item investigate beta-expansion / cut-introduction
+	\mypause
+	\item implement and evaluate compressibility in practice
+	\mypause
+	\item obtain a syntactic proof of soundness for the classical case
+	\mypause
+	\item investigate algorithmic interpretations for the classical case
+	%\item implement deep-apply and deep-intro tactics in Coq
+	\end{itemize}
+\item Propositional Resolution:
+	\begin{itemize}
+	\item develop efficient subsumption algorithms
+  \mypause
+	\item improve lowering of subproofs
+  \mypause
+	\item improve split
+	\end{itemize}
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}{The End}
+\begin{itemize}
+\item Thanks!
+\item Some announcements:
+	\begin{itemize}
+	\item LowerUnivalents: SMT2013, Helsinki, 8th of July 15:30
+	\item Proof Compression Workshop: \\
+	16th of September, affiliated with Tableaux, Nancy, France
+	\end{itemize}
+\item Questions? Comments? Suggestions?
+\item www.logic.at/people/bruno/
+\end{itemize}
+
+%\begin{footnotesize}
+% \begin{itemize}
+%\item Deep Natural Deduction 
+%\end{itemize}
+%\end{footnotesize}
+
+
+\end{frame}
+
+
+\end{document}
