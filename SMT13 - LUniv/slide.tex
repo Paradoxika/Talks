@@ -202,10 +202,18 @@
 
 \section{Introduction}
 
-\subsection{Rational}
+\subsection{Motivations}
 
-\begin{frame}{Why compressing propositional resolution proofs?}
-
+\begin{frame}{Why compressing propositional part of SMT proofs?}
+  \begin{subpart}{SMT solvers are embeded in other tools}
+    \item Sledgehammer's extension to SMT solver
+    \item SMTCoq
+  \end{subpart}
+  \begin{subpart}{Some tools need the proof to be}
+    \item checked;
+    \item tranlated;
+    \item analysed.
+  \end{subpart}
 \end{frame}
 
 \subsection{Proofs' representation}
@@ -271,11 +279,11 @@
   \begin{block}
     \centering
     \tikzstyle{ndist}=[node distance=1.2cm]
-    \newcommand{\ru}{r1}
-    \newcommand{\au}{a1}
-    \newcommand{\lo}{low}
-    \newcommand{\rd}{r2}
-    \newcommand{\ad}{a2}
+    \newcommand{\ru}{$\dual{b}$}
+    \newcommand{\au}{$b \dual{a}$}
+    \newcommand{\lo}{$a$}
+    \newcommand{\rd}{$b c$}
+    \newcommand{\ad}{$\dual{a} b c$}
     \tikz[baseline=(r1.north), ndist]{
       \proofnode {r1} {\ru};
       \withchildren{r1} {a1}{\au} {low}{\lo};
@@ -283,7 +291,7 @@
       \proofnode {r2}{\rd};
       \withchildren{r2} {low}{\lo} {a2}{\ad};
     } = \tikz[baseline=(r1.base), ndist]{
-      \proofnode {r0} {r0};
+      \proofnode {r0} {$c$};
       \withchildren{r0} {r1}{\ru} {r2}{\rd};
       \withchildren{r1} {a1}{\au} {low}{\lo};
       \proofnode[above right of=r2] {a2} {\ad};
@@ -385,7 +393,7 @@
       \draw [proof edge] (r1) -- (iu);
     \end{tikzpicture}
     \visible<3->{Original proof} \\
-    \visible<4>{\small 4 resolutions}
+    \visible<4>{\small 5 resolutions}
     \end{center}
 
     \column{0.5\textwidth}
@@ -416,7 +424,7 @@
       \crossnode<4>{iu}
     \end{tikzpicture}
     \uncover<4>{Compressed proof} \\
-    \visible<4>{\small 3 resolutions}
+    \visible<4>{\small 4 resolutions}
     \end{center}
     }
   \end{columns}
@@ -736,8 +744,8 @@
   \begin{subpart}{Future works}
     \item Combine LowerUnivalents after other algorithms.
     \item Get rid of order dependency.
-    \item Lower subproofs just until resolvents are all resolved.
-    \item Explore other kind of redundancies.
+    \item Lower subproofs to the middle of the proof.
+    \item Explore other kinds of redundancies.
   \end{subpart}
 \end{frame}
 
