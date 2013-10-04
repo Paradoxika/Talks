@@ -1,0 +1,1018 @@
+\documentclass{beamer}
+
+\usepackage[latin1]{inputenc}
+\usepackage[british]{babel}
+\usepackage{amssymb}
+%\usepackage{utf8}
+%\usepackage{latexsym}
+%\usepackage{rotate}
+\usepackage{tikz}
+\usepackage{datetime}
+\usepackage{bussproofs}
+
+\newdate{date}{16}{09}{2013}
+\date{\displaydate{date}}
+
+%\definecolor{vertmoyen}{HTML}{A9CB60}
+%\definecolor{vertclair}{HTML}{D3F192}
+\definecolor{vertfonce}{HTML}{347003}
+%\definecolor{deletecol}{HTML}{3B8A13}
+%\definecolor{addcolor} {HTML}{9E0270}
+
+\usecolortheme[named=vertfonce]{structure}
+
+\newcommand{\dual}[1]{\ensuremath{\bar{#1}}}
+
+\newenvironment<>{subpart}[1]
+{ \begin{block}#2{#1}
+  \begin{itemize}
+}{
+  \end{itemize}
+  \end{block}
+}
+
+\newcommand{\recalltoc}{\frame{\tableofcontents[sectionstyle=show/shaded,subsectionstyle=show/show/hide]}}
+
+\newcommand{\Resolution}[2]{\RightLabel{\footnotesize{$#1$}} \BinaryInfC{$#2$}}
+
+%\usepackage[vlined]{algorithm2e}
+\usetikzlibrary{arrows}
+\usetikzlibrary{positioning}
+
+\tikzstyle{proof edge}=[thick,cap=round]
+\tikzstyle{deleted edge}=[proof edge, dashed, color=deletecol]
+
+\newcommand{\proofnode}[3][]{
+  \node [anchor=mid, #1] (#2) {#3}
+}
+
+\newcommand{\rootnode}[1][]{
+  \proofnode[#1]{root}{$\bot$}
+}
+
+\newcommand<>{\edgewithlabel}[3]{
+  \draw#4 [proof edge, color=vertfonce] (#1) -- (#2) node [above, pos=0.3] {\footnotesize #3}
+}
+
+\newcommand<>{\drawchildren}[3]{
+  \draw#4 [proof edge] (#1) -- (#2);
+  \draw#4 [proof edge] (#1) -- (#3)
+}
+
+\newcommand{\addchildren}[5]{
+  \proofnode[above left  of=#1]{#2}{#3};
+  \proofnode[above right of=#1]{#4}{#5}
+}
+
+\newcommand{\withchildren}[5]{
+  \addchildren{#1}{#2}{#3}{#4}{#5};
+  \drawchildren{#1}{#2}{#4}
+}
+
+\newcommand{\withchildrenPivot}[6]{
+  \addchildren{#1}{#2}{#3}{#4}{#5};
+  \drawchildren{#1}{#2}{#4}
+}
+
+\newcommand<>{\crossnode}[2][]{
+  \draw#3 [color=red,thick,cap=round,#1] (#2.mid) ++(10:0.3) -- ++(190:0.6);
+}
+
+\newcommand<>{\marknode}[2][.33cm]{
+  \draw#3 [color=red,line width=1pt] (#2) circle (#1);
+}
+
+\newcommand<>{\whitenode}[2][.19cm]{
+  \draw#3 [color=black,fill=white,line width=0.5pt] (#2) circle (#1);
+}
+
+\newcommand<>{\waitingnode}[2][.19cm]{
+  \draw#3 [color=black,fill=vertfonce,fill opacity=0.6,line width=0.5pt] (#2) circle (#1);
+}
+
+\newcommand<>{\blacknode}[2][.19cm]{
+  \draw#3 [color=black,fill=black,line width=0.5pt] (#2) circle (#1);
+}
+
+\newcommand{\proofnodeBW}[2][]{
+  \node [anchor=mid, #1] (#2) {};
+	\whitenode{#2};
+}
+
+\newcommand{\proofnodeBWHidden}[2][]{
+  \node [anchor=mid, #1] (#2) {};
+}
+
+
+\newcommand{\rootnodeBW}[1][]{
+  \proofnodeBW[#1]{root}{};
+}
+
+\newcommand{\addchildrenBW}[3]{
+  \proofnodeBW[above left  of=#1]{#2};
+  \proofnodeBW[above right of=#1]{#3};
+}
+
+\newcommand{\withchildrenBW}[3]{
+  \addchildrenBW{#1}{#2}{#3};
+  \drawchildren{#1}{#2}{#3};
+}
+
+
+\newcommand{\firstNode}[3] {
+	\node [anchor=mid] (#1) at (0,0) {#2};
+	\node [color=red] (n#1) at (#1.north) {\tiny{#3}};
+}
+
+\newcommand{\nextNode}[4] {
+	\node [anchor=mid, right of=#1] (#2) {#3};
+	\node [color=red] (n#2) at (#2.north) {\tiny{#4}};
+}
+
+
+\title{Subsumption, Recursive Split and\\Greedy Pebbling}% for Propositional Proof Compression}
+%\title{Three algorithms for Propositional Proof Compression}
+
+%\author{Andreas Fellner}
+\author[AFellner]{Andreas Fellner\\[2mm]Joseph Boudou, Bruno Woltzenlogel Paleo}
+\vspace{2cm}
+\date[APPC 2013]{Third Workshop of the Amadeus Project on Proof Compression\\\displaydate{date}}
+
+\begin{document}
+
+\maketitle
+%\begin{frame}
+%\frametitle{Table of content}
+%\begin{itemize}
+%\item Subsumption
+%\item Recursive Split
+%\item Greedy Pebbling
+%\end{itemize}
+%\end{frame}
+
+\begin{frame}{Overview}
+\tableofcontents
+\end{frame}
+
+\section{Introduction}
+
+\begin{frame}
+
+\frametitle{Propopositional Resolution Calculus}
+
+\begin{subpart}{Literal}
+ \item Variable $v$ or negated variable $\dual{v}$
+\end{subpart}
+
+\begin{subpart}{Clause}
+	\item Disjunction of literals
+	\item Represented as a set
+\end{subpart}
+
+\begin{block}{Resolution rule}
+	\begin{prooftree}%
+		\AxiomC{$\Gamma \vee v$}%
+		\AxiomC{$\dual{v} \vee \Delta$}%
+		\Resolution{v}{\Gamma \vee \Delta}%
+	\end{prooftree}
+\end{block}
+
+\end{frame}
+
+\begin{frame}
+
+\begin{block}{Proof as a directed acyclic graph (DAG)}
+	\begin{itemize}
+		\item node, conclusion, pivot, premise, child
+	\end{itemize}
+		\centering
+		\begin{tikzpicture}[node distance=1.2cm]
+			\rootnode;
+			\withchildren{root} {n7}{$b$}  {n9}{$\dual{b}$};
+			\withchildren{n7}   {n1}{$\dual{a},b$} {n6}{$a$};
+			\proofnode[above right of=n9] {n8} {$\dual{b},\dual{a}$};
+			\drawchildren{n9} {n6} {n8};
+			\withchildren{n6} {n4}{$\dual{c}$} {n5}{a,c};
+			\withchildren{n4} {n2}{$\dual{a},\dual{c}$}{n3}{$a,\dual{c}$};
+			\uncover<2>{
+			\node [color=red] (numb1) at (n1.west) {\tiny{1}};
+			\node [color=red] (numb2) at (n2.west) {\tiny{2}};
+			\node [color=red] (numb3) at (n3.west) {\tiny{3}};
+			\node [color=red] (numb4) at (n4.west) {\tiny{4}};
+			\node [color=red] (numb5) at (n5.west) {\tiny{5}};
+			\node [color=red] (numb6) at (n6.west) {\tiny{6}};
+			\node [color=red] (numb7) at (n7.west) {\tiny{7}};
+			\node [color=red] (numb8) at (n8.west) {\tiny{8}};
+			\node [color=red] (numb9) at (n9.west) {\tiny{9}};
+			\node [color=red] (numb10) at (root.west) {\tiny{10}};
+			}
+		\end{tikzpicture}
+\end{block}
+\vspace{-0.5cm}
+\begin{block}{Proof as sequence}
+	\begin{itemize}
+		\item Use topological order
+	\end{itemize}
+	\begin{tikzpicture}[node distance=0.8cm]
+		\usetikzlibrary{calc}
+		\firstNode{n1} {$\dual{a},b$} {\uncover<2>{1}};
+		\nextNode{n1} {n2} {$\dual{a},\dual{c}$} {\uncover<2>{2}};
+		\nextNode{n2} {n3}{$a,\dual{c}$} {\uncover<2>{3}};
+		\nextNode{n3} {n4}{$\dual{c}$} {\uncover<2>{4}};
+		\nextNode{n4} {n5}{$a,c$}{\uncover<2>{5}};
+		\nextNode{n5} {n6}{$a$}{\uncover<2>{6}};
+		\nextNode{n6} {n7}{$b$}{\uncover<2>{7}};
+		\nextNode{n7} {n8}{$\dual{b},\dual{a}$} {\uncover<2>{8}};
+		\nextNode{n8} {n9}{$\dual{b}$} {\uncover<2>{9}};
+		\nextNode{n9} {root}{$\bot$} {\uncover<2>{10}};
+		\draw [-triangle 45,color=black,thick] (3,-0.8) -- node[auto,text=vertfonce,above]{top-down} (6,-0.8);
+		\draw [-triangle 45,color=black,thick] (6,-1.1) -- node[auto,text=vertfonce,below]{bottom-up} (3,-1.1); 
+	\end{tikzpicture}
+\end{block}
+\end{frame}
+
+\section{Subsumption algorithms}
+\recalltoc
+\begin{frame}
+	\frametitle{Subsumption for Proof Compression}
+	\begin{subpart}{Idea}
+		\item Subsumption
+		\begin{itemize}
+			\item $C_1$ subsumes $C_2$ iff $C_1 \subset C_2$
+		\end{itemize}
+		\item Replace subsumed clauses by their subsumers
+		\item Fix nodes with changed premises
+		\begin{itemize}
+			\item Pivot in both premises $\rightarrow$ resolve premises
+			\item Pivot missing in a premise $\rightarrow$ use this premise
+		\end{itemize}
+	\end{subpart}
+	\begin{subpart}{Performance}
+		\item Worst case quadratic runtime in the proof size
+		\item Use literal-tree structure to store visited nodes and check subsumption
+	\end{subpart}
+\end{frame}
+
+\begin{frame}
+
+	\frametitle{Top-down vs Bottom-up}
+
+	\begin{block}{Top-down}
+		\begin{tikzpicture}
+			%\nextNode{(0,0)} {p1} {$p_1$} {};
+			\firstNode{p1}{$C_1$}{};
+			\nextNode{p1} {p2} {$C_2$} {};
+			\nextNode{p2} {p3} {$C_3$} {};
+			\nextNode{p3} {dots1} {$\ldots$} {};
+			\nextNode{dots1} {pk} {$C_k$} {};
+			\nextNode{pk} {dots2}{$\ldots$} {};
+			\nextNode{dots2} {pn2}{$C_{n-2}$} {};
+			\nextNode{pn2} {pn1}{$C_{n-1}$} {};
+			\nextNode{pn1} {pn}{$C_n$} {};
+			\draw (pk) to [out = 90, in = 90] node[above,pos = 0.8] {$\subset$} (p1);
+			\draw (pk) to [out = 90, in = 90] node[above, pos = 0.8] {$\subset$} (p2); %{$\overset{\tiny{?}}{\tiny{<}}$} (p2);
+			\draw (pk) to [out = 90, in = 90] node[above, pos = 0.8] {$\subset$} (p3);
+			\draw [color=vertfonce,thick,-triangle 45] (3,-0.6) -- (6,-0.6);
+			%\draw [->] (p1){}+(0,-1) -- (pn){}+(0,-1);
+			%\draw [color=blue] (p1) circle (1);
+			%\draw [color=blue] (pn) circle (1);
+		\end{tikzpicture}
+	\end{block}
+		\begin{block}{Bottom-up}
+		\begin{tikzpicture}
+			%\nextNode{(0,0)} {p1} {$p_1$} {};
+			\firstNode{p1}{$c_1$}{};
+			\nextNode{p1} {p2} {$C_2$} {};
+			\nextNode{p2} {p3} {$C_3$} {};
+			\nextNode{p3} {dots1} {$\ldots$} {};
+			\nextNode{dots1} {pk} {$C_k$} {};
+			\nextNode{pk} {dots2}{$\ldots$} {};
+			\nextNode{dots2} {pn2}{$C_{n-2}$} {};
+			\nextNode{pn2} {pn1}{$C_{n-1}$} {};
+			\nextNode{pn1} {pn}{$C_n$} {};
+			\draw (pk) to [out = 90, in = 90] node[above,pos = 0.8] {$\supset^*$} (pn2);
+			\draw (pk) to [out = 90, in = 90] node[above, pos = 0.8] {$\supset^*$} (pn1); %{$\overset{\tiny{?}}{\tiny{<}}$} (p2);
+			\draw (pk) to [out = 90, in = 90] node[above, pos = 0.8] {$\supset^*$} (pn);
+			\draw [color=vertfonce,thick,-triangle 45] (6,-0.6) -- (3,-0.6);
+		\end{tikzpicture}
+	\end{block}
+	$C \subset^* D$ iff $C \subset D$ and $C$ is not an ancestor of $D$
+\end{frame}
+
+\begin{frame}
+	\frametitle{Top-down Subsumption Example}
+	\centering
+	\begin{tikzpicture}[node distance=1.2cm]
+		\rootnode;
+		\withchildren{root} {n5}{$a$}  {n6}{$\dual{a}$};
+		\addchildren{n5}   {n3}{$\dual{b}$} {n4}{$a,b$};
+		\drawchildren<-2>{n5} {n3} {n4};
+		\withchildren{n3} {n1}{$\dual{a},\dual{b}$} {n2}{$a$};
+		\only<1>{
+		\node [color=red] (numb1) at (n1.west) {\tiny{1}};
+		\node [color=red] (numb2) at (n2.west) {\tiny{2}};
+		\node [color=red] (numb3) at (n3.west) {\tiny{3}};
+		\node [color=red] (numb4) at (n4.west) {\tiny{4}};
+		\node [color=red] (numb5) at (n5.west) {\tiny{5}};
+		\node [color=red] (numb6) at (n6.west) {\tiny{6}};
+		\node [color=red] (numb7) at (root.west) {\tiny{7}};
+		}
+		\marknode<2>{n2};
+		\marknode<2>{n4};
+		\crossnode<3->{n4};
+		\drawchildren<3->{n5}{n3}{n2};
+		\draw<4>[-triangle 45,thick] (n2) -- (n5);
+	\end{tikzpicture}
+\end{frame}
+
+\begin{frame}
+	\frametitle{Top-down Subsumption Example}
+	\centering
+	\begin{tikzpicture}[node distance=1.2cm]
+		\rootnode;
+		\withchildren{root} {n5}{$a$}  {n7}{$\dual{a}$};
+	\end{tikzpicture}
+\end{frame}
+
+\begin{frame}
+	\frametitle{Bottom-up Subsumption Example}
+	\centering
+	\begin{tikzpicture}[node distance=1.2cm]
+		\rootnode;
+		\withchildren{root} {n5}{$\dual{a}$}  {n6}{$a$};
+		\withchildren{n5} {n1}{$\dual{b}$} {n4}{$b$};
+		\withchildren{n4} {n2}{$\dual{a},b$} {n3}{$a,b$};
+		\only<1>{
+		\node [color=red] (numb1) at (n1.west) {\tiny{1}};
+		\node [color=red] (numb2) at (n2.west) {\tiny{2}};
+		\node [color=red] (numb3) at (n3.west) {\tiny{3}};
+		\node [color=red] (numb4) at (n4.west) {\tiny{4}};
+		\node [color=red] (numb5) at (n5.west) {\tiny{5}};
+		\node [color=red] (numb6) at (n6.west) {\tiny{6}};
+		\node [color=red] (numb7) at (root.west) {\tiny{7}};
+		}
+		\marknode<2>{n3};
+		\marknode<2>{n6};
+	\end{tikzpicture}
+\end{frame}
+
+
+\begin{frame}
+	\frametitle{Bottom-up Subsumption Example}
+	\centering
+	\begin{tikzpicture}[node distance=1.2cm]
+		\rootnode;
+		
+		\proofnode [above left of= root]{n5} {$\dual{a}$};
+		\withchildren{n5} {n1}{$\dual{b}$} {n4}{$b$};
+		
+		\withchildren{n4} {n2}{$\dual{a},b$} {n6}{$a$};
+		
+		\drawchildren{root}{n5}{n6};
+
+	\end{tikzpicture}
+\end{frame}
+
+\begin{frame}
+	\frametitle{Bottom-up Subsumption Example}
+	\centering
+	\begin{tikzpicture}[node distance=1.2cm]
+		\rootnode;
+		\withchildren{root} {n5}{$\dual{a}$}  {n6}{$a$};
+		\withchildren{n5} {n1}{$\dual{b}$} {n4}{$b$};
+		\withchildren{n4} {n2}{$\dual{a},b$} {n3}{$a,b$};
+		\only<1>{
+		\node [color=red] (numb1) at (n1.west) {\tiny{1}};
+		\node [color=red] (numb2) at (n2.west) {\tiny{2}};
+		\node [color=red] (numb3) at (n3.west) {\tiny{3}};
+		\node [color=red] (numb4) at (n4.west) {\tiny{4}};
+		\node [color=red] (numb5) at (n5.west) {\tiny{5}};
+		\node [color=red] (numb6) at (n6.west) {\tiny{6}};
+		\node [color=red] (numb7) at (root.west) {\tiny{7}};
+		}
+		\marknode<2>{n2};
+		\marknode<2>{n5};
+	\end{tikzpicture}
+\end{frame}
+
+\begin{frame}
+	\frametitle{Bottom-up Subsumption Example}
+	\centering
+	\begin{tikzpicture}[node distance=1.2cm]
+		\rootnode;
+		\withchildren{root} {n5}{$\dual{a}$}  {n6}{$a$};
+		\withchildren{n5} {n1}{$\dual{b}$} {n4}{$b$};
+		\proofnode[above right of=n4]{n3} {$a,b$};
+		\draw [proof edge] (n4) -- (n3);
+		\draw [->,proof edge] (n5) -- (n4);
+		\draw [->,proof edge](n4) [out = 150, in = 90] to (n5);
+	\end{tikzpicture}
+\end{frame}
+
+\begin{frame}
+
+\frametitle{Problems with Bottom-up Subsumption}
+
+\begin{subpart}{Performance}
+	\item Ancestor check is costly
+\end{subpart}
+
+%proof with cyclic dependency
+
+\begin{subpart}{Copy node issue}
+	\item Fixing has to be done top-down
+	\item Nodes are replaced bottom-up
+\end{subpart}
+
+%illustrate refixing problem
+
+\end{frame}
+
+\begin{frame}
+
+\frametitle{RecycleUnits}
+
+\begin{subpart}{Omer Bar-Ilan et al., 2009}
+	\item IBM Haifa Research Laboratory
+\end{subpart}
+
+\begin{subpart}{Special case of bottom-up subsumption}
+	\item Check only for subsuming unit clauses
+	\item Replace subsumption check by comparing units to pivots
+	\item Worst case quadratic runtime in the amount of unit clauses
+\end{subpart}
+
+%problems??
+
+\end{frame}
+
+\begin{frame}
+
+	\frametitle{Experiments}
+
+	\begin{subpart}{Setting}
+		\item 500 proofs, provided by VeriT SMT Solver
+		\item 659,584 nodes in total
+		\item Average 1320 nodes per proof
+	\end{subpart}
+
+	\begin{block}{Results}
+		\vspace{1em}
+		\centering
+		\begin{tabular}{lcc}
+			\hline
+			Algorithm                & Length Compression & Speed   \\
+			\hline
+			Top-down Subsumption     &  3.7 \% & 2.3 nodes/ms \\
+			Bottom-up Subsumption    &  1\%    & 0.4 nodes/ms \\
+			RecycleUnits						 &  2\%    & 1.0 nodes/ms \\
+			DAGify          				 &  0.6 \% & 7.3 nodes/ms \\  
+			\hline
+		\end{tabular}
+	\end{block}
+
+\end{frame}
+
+\section{Recursive Split}
+\recalltoc
+\begin{frame}
+
+\frametitle{Split Algorithm}
+
+\begin{subpart}{Author}
+	\item Scott Cotton, 2010
+\end{subpart}
+\begin{subpart}{Idea}
+	\item Let $P$ be a proof with root clause $C$
+	\item Choose a variable $v$, occuring in $P$, heuristically
+	\item Extract proofs for $C \vee v$ and $C \vee \dual{v}$
+	\begin{itemize}
+		\item By deleting positive/negative branches of nodes with pivot $v$
+		\item And fixing nodes like at subsumption algorithms
+	\end{itemize}
+	\item Combine proofs by resolving roots
+\end{subpart}
+
+\end{frame}
+
+\begin{frame}
+	\frametitle{Split Algorithm Example}
+	\centering
+	%\vspace{-1cm}
+	Split variable $a$\\[1cm]
+	%\begin[center]{block}
+	\begin{tikzpicture}[node distance=1.2cm]
+		\rootnode;
+		\withchildren{root} {n7}{$b$}  {n9}{$\dual{b}$};
+		\withchildren{n7}   {n1}{$\dual{a},b$} {n6}{$a$};
+		\proofnode[above right of=n9] {n8} {$\dual{b},\dual{a}$};
+		\drawchildren{n9} {n6} {n8};
+		\withchildren{n6} {n4}{$\dual{c}$} {n5}{$a,c$};
+		\withchildren{n4} {n2}{$\dual{a},\dual{c}$}{n3}{$a,\dual{c}$};
+	\end{tikzpicture}
+	%\end{block}
+\end{frame}
+
+\begin{frame}
+\frametitle{Split Algorithm Example}
+	\only<1>{\centering{Duplicate the proof}\\[1cm]}
+  \begin{columns}
+  \column{0.4\textwidth}
+	\only<2>{Delete positive branch\\[1cm]}
+	\only<3>{Fix positive branch\\[1cm]}
+	\begin{tikzpicture}[node distance=1.2cm]
+		\rootnode;
+		\withchildren{root} {n7}{$b$}  {n9}{$\dual{b}$};
+		\withchildren{n7}   {n1}{$\dual{a},b$} {n6}{$a$};
+		\proofnode[above right of=n9] {n8} {$\dual{b},\dual{a}$};
+		\drawchildren{n9} {n6} {n8};
+		\withchildren{n6} {n4}{$\dual{c}$} {n5}{$a,c$};
+		\withchildren{n4} {n2}{$\dual{a},\dual{c}$}{n3}{$a,\dual{c}$};
+		\crossnode<2->{n6};
+		\draw<3>[-triangle 45] (n1) -- (n7);
+		\draw<3>[-triangle 45] (n8) -- (n9);
+	\end{tikzpicture}
+	\column{0.4\textwidth}
+	\only<2>{Delete negative branch\\[1cm]}
+	\only<3>{Fix negative branch\\[1cm]}
+	\begin{tikzpicture}[node distance=1.2cm]
+		\rootnode;
+		\withchildren{root} {n7}{$b$}  {n9}{$\dual{b}$};
+		\withchildren{n7}   {n1}{$\dual{a},b$} {n6}{$a$};
+		\proofnode[above right of=n9] {n8} {$\dual{b},\dual{a}$};
+		\drawchildren{n9} {n6} {n8};
+		\withchildren{n6} {n4}{$\dual{c}$} {n5}{$a,c$};
+		\withchildren{n4} {n2}{$\dual{a},\dual{c}$}{n3}{$a,\dual{c}$};
+		\crossnode<2->{n2};
+		\crossnode<2->{n1};
+		\crossnode<2->{n8};
+		\draw<3>[-triangle 45] (n3) -- (n4);
+		\draw<3>[-triangle 45] (n6) -- (n7);
+		\draw<3>[-triangle 45] (n6) -- (n9);
+	\end{tikzpicture}
+
+	\end{columns}
+\end{frame}
+
+\begin{frame}
+\frametitle{Split Algorithm Example}
+  \begin{columns}
+  \column{0.4\textwidth}
+	Fix positive branch\\[1cm]
+	\begin{tikzpicture}[node distance=1.2cm]
+		\rootnode;
+		\withchildren{root} {n1}{$\dual{a},b$}  {n9}{$\dual{b},\dual{a}$};
+	\end{tikzpicture}
+	\column{0.4\textwidth}
+	Fix negative branch\\[1cm]
+	\begin{tikzpicture}[node distance=1.2cm]
+		\rootnode;
+		\proofnode[above of=root]{n6} {a};
+		\withchildren{n6} {n4}{$a,\dual{c}$} {n5}{$a,c$};
+		\draw [proof edge,bend left=45] (root) to (n6);
+		\draw [proof edge,bend right=45] (root) to (n6);
+	\end{tikzpicture}
+
+	\end{columns}
+\end{frame}
+
+\begin{frame}
+\frametitle{Split Algorithm Example}
+  \begin{columns}
+  \column{0.4\textwidth}
+	Fix positive branch\\[1cm]
+	\begin{tikzpicture}[node distance=1.2cm]
+		\proofnode{n6} {$\dual{a}$};
+		\withchildren{n6} {n1}{$\dual{a},b$}  {n9}{$\dual{b},\dual{a}$};
+	\end{tikzpicture}
+	\column{0.4\textwidth}
+	Fix negative branch\\[1cm]
+	\begin{tikzpicture}[node distance=1.2cm]
+		\proofnode{n6} {a};
+		\withchildren{n6} {n4}{$a,\dual{c}$} {n5}{$a,c$};
+	\end{tikzpicture}
+
+	\end{columns}
+\end{frame}
+
+\begin{frame}
+\frametitle{Split Algorithm Example}
+	\centering
+	Combine branches by resolving\\[1cm]
+	\begin{tikzpicture}[node distance=1.2cm]
+		\rootnode;
+		%\withchildren{root} {n3}{$\dual{a}$} {n5}{$a$};
+		\proofnode[above left of =root,xshift=-1cm]{n3}{$\dual{a}$};
+		\proofnode[above right of =root,xshift=1cm]{n5}{$a$};
+		\drawchildren{root} {n3} {n5};
+		\withchildren{n3} {n1}{$\dual{a},b$}  {n2}{$\dual{b},\dual{a}$};
+		\withchildren{n5} {n4}{$a,\dual{c}$} {n6}{$a,c$};
+	\end{tikzpicture}
+\end{frame}
+
+\begin{frame}
+
+\frametitle{Iterative Split}
+
+\begin{subpart}{Idea}
+	\item Apply split to result of split
+\end{subpart}
+
+\begin{subpart}{Issues}
+	\item Best variables don't end up lowest
+	\item Same variables for positive and negative branches
+\end{subpart}
+\begin{block}{Example}
+\end{block}
+  \begin{columns}
+  \column{0.5\textwidth}
+	\centering
+	Split once, best variable: $a$\\
+	\begin{tikzpicture}
+		\rootnode;
+		\withchildren{root}{n1}{$a$} {n2}{$\dual{a}$};
+		\addchildren{n1} {trans1}{} {trans2}{};
+		\addchildren{n2} {trans3}{} {trans4}{};
+		\draw [dashed] (n1) to (trans1);
+		\draw [dashed] (n1) to (trans2);
+		\draw [dashed] (n2) to (trans3);
+		\draw [dashed] (n2) to (trans4);
+	\end{tikzpicture}
+	\column{0.5\textwidth}
+	\centering
+	Split again, best variable: $b$\\
+	\begin{tikzpicture}
+		\rootnode;
+		\proofnode[above left of = root,xshift = -0.6cm] {n1}{$b$};
+		\proofnode[above right of = root,xshift = 0.6cm] {n2}{$\dual{b}$};
+		\drawchildren{root}{n1} {n2};
+		\withchildren{n1} {n3}{$b,a$} {n4}{$b,\dual{a}$};
+		\withchildren{n2} {n5}{$\dual{b},a$} {n6}{$\dual{b},\dual{a}$};
+		\addchildren{n3} {trans1}{} {trans2}{};
+		\addchildren{n5} {trans3}{} {trans4}{};
+		\addchildren{n6} {notneeded}{} {trans5}{};
+		\draw [dashed] (n3) to (trans1);
+		\draw [dashed] (n3) to (trans2);
+		\draw [dashed] (n4) to (trans2);
+		\draw [dashed] (n4) to (trans3);
+		\draw [dashed] (n5) to (trans3);
+		\draw [dashed] (n5) to (trans4);
+		\draw [dashed] (n6) to (trans4);
+		\draw [dashed] (n6) to (trans5);
+	\end{tikzpicture}
+\end{columns}
+
+\end{frame}
+
+\begin{frame}
+\frametitle{Recursive Split}
+\begin{subpart}{Idea}
+	\item Apply split to positive and negative branches before combining
+	\item Use stopping criteria (depth or time)
+\end{subpart}
+
+\begin{block}{Example}
+\end{block}
+\vspace{-0.8cm}
+  \begin{columns}
+  \column{0.5\textwidth}
+	\centering
+	Split once, best variable: $a$\\
+	\begin{tikzpicture}
+		\rootnode;
+		\withchildren{root}{n1}{$a$} {n2}{$\dual{a}$};
+		\addchildren{n1} {trans1}{} {trans2}{};
+		\addchildren{n2} {trans3}{} {trans4}{};
+		\draw [dashed] (n1) to (trans1);
+		\draw [dashed] (n1) to (trans2);
+		\draw [dashed] (n2) to (trans3);
+		\draw [dashed] (n2) to (trans4);
+	\end{tikzpicture}
+	\column{0.5\textwidth}
+	\centering
+	Split positive/negative branches, best variables: $b$/$c$; \\
+	\begin{tikzpicture}
+		\rootnode;
+		\proofnode[above left of = root,xshift = -0.6cm] {n1}{$a$};
+		\proofnode[above right of = root,xshift = 0.6cm] {n2}{$\dual{a}$};
+		\drawchildren{root}{n1} {n2};
+		\withchildren{n1} {n3}{$a,b$} {n4}{$a, \dual{b}$};
+		\withchildren{n2} {n5}{$\dual{a},c$} {n6}{$\dual{a},\dual{c}$};
+		\addchildren{n3} {trans1}{} {trans2}{};
+		\addchildren{n5} {trans3}{} {trans4}{};
+		\addchildren{n6} {notneeded}{} {trans5}{};
+		\draw [dashed] (n3) to (trans1);
+		\draw [dashed] (n3) to (trans2);
+		\draw [dashed] (n4) to (trans2);
+		\draw [dashed] (n4) to (trans3);
+		\draw [dashed] (n5) to (trans3);
+		\draw [dashed] (n5) to (trans4);
+		\draw [dashed] (n6) to (trans4);
+		\draw [dashed] (n6) to (trans5);
+	\end{tikzpicture}
+\end{columns}
+\vspace{-0.3cm}
+\begin{subpart}{Issue}
+	\item Equal nodes may be computed in both branches
+\end{subpart}
+
+\end{frame}
+
+\begin{frame}
+
+\frametitle{Experiments}
+
+	\begin{block}{Results}
+		\vspace{1em}
+		\centering
+		\begin{tabular}{lcc}
+			\hline
+			Algorithm                & Length Compression & Speed   \\
+			\hline
+			Recursive Split (depth 3) &  2.3\% & 3.0 nodes/ms \\
+			Recursive Split (depth 5) &  2.0\% & 2.0 nodes/ms \\
+			Iterative Split (depth 3) &  2.9\% & 3.2 nodes/ms \\
+			Iterative Split (depth 5) &  3.4\% & 2.3 nodes/ms \\
+			\hline
+		\end{tabular}
+	\end{block}
+
+\end{frame}
+
+\section{Greedy pebbling}
+\recalltoc
+\begin{frame}
+
+\frametitle{Space Compression}
+
+\begin{subpart}{Space measure}
+	\item Maximal amount of nodes that have to be kept in memory at once
+\end{subpart}
+
+\vspace{-2mm}
+\begin{subpart}{Deletion information}
+	\item Extra lines in proof output
+	\item Example: $y$ is the last child of $x$
+	\begin{itemize}
+		\item Read and check node $x$\\
+		$\ldots$
+		\item Read and check node $y$
+		\item Delete node $x$\\
+		$\ldots$
+	\end{itemize}
+\end{subpart}
+
+\vspace{-4mm}
+\begin{subpart}{Interesting scenario}
+	\item Proof checker has much less memory than proof producer
+\end{subpart}
+
+\end{frame}
+
+\begin{frame}
+
+\frametitle{Black Pebbling Game}
+
+\textit{A pebble is a small stone}
+
+%I think to pebble is not a real word, but it's shorter and easiert than "put a pebble on"
+\begin{subpart}{Rules}
+	\item If all premises of a node $p$ are pebbled, $p$ may be pebbled
+	\begin{itemize}
+		\item In this case, a pebble may be moved from a premise to $p$
+	\end{itemize}
+	\item Nodes can be unpebbled at any time
+\end{subpart}
+
+\begin{subpart}{Goal}
+	\item Pebble some node $v$
+\end{subpart}
+
+\begin{subpart}{Pebbling problem}
+	\item For a given DAG and a node $v$, can $v$ be pebbled using no more than $n$ pebbles in total?
+	\item PSPACE-complete (John R. Gilbert et al., 1980)
+\end{subpart}
+
+\end{frame}
+
+\begin{frame}
+	\frametitle{Pebbling Game Example}
+	\centering
+	Maximum pebbles used:
+		\alt<1>{0}{\alt<2>{1}{\alt<3,4>{2}{3}}} \\[1cm]
+	\begin{tikzpicture}[node distance=1.2cm]
+		\rootnodeBW;
+		\withchildrenBW{root}{n5}{n7};
+		\withchildrenBW{n5}{n3}{n4};
+		\withchildrenBW{n3}{n1}{n2};
+		\proofnodeBW[above right of=n4]{n8};
+		\drawchildren{n4}{n2}{n8};
+		\proofnodeBW[above right of=n7]{n6};
+		\drawchildren{n7}{n4}{n6};
+		\blacknode<2,3>{n1};
+		\blacknode<3-5>{n2};
+		\blacknode<4-6>{n3};
+		\blacknode<5>{n8};
+		\blacknode<6-8>{n4};
+		\blacknode<7-9>{n5};
+		\blacknode<8>{n6};
+		\blacknode<9>{n7};
+		\blacknode<10>{root};
+	\end{tikzpicture}
+\end{frame}
+
+\begin{frame}
+	\frametitle{Greedy Pebbling}
+	
+	\begin{subpart}{Topological Order + Deletion Information}
+		\item Correspond to a strategy for the pebbling game
+	\end{subpart}
+	
+	\begin{subpart}{Greedy heuristics}
+		\item Find better order w.r.t. space measure
+		\item Choose next node w.r.t.:
+		\begin{itemize}
+			\item Number of pebbles that can be removed
+			\item Pebbled premises
+			\item Children with pebbled premises
+			\item Number of children
+			\item Number of premises, which the node is the last children of
+			\item $\ldots$
+		\end{itemize}
+	\end{subpart}
+	
+	\begin{block}{Top-down vs Bottom-up}
+	\end{block}
+	
+\end{frame}
+
+\begin{frame}
+	\frametitle{Greedy Top-down Pebbling}
+	\centering
+	Maximum pebbles used:
+		\alt<1>{0}{\alt<2>{1}{\alt<3,4,5>{2}{\alt<6,7,8>{3}{4}}}} \\[1cm]
+	\begin{tikzpicture}[node distance=1.2cm]
+		\proofnodeBWHidden{root};
+		\proofnodeBWHidden[above left of = root,xshift=-1.2cm]{n7};
+		\proofnodeBW[above right of = n7,xshift=1.2cm]{n6};
+		\proofnodeBW[above left of = n7]{n3};
+		\proofnodeBWHidden[above right of = root,xshift=1.2cm]{n12};
+		\proofnodeBW[above right of = n12]{n10};
+		\withchildrenBW{n3}{n1}{n2};
+		\withchildrenBW{n6}{n4}{n5};
+		\withchildrenBW{n10}{n8}{n9};
+		\blacknode<2,3>{n1};
+		\blacknode<3>{n2};
+		\blacknode<4-10>{n3};
+		\whitenode<3->{n7};
+		\draw<3->[proof edge] (n7.north west) -- (n3.south east);
+		\blacknode<5,6>{n8};
+		\blacknode<6>{n9};
+		\blacknode<7-11>{n10};
+		\whitenode<6->{n12};
+		\draw<6->[proof edge] (n10) -- (n12);
+		\blacknode<8,9>{n4};
+		\blacknode<9>{n5};
+		\blacknode<10,11>{n6};
+		\whitenode<10->{root};
+		\draw<9->[proof edge] (n6.south west) -- (n7.north east);
+		\draw<9->[proof edge] (n6.south east) -- (n12.north west);
+		\draw<10->[proof edge] (n7.south east) -- (root.north west);
+		\draw<10->[proof edge] (n12.south west) -- (root.north east);	
+		\blacknode<11,12>{n7};
+		\blacknode<12>{n12};
+		\blacknode<13>{root};
+	\end{tikzpicture}
+\end{frame}
+
+\begin{frame}
+	\frametitle{Greedy Bottom-up Pebbling}
+	\centering
+	Maximum pebbles used:
+		\alt<1,2,3>{0}{\alt<4>{1}{\alt<5,6,7,8>{2}{3}}} \\[1cm]
+	\begin{tikzpicture}[node distance=1.2cm]
+		\proofnodeBW{root};
+		\proofnodeBW[above left of = root,xshift=-1.2cm]{n7};
+		\proofnodeBW[above right of = root,xshift=1.2cm]{n12};
+		\draw[proof edge] (n7.south east) -- (root.north west);
+		\draw[proof edge] (n12.south west) -- (root.north east);	
+		
+		\proofnodeBWHidden[above right of = n7,xshift=1.2cm]{n6};
+		\proofnodeBWHidden[above left of = n7]{n3};
+		\proofnodeBWHidden[above right of = n12]{n10};
+		
+		\proofnodeBWHidden[above right of = n3]{n2};
+		\proofnodeBWHidden[above left of = n3]{n1};
+		
+		\proofnodeBWHidden[above right of = n6]{n5};
+		\proofnodeBWHidden[above left of = n6]{n4};
+		
+		\proofnodeBWHidden[above right of = n10]{n8};
+		\proofnodeBWHidden[above left of = n10]{n9};
+		
+		\waitingnode<1->{root};
+		\waitingnode<2-17>{n12};
+		\whitenode<2->{n6};
+		\whitenode<2->{n10};
+		\draw<2->[proof edge] (n6.south east) -- (n12.north west);
+		\draw<2->[proof edge] (n10) -- (n12);
+		\waitingnode<3-6>{n6};
+		\whitenode<3->{n4};
+		\whitenode<3->{n5};
+		\drawchildren<3->{n6}{n4}{n5};
+		\blacknode<4,5>{n5};
+		\blacknode<5>{n4};
+		\blacknode<6-10>{n6};
+		\waitingnode<7-9>{n10};
+		\whitenode<7->{n8};
+		\whitenode<7->{n9};
+		\drawchildren<7->{n10}{n8}{n9};
+		\blacknode<8,9>{n8};
+		\blacknode<9>{n9};
+		\blacknode<10>{n10};
+		\blacknode<11-17>{n12};
+		\waitingnode<12-17>{n7};
+		\whitenode<12->{n3};
+		\draw<12->[proof edge] (n7.north west) -- (n3.south east);
+		\draw<12->[proof edge] (n6.south west) -- (n7.north east);
+		
+		\waitingnode<13-15>{n3};
+		\drawchildren<13->{n3}{n1}{n2};
+		\whitenode<13->{n1};
+		\whitenode<13->{n2};
+		
+		\blacknode<14,15>{n1};
+		\blacknode<15>{n2};
+		
+		\blacknode<16>{n3};
+		
+		\blacknode<17>{n7};
+		
+		\blacknode<18>{root};
+	\end{tikzpicture}
+\end{frame}
+
+
+\begin{frame}
+
+\frametitle{Experiments}
+
+	\begin{block}{Results}
+		\vspace{1em}
+		\centering
+		\begin{tabular}{lcc}
+			\hline
+			Algorithm                & Space Compression & Speed   \\
+			\hline
+			Top-down Pebbling*       &  -40.4776\% & 1.4 nodes/ms \\
+			Bottom-up Pebbling**     &  6.8\%    & 12.2 nodes/ms \\
+			\hline
+		\end{tabular}
+	\end{block}
+
+\begin{subpart}{Used heuristics}
+	\item *: removes pebbles $>$ pebbled premises $>$ children with pebbled premises $>$ index in the original proof
+	\item **: last child of a node $>$ number of children $>$ index in the original proof
+\end{subpart}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Conclusion \& Future Work}
+	\begin{subpart}{Subsumption}
+    \item Top-down-S interesting replacement for DAGification
+		\item Bottom-up-S could possibly do much
+		\item Boost performance
+		\item Fix problems with Bottom-up-S
+  \end{subpart}
+  \vspace{-0.1cm}
+	\begin{subpart}{Recursive Split}
+    \item Promising Idea
+		\item Still needs some fine tuning
+  \end{subpart}
+	\vspace{-0.1cm}
+	\begin{subpart}{Greedy Pebbling}
+		\item Top-down version is not clever enough
+		\item Bottom-up version shows nice results
+		\item Find better heuristics for Bottom-up
+	\end{subpart}
+\end{frame}
+
+\begin{frame}
+	\begin{center}
+		Special Thanks to:\\[5mm]
+		Google \&\\[5mm]
+		European Master's Program in Computational Logic (EMCL)\\[5mm]
+		for financial support
+	\end{center}
+\end{frame}
+
+\begin{frame}
+	\vspace{2cm}
+	\begin{center}
+		Thank you for your attention\\[5mm]
+		Feel free to ask questions\\[25mm]
+		http://github.com/Paradoxika/Skeptik
+	\end{center}
+\end{frame}
+
+\end{document}
