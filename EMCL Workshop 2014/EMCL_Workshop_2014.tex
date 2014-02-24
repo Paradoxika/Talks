@@ -1,0 +1,871 @@
+\documentclass{beamer}
+
+\usepackage[latin1]{inputenc}
+\usepackage[british]{babel}
+\usepackage{amssymb}
+%\usepackage{utf8}
+%\usepackage{latexsym}
+%\usepackage{rotate}
+\usepackage{tikz}
+\usepackage{datetime}
+\usepackage{bussproofs}
+
+\usepackage{drawproof}
+
+\newdate{date}{18}{02}{2014}
+\date{\displaydate{date}}
+
+\definecolor{vertfonce}{HTML}{347003}
+\definecolor{deletecol}{HTML}{111111}
+
+\usecolortheme[named=vertfonce]{structure}
+
+\newcommand{\dual}[1]{\ensuremath{\bar{#1}}}
+\newcommand{\dn}[2]{#1 \setminus (#2)}
+
+\newenvironment<>{subpart}[1]
+{ \begin{block}#2{#1}
+  \begin{itemize}
+}{
+  \end{itemize}
+  \end{block}
+}
+
+\newcommand{\recalltoc}{\frame{\tableofcontents[sectionstyle=show/shaded,subsectionstyle=show/show/hide]}}
+
+\newcommand{\Resolution}[2]{\RightLabel{\footnotesize{$#1$}} \BinaryInfC{$#2$}}
+
+%\usepackage[vlined]{algorithm2e}
+\usetikzlibrary{arrows}
+\usetikzlibrary{positioning}
+
+
+\title{Propositional proof compression}
+
+\author{Andreas Fellner}
+
+\vspace{2cm}
+\date{EMCL Workshop 2014, Vienna\\ $18^{th}$, $19^{th}$ February, 2014}
+
+\begin{document}
+
+\maketitle
+
+\section{Motivation}
+
+\begin{frame}
+	\frametitle{A proof}
+	\centering
+	\begin{minipage}{.5\linewidth}
+		\begin{tikzpicture}[node distance=1.2cm]
+			\rootnode;
+			\withchildren{root} {n5}{$\dual{a}$}  {n6}{$a$};
+			\withchildren{n5} {n1}{$\dual{a},\dual{b}$} {n4}{$b$};
+			\withchildren{n4} {n2}{$\dual{a},b$} {n3}{$a,b$};
+		\end{tikzpicture}
+	\end{minipage}%
+	\begin{minipage}{.3\linewidth}
+		\textbf{Axioms}\\
+		$\{$\dual{a},\dual{b}$\}, \{\dual{a},b\}, \{a,b\}, \{a\}$
+	\end{minipage}%
+\end{frame}
+
+\begin{frame}
+	\frametitle{A proof}
+	\centering
+	\begin{minipage}{.5\linewidth}
+	\begin{tikzpicture}[node distance=1.2cm]
+		\rootnode;
+		
+		\proofnode [above left of= root]{n5} {$\dual{a}$};
+		\withchildren{n5} {n1}{$\dual{a},\dual{b}$} {n4}{$b$};
+		
+		\withchildren{n4} {n2}{$\dual{a},b$} {n6}{$a$};
+		
+		\drawchildren{root}{n5}{n6};
+	\end{tikzpicture}
+	\end{minipage}%
+	\begin{minipage}{.3\linewidth}
+		\textbf{Axioms}\\
+		$\{$\dual{a},\dual{b}$\}, \{\dual{a},b\}, \{a\}$ \\
+	\end{minipage}%
+\end{frame}
+
+\begin{frame}
+
+\frametitle{Another proof}
+\centering
+\begin{minipage}{.6\linewidth}
+	\begin{tikzpicture}[node distance=1.5cm]
+
+		\rootnode;
+		\withchildren{root} {r0}{$\dual{a}$} {u0}{$a$};
+
+		\withchildren{r0} {r1}{$\dual{a},\dual{c}$} {r2}{$\dual{a},c$};
+
+		\withchildren{r1} {a0}{$\dual{a},\dual{b},\dual{c}$} {u1}{$\dual{a},b$};
+
+		\proofnode[above right of=r2]{a1}{$\dual{b},c$};
+		\drawchildren{r2} {u1}{a1};
+
+	\end{tikzpicture}
+\end{minipage}%
+\begin{minipage}{.3\linewidth}
+	\textbf{Axioms}\\
+	$\{a\}, \{\dual{a},b\}, \{\dual{b},c\}, \{\dual{a},\dual{b},\dual{c}\}$ \\
+\end{minipage}%
+\end{frame}
+
+\begin{frame}
+
+	\frametitle{Another proof}
+	\centering
+	\begin{minipage}{.6\linewidth}
+		\begin{tikzpicture}[node distance=1.5cm]
+			\rootnode;
+			\withchildren{root} {r0}{$\dual{a}$} {u0}{$a$};
+			
+			\withchildren{r0} {r1}{$\dual{a},\dual{b}$} {r2}{$\dual{a},b$};
+			
+			\withchildren{r1} {r3}{$\dual{a},\dual{b},\dual{c}$} {r4}{$\dual{b},c$};
+    \end{tikzpicture}
+	\end{minipage}%
+	\begin{minipage}{.3\linewidth}
+		\textbf{Axioms}\\
+		$\{a\}, \{\dual{a},b\}, \{\dual{b},c\}, \{\dual{a},\dual{b},\dual{c}\}$ \\
+	\end{minipage}%
+\end{frame}
+
+\begin{frame}
+
+\frametitle{Puropose}
+
+\begin{itemize}\itemsep1em
+	\item Smaller proof libraries
+	\item Faster proof checking
+	\item Smaller unsat cores; better interpolants
+	\item Easier combination of deductive system
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}
+\frametitle{Table of Contents}
+\tableofcontents
+\end{frame}
+
+\section{Length compression}
+\subsection{Subsumption based}
+\begin{frame}
+
+\frametitle{Processing proofs}
+
+\begin{subpart}{Topological order}
+	\item Order proof nodes
+	\item Premise before node
+\end{subpart}
+\vspace{1em}
+\centering
+\begin{tikzpicture}[node distance=1.2cm]
+	\rootnode;
+	\withchildren{root} {n5}{$\dual{a}$}  {n6}{$a$};
+	\withchildren{n5} {n1}{$\dual{a},\dual{b}$} {n4}{$b$};
+	\withchildren{n4} {n2}{$\dual{a},b$} {n3}{$a,b$};
+	\only<2->{
+	\node [color=red] (numb1) at (n1.west) {\tiny{1}};
+	}
+	\only<3->{
+	\node [color=red] (numb2) at (n2.west) {\tiny{2}};
+	}
+	\only<4->{
+	\node [color=red] (numb3) at (n3.west) {\tiny{3}};
+	}
+	\only<5->{
+	\node [color=red] (numb4) at (n4.west) {\tiny{4}};
+	}
+	\only<6->{
+	\node [color=red] (numb5) at (n5.west) {\tiny{5}};
+	}
+	\only<7->{
+	\node [color=red] (numb6) at (n6.west) {\tiny{6}};
+	}
+	\only<8->{
+	\node [color=red] (numb7) at (root.west) {\tiny{7}};
+	}
+\end{tikzpicture}\\[1em]
+\begin{tikzpicture}[node distance=0.8cm]
+		\usetikzlibrary{calc}
+		\uncover<2->{\firstNode{n1} {$\dual{a},\dual{b}$} {};}
+		\uncover<3->{\nextNode{n1} {n2} {$\dual{a},b$} {};}
+		\uncover<4->{\nextNode{n2} {n3} {$a,b$} {};}
+		\uncover<5->{\nextNode{n3} {n4} {$b$} {};}
+		\uncover<6->{\nextNode{n4} {n5} {$\dual{a}$} {};}
+		\uncover<7->{\nextNode{n5} {n6} {$a$} {};}
+		\uncover<8->{\nextNode{n6} {n7} {$\bot$} {};}
+		\uncover<9->{
+		\draw [-triangle 45,color=black,thick] (1,-0.8) -- node[auto,text=vertfonce,above]{Top-Down} (4,-0.8);
+		}
+		\uncover<10->{
+		\draw [-triangle 45,color=black,thick] (4,-1.1) -- node[auto,text=vertfonce,below]{Bottom-Up} (1,-1.1);
+		}
+\end{tikzpicture}
+
+\end{frame}
+
+\begin{frame}
+	\frametitle{Subsumption for Proof Compression}
+	\begin{itemize}\itemsep1em
+		\item Subsumption
+		\begin{itemize}
+			\item $C_1$ subsumes $C_2$ iff $C_1 \subset C_2$
+		\end{itemize}
+		\item Replace subsumed clauses by their subsumers
+		\item Fix nodes with changed premises
+		\begin{itemize}
+			\item Pivot in both premises $\rightarrow$ resolve premises
+			\item Pivot missing in a premise $\rightarrow$ use this premise
+		\end{itemize}
+	\end{itemize}
+	%\begin{subpart}{Performance}
+		%\item Worst case quadratic runtime in the proof size
+		%\item Use literal-tree structure to store visited nodes and check subsumption
+	%\end{subpart}
+\end{frame}
+
+\begin{frame}
+
+	\frametitle{Top-Down and Bottom-Up Subsumption}
+
+	\begin{block}{Top-Down}
+		\begin{tikzpicture}
+			%\nextNode{(0,0)} {p1} {$p_1$} {};
+			\firstNode{p1}{$C_1$}{};
+			\nextNode{p1} {p2} {$C_2$} {};
+			\nextNode{p2} {p3} {$C_3$} {};
+			\nextNode{p3} {dots1} {$\ldots$} {};
+			\nextNode{dots1} {pk} {$C_k$} {};
+			\nextNode{pk} {dots2}{$\ldots$} {};
+			\nextNode{dots2} {pn2}{$C_{n-2}$} {};
+			\nextNode{pn2} {pn1}{$C_{n-1}$} {};
+			\nextNode{pn1} {pn}{$C_n$} {};
+			\draw (pk) to [out = 90, in = 90] node[above,pos = 0.8] {$\subset$} (p1);
+			\draw (pk) to [out = 90, in = 90] node[above, pos = 0.8] {$\subset$} (p2); %{$\overset{\tiny{?}}{\tiny{<}}$} (p2);
+			\draw (pk) to [out = 90, in = 90] node[above, pos = 0.8] {$\subset$} (p3);
+			\draw [color=vertfonce,thick,-triangle 45] (3,-0.6) -- (6,-0.6);
+			%\draw [->] (p1){}+(0,-1) -- (pn){}+(0,-1);
+			%\draw [color=blue] (p1) circle (1);
+			%\draw [color=blue] (pn) circle (1);
+		\end{tikzpicture}
+	\end{block}
+		\begin{block}{Bottom-Up}
+		\begin{tikzpicture}
+			%\nextNode{(0,0)} {p1} {$p_1$} {};
+			\firstNode{p1}{$c_1$}{};
+			\nextNode{p1} {p2} {$C_2$} {};
+			\nextNode{p2} {p3} {$C_3$} {};
+			\nextNode{p3} {dots1} {$\ldots$} {};
+			\nextNode{dots1} {pk} {$C_k$} {};
+			\nextNode{pk} {dots2}{$\ldots$} {};
+			\nextNode{dots2} {pn2}{$C_{n-2}$} {};
+			\nextNode{pn2} {pn1}{$C_{n-1}$} {};
+			\nextNode{pn1} {pn}{$C_n$} {};
+			\draw (pk) to [out = 90, in = 90] node[above,pos = 0.8] {$\supset^*$} (pn2);
+			\draw (pk) to [out = 90, in = 90] node[above, pos = 0.8] {$\supset^*$} (pn1); %{$\overset{\tiny{?}}{\tiny{<}}$} (p2);
+			\draw (pk) to [out = 90, in = 90] node[above, pos = 0.8] {$\supset^*$} (pn);
+			\draw [color=vertfonce,thick,-triangle 45] (6,-0.6) -- (3,-0.6);
+		\end{tikzpicture}
+	\end{block}
+	$C \subset^* D$ iff $C \subset D$ and $C$ is not an ancestor of $D$
+\end{frame}
+
+\begin{frame}
+	\frametitle{Top-Down Subsumption Example}
+	\centering
+	\begin{tikzpicture}[node distance=1.2cm]
+		\rootnode;
+		\withchildren{root} {n5}{$a$}  {n6}{$\dual{a}$};
+		\addchildren{n5}   {n3}{$\dual{b}$} {n4}{$a,b$};
+		\drawchildren<-2>{n5} {n3} {n4};
+		\withchildren{n3} {n1}{$\dual{a},\dual{b}$} {n2}{$a$};
+		\only<1>{
+		\node [color=red] (numb1) at (n1.west) {\tiny{1}};
+		\node [color=red] (numb2) at (n2.west) {\tiny{2}};
+		\node [color=red] (numb3) at (n3.west) {\tiny{3}};
+		\node [color=red] (numb4) at (n4.west) {\tiny{4}};
+		\node [color=red] (numb5) at (n5.west) {\tiny{5}};
+		\node [color=red] (numb6) at (n6.west) {\tiny{6}};
+		\node [color=red] (numb7) at (root.west) {\tiny{7}};
+		}
+		\marknode<2>{n2};
+		\marknode<2>{n4};
+		\crossnode<3->{n4};
+		\drawchildren<3->{n5}{n3}{n2};
+		\draw<4>[-triangle 45,thick] (n2) -- (n5);
+	\end{tikzpicture}
+\end{frame}
+
+\begin{frame}
+	\frametitle{Top-Down Subsumption Example}
+	\centering
+	\begin{tikzpicture}[node distance=1.2cm]
+		\rootnode;
+		\withchildren{root} {n5}{$a$}  {n7}{$\dual{a}$};
+	\end{tikzpicture}
+\end{frame}
+
+\begin{frame}
+	\frametitle{Bottom-Up Subsumption Example}
+	\centering
+	\begin{tikzpicture}[node distance=1.2cm]
+		\rootnode;
+		\withchildren{root} {n5}{$\dual{a}$}  {n6}{$a$};
+		\withchildren{n5} {n1}{$\dual{b}$} {n4}{$b$};
+		\withchildren{n4} {n2}{$\dual{a},b$} {n3}{$a,b$};
+		\only<1>{
+		\node [color=red] (numb1) at (n1.west) {\tiny{1}};
+		\node [color=red] (numb2) at (n2.west) {\tiny{2}};
+		\node [color=red] (numb3) at (n3.west) {\tiny{3}};
+		\node [color=red] (numb4) at (n4.west) {\tiny{4}};
+		\node [color=red] (numb5) at (n5.west) {\tiny{5}};
+		\node [color=red] (numb6) at (n6.west) {\tiny{6}};
+		\node [color=red] (numb7) at (root.west) {\tiny{7}};
+		}
+		\marknode<2>{n3};
+		\marknode<2>{n6};
+	\end{tikzpicture}
+\end{frame}
+
+\begin{frame}
+	\frametitle{Bottom-Up Subsumption Example}
+	\centering
+	\begin{tikzpicture}[node distance=1.2cm]
+		\rootnode;
+		
+		\proofnode [above left of= root]{n5} {$\dual{a}$};
+		\withchildren{n5} {n1}{$\dual{b}$} {n4}{$b$};
+		
+		\withchildren{n4} {n2}{$\dual{a},b$} {n6}{$a$};
+		
+		\drawchildren{root}{n5}{n6};
+
+	\end{tikzpicture}
+\end{frame}
+
+\begin{frame}
+	\frametitle{Bottom-Up Subsumption Example}
+	\centering
+	\begin{tikzpicture}[node distance=1.2cm]
+		\rootnode;
+		\withchildren{root} {n5}{$\dual{a}$}  {n6}{$a$};
+		\withchildren{n5} {n1}{$\dual{b}$} {n4}{$b$};
+		\withchildren{n4} {n2}{$\dual{a},b$} {n3}{$a,b$};
+		\only<1>{
+		\node [color=red] (numb1) at (n1.west) {\tiny{1}};
+		\node [color=red] (numb2) at (n2.west) {\tiny{2}};
+		\node [color=red] (numb3) at (n3.west) {\tiny{3}};
+		\node [color=red] (numb4) at (n4.west) {\tiny{4}};
+		\node [color=red] (numb5) at (n5.west) {\tiny{5}};
+		\node [color=red] (numb6) at (n6.west) {\tiny{6}};
+		\node [color=red] (numb7) at (root.west) {\tiny{7}};
+		}
+		\marknode<2>{n2};
+		\marknode<2>{n5};
+	\end{tikzpicture}
+\end{frame}
+
+
+\begin{frame}
+	\frametitle{Bottom-Up Subsumption Example}
+	\centering
+	\begin{tikzpicture}[node distance=1.2cm]
+		\rootnode;
+		\withchildren{root} {n5}{$\dual{a}$}  {n6}{$a$};
+		\withchildren{n5} {n1}{$\dual{b}$} {n4}{$b$};
+		\proofnode[above right of=n4]{n3} {$a,b$};
+		\draw [proof edge] (n4) -- (n3);
+		\draw [->,proof edge] (n5) -- (n4);
+		\draw [->,proof edge](n4) [out = 150, in = 90] to (n5);
+	\end{tikzpicture}
+\end{frame}
+
+\AtBeginSection[]
+{
+  \begin{frame}<beamer>
+    \frametitle{Outline}
+    \tableofcontents[currentsection]
+  \end{frame}
+}
+
+\subsection{LowerUnivalents}
+
+\begin{frame}
+
+	\frametitle{LowerUnivalents}
+	
+  \begin{definition}[Valent literal]
+    In a proof $\psi$, a literal $\ell$ is \emph{valent} for the subproof $\varphi$ iff $\dual{\ell}$
+    belongs to the conclusion of $\dn{\psi}{\varphi}$ but not to the conclusion of $\psi$.
+  \end{definition}
+  \begin{definition}[Univalent subproof]
+    A subproof $\varphi$ with conclusion $\Gamma$ is \emph{univalent} w.r.t. a set $\Delta$ of
+    literals iff $\varphi$ has exactly one valent literal $\ell$, $\ell \notin \Delta$ and $\Gamma
+    \subseteq \Delta \cup \left\{ \ell \right\}$. $\ell$ is called the \emph{univalent literal} of
+    $\varphi$ w.r.t.  $\Delta$.
+  \end{definition}
+	\begin{subpart}{Idea}
+		\item $\Delta$ are negated univalent literals
+		\item Delete univalent subproofs
+		\item Reinsert in order of deletion
+	\end{subpart}
+\end{frame}
+
+\begin{frame}
+	\frametitle{LowerUnivalents Example}
+	\centering
+	$$ \Delta = \temporal<2>{\emptyset}{\{\dual{a}\}}{\{\dual{a},\dual{b}\}} $$
+	\begin{tikzpicture}[node distance=1.5cm]
+
+		\proofnode{root} {\only<-7,10>{$\bot$}};
+		\addchildren{root} {r0}{\alt<-5,9->{$\dual{a}$}{\only<6-7>{$\dual{a},\dual{b}$}}}
+											 {u0}{$a$};
+		\draw<-6,10>[proof edge] (root) -- (r0);
+		\draw<1,10> [proof edge] (root) -- (u0);
+		\draw<2-6>[deleted edge] (root) -- (u0);
+
+		\addchildren{r0} {r1}{\alt<-7>{$\dual{a},\dual{c}$}{$\dual{a},\dual{b}$}}
+										 {r2}{\alt<-7>{$\dual{a},c$}{$\dual{a},b$}};
+		\drawchildren<-3,9->{r0} {r1}{r2};
+		\draw<4-7>[proof edge] (r0) .. controls (r1.south west) .. (a0);
+		\draw<4>  [proof edge] (r0) -- (r2);
+		\draw<5-7>[proof edge] (r0) .. controls (r2.south east) .. (a1);
+
+		\addchildren{r1} {a0}{$\dual{a},\dual{b},\dual{c}$} {u1}{\alt<-7>{$\dual{a},b$}{$\dual{b},c$}};
+		\draw<-3,8->[proof edge] (r1) -- (a0);
+		\draw<-2,8->[proof edge] (r1) -- (u1);
+		\draw<3>  [deleted edge] (r1) -- (u1);
+
+		\proofnode[above right of=r2]{a1}{\only<-7>{$\dual{b},c$}};
+		\draw<-2>   [proof edge] (r2) -- (u1);
+		\draw<3,4>[deleted edge] (r2) -- (u1);
+		\draw<-4>   [proof edge] (r2) -- (a1);
+
+		\marknode<2-> [.31cm and .27cm]{u0};
+		\marknode<3-7>[.35cm and .3cm]{u1};
+		\marknode<8-> [.35cm and .3cm]{r2};
+
+		\crossnode<4-7>{r1};
+		\crossnode<5-7>{r2};
+		\crossnode<7>{root};
+	\end{tikzpicture}
+\end{frame}
+
+\section{Space compression}
+
+\begin{frame}
+
+\frametitle{Space Compression}
+
+\begin{subpart}{Space measure}
+	\item Maximal amount of nodes that have to be kept in memory at once when checking the proof
+\end{subpart}
+
+\vspace{-2mm}
+\begin{subpart}{Deletion information}
+	\item Extra lines in proof output
+	\item Example: $y$ is the last child of $x$
+	\begin{itemize}
+		\item Read and check node $x$\\
+		$\ldots$
+		\item Read and check node $y$
+		\item Delete node $x$\\
+		$\ldots$
+	\end{itemize}
+\end{subpart}
+
+\vspace{-4mm}
+\begin{subpart}{Interesting scenario}
+	\item Proof checker has much less memory than proof producer
+\end{subpart}
+
+\end{frame}
+
+\begin{frame}
+
+\frametitle{Black Pebbling Game}
+
+\textit{A pebble is a small stone}
+
+%I think to pebble is not a real word, but it's shorter and easiert than "put a pebble on"
+\begin{subpart}{Rules}
+	\item If all premises of a node $p$ are pebbled, $p$ may be pebbled
+	\item Nodes can be unpebbled at any time
+	\item Each node can be pebbled only once
+\end{subpart}
+
+\begin{subpart}{Goal}
+	\item Pebble some node $v$
+\end{subpart}
+
+\begin{subpart}{Pebbling problem}
+	\item For a given DAG and a node $v$, can $v$ be pebbled using no more than $n$ pebbles in total?
+	\item PSPACE-complete (John R. Gilbert et al., 1980)
+\end{subpart}
+
+\end{frame}
+
+%\begin{frame}
+	%\frametitle{Pebbling Game Example}
+	%\centering
+	%\begin{tikzpicture}[node distance=1.2cm]
+			%\rootnode;
+			%\withchildren{root} {n5}{$a$}  {n6}{$\dual{a}$};
+			%\addchildren{n5}   {n3}{$\dual{b}$} {n4}{$a,b$};
+			%\drawchildren{n5} {n3} {n4};
+			%\withchildren{n3} {n1}{$\dual{a},\dual{b}$} {n2}{$a$};
+	%\end{tikzpicture}
+%\end{frame}
+
+\begin{frame}
+	\frametitle{Pebbling Game Example}
+	\centering
+	\uncover<2->{
+		Maximum pebbles used:
+			\alt<2>{0}{\alt<3>{1}{\alt<4>{2}{3}}} \\[1cm]
+	}
+	\begin{minipage}{.5\linewidth}
+		\uncover<2->{
+		\begin{tikzpicture}[node distance=1.2cm]
+			\proofnodeBW{unp};
+			\proofnodeBW[below=of unp]{pebbled};
+			\whitenode{unp};
+			\blacknode{pebbled};
+			\node[right =of unp, xshift=-1em] (t1) {Not in memory};
+			\node[right =of pebbled, xshift=-1em] (t1) {In memory};
+		\end{tikzpicture}
+		}
+	\end{minipage}%
+	\begin{minipage}{.5\linewidth}
+	\only<1>{
+		\begin{tikzpicture}[node distance=1.2cm]
+			\rootnode;
+			\withchildren{root} {n5}{$a$}  {n6}{$\dual{a}$};
+			\addchildren{n5}   {n3}{$\dual{b}$} {n4}{$a,b$};
+			\drawchildren{n5} {n3} {n4};
+			\withchildren{n3} {n1}{$\dual{a},\dual{b}$} {n2}{$a$};
+		\end{tikzpicture}
+	}
+	\only<2->{
+		\begin{tikzpicture}[node distance=1.2cm]
+				\rootnodeBW;
+				\withchildrenBW{root} {n5}  {n6};
+				\addchildrenBW{n5}   {n3} {n4};
+				\drawchildren{n5} {n3} {n4};
+				\withchildrenBW{n3} {n1} {n2};
+				\blacknode<3,4,5>{n1};
+				\blacknode<4,5>{n2};
+				\blacknode<5,6,7,8>{n3};
+				\blacknode<7,8>{n4};
+				\blacknode<8,9,10,11>{n5};
+				\blacknode<10,11>{n6};
+				\blacknode<11>{root};
+		\end{tikzpicture}
+		}
+	\end{minipage}%
+\end{frame}
+
+\begin{frame}
+	\frametitle{Greedy Pebbling}
+	
+	\begin{subpart}{Topological Order + Deletion Information}
+		\item Correspond to a strategy for the pebbling game
+	\end{subpart}
+	
+	\begin{subpart}{Top-Down}
+		\item Select node out of all pebbleable nodes
+		\item Corresponds to playing the game
+	\end{subpart}
+	
+	\begin{subpart}{Bottom-Up}
+		\item Recursively queue up premises
+	\end{subpart}
+	
+	\begin{block}{Heuristics}
+	\end{block}
+	
+\end{frame}
+
+\begin{frame}
+	\frametitle{Top-Down Pebbling}
+	\centering
+	Maximum pebbles used:
+		\alt<1>{0}{\alt<2>{1}{\alt<3>{2}{\alt<4-7>{3}{\alt<8-11>{4}{\alt<12-15>{5}{6}}}}}} \\[1cm]
+	\begin{tikzpicture}[node distance=1cm]
+		\proofnodeBWHidden{root};
+		
+		\proofnodeBWHidden[above left=of root,xshift=-1.5cm]{n4};
+		\proofnodeBWHidden[above right=of root,xshift=1.5cm]{n15};
+		\proofnodeBWHidden[above =of root,yshift=0.5cm]{n11};
+
+		\proofnodeBWHidden[above left=of n4]{h1};
+		\proofnodeBWHidden[above right=of n15]{h2};
+		\proofnodeBWHidden[above left=of n11]{h3};
+		\proofnodeBWHidden[above right=of n11]{h4};
+		
+		\proofnodeBW[above left=of h1]{n3};
+		\proofnodeBW[above right=of h2]{n14};
+		\proofnodeBW[right=of n3,xshift=1.6cm]{n7};
+		\proofnodeBW[left=of n14,xshift=-1.6cm]{n10};
+
+		\withchildrenBW{n3} {n1} {n2};
+		\withchildrenBW{n7} {n5} {n6};
+		\withchildrenBW{n10} {n8} {n9};
+		\withchildrenBW{n14} {n12} {n13};
+		
+		\blacknode<2-4>{n1};
+		\blacknode<3,4>{n2};
+		\blacknode<4-20>{n3};
+		\whitenode<3-20>{n4};
+		\draw<3->[proof edge] (n4) -- (n3);
+		
+		\blacknode<6-8>{n12};
+		\blacknode<7,8>{n13};
+		\blacknode<8-22>{n14};
+		\whitenode<7->{n15};
+		\draw<7->[proof edge] (n15) -- (n14);
+		
+		\blacknode<10-12>{n5};
+		\blacknode<11,12>{n6};
+		\blacknode<12-18>{n7};
+		\whitenode<11->{n11};
+		\draw<11->[proof edge] (n11) -- (n7);
+		
+		\blacknode<14-16>{n8};
+		\blacknode<15,16>{n9};
+		\blacknode<16-18>{n10};
+		\draw<15->[proof edge] (n11) -- (n10);
+		
+		\draw<16->[proof edge] (n4) -- (n11);
+		\draw<16->[proof edge] (n15) -- (n11);
+		
+		\blacknode<18-22>{n11};
+		\draw<18->[proof edge] (root) -- (n4);
+		\draw<18->[proof edge] (root) -- (n15);
+		\whitenode<18->{root}
+		
+		\blacknode<20->{n4};
+		
+		\blacknode<22->{n15};
+		
+		\blacknode<24>{root};
+	\end{tikzpicture}
+\end{frame}
+
+\begin{frame}
+	\frametitle{Bottom-up Pebbling}
+	\centering
+	Maximum pebbles used:
+		\alt<1-4>{0}{\alt<5>{1}{\alt<6>{2}{\alt<7-12>{3}{\alt<13-17>{4}{5}}}}} \\[1cm]
+	\begin{tikzpicture}[node distance=1cm]
+		\rootnodeBW;
+
+		\proofnodeBW[above left=of root,xshift=-1.5cm]{n4};
+		\proofnodeBW[above right=of root,xshift=1.5cm]{n15};
+		\draw[proof edge] (root) -- (n4);
+		\draw[proof edge] (root) -- (n15);
+				
+		\proofnodeBWHidden[above =of root,yshift=0.5cm]{n11};
+
+		\proofnodeBWHidden[above left=of n4]{h1};
+		\proofnodeBWHidden[above right=of n15]{h2};
+		\proofnodeBWHidden[above left=of n11]{h3};
+		\proofnodeBWHidden[above right=of n11]{h4};
+		
+		\proofnodeBWHidden[above left=of h1]{n3};
+		\proofnodeBWHidden[above right=of h2]{n14};
+		\proofnodeBWHidden[right=of n3,xshift=1.6cm]{n7};
+		\proofnodeBWHidden[left=of n14,xshift=-1.6cm]{n10};
+
+		\proofnodeBWHidden[above left of=n3]{n1};
+		\proofnodeBWHidden[above right of=n3]{n2};
+		\proofnodeBWHidden[above left of=n7]{n5};
+		\proofnodeBWHidden[above right of=n7]{n6};
+		
+		\proofnodeBWHidden[above left of=n10]{n8};
+		\proofnodeBWHidden[above right of=n10]{n9};
+		
+		\proofnodeBWHidden[above left of=n14]{n12};
+		\proofnodeBWHidden[above right of=n14]{n13};
+			
+		\waitingnode<2-32>{root};
+		\whitenode<2->{n11};
+		\whitenode<2->{n3};
+		\whitenode<2->{n14};
+		\draw<2->[proof edge] (n4) -- (n3);
+		\draw<2->[proof edge] (n4) -- (n11);
+		\draw<2->[proof edge] (n15) -- (n11);
+		\draw<2->[proof edge] (n15) -- (n14);
+		
+		\waitingnode<3->{n15};
+		\whitenode<3->{n10};
+		\whitenode<3->{n7};
+		\whitenode<3->{n12};
+		\whitenode<3->{n13};
+		\draw<3->[proof edge] (n14) -- (n12);
+		\draw<3->[proof edge] (n14) -- (n13);
+		\draw<3->[proof edge] (n11) -- (n7);
+		\draw<3->[proof edge] (n11) -- (n10);
+		
+		
+		\waitingnode<4-7>{n14};
+		
+		\blacknode<5-7>{n12};
+		\blacknode<6,7>{n13};
+		\blacknode<7-22>{n14};
+		
+		\waitingnode<9-20>{n11};
+		\whitenode<9->{n5};
+		\whitenode<9->{n6};
+		\whitenode<9->{n8};
+		\whitenode<9->{n9};
+		\draw<9->[proof edge] (n7) -- (n5);
+		\draw<9->[proof edge] (n7) -- (n6);
+		\draw<9->[proof edge] (n10) -- (n8);
+		\draw<9->[proof edge] (n10) -- (n9);
+		
+		\waitingnode<10-13>{n7};
+		\blacknode<11-13>{n6};
+		\blacknode<12,13>{n5};
+		\blacknode<13-20>{n7};
+		
+		\waitingnode<15-18>{n10};
+		\blacknode<16-18>{n8};
+		\blacknode<17,18>{n9};
+		\blacknode<18-20>{n10};
+		
+		\blacknode<20-30>{n11};
+		\blacknode<22->{n15};
+		
+		\waitingnode<24-31>{n4};
+		\whitenode<24->{n1};
+		\whitenode<24->{n2};
+		\draw<24->[proof edge] (n3) -- (n1);
+		\draw<24->[proof edge] (n3) -- (n2);
+		
+		\waitingnode<25-28>{n3};
+		\blacknode<26-28>{n1};
+		\blacknode<27,28>{n2};
+		\blacknode<28-30>{n3};
+		
+		\blacknode<30->{n4};
+		
+		\blacknode<32>{root};
+		
+	\end{tikzpicture}
+\end{frame}
+
+\section{Skeptik}
+
+\begin{frame}
+
+\frametitle{Skeptik}
+
+\begin{subpart}{Proof compression tool}
+	\item First order logic framework
+	\item Many propositional proof compression algorithms implemented
+\end{subpart}
+
+\begin{subpart}{Developed at}
+	\item TU Wien
+	\item Bruno Woltzenlogel Paleo
+	\item Joseph Boudou
+\end{subpart}
+
+\begin{subpart}{Scala}
+	\item Functional extension of Java
+\end{subpart}
+
+\begin{subpart}{Check out at}
+	\item https://github.com/Paradoxika/Skeptik
+\end{subpart}
+
+\end{frame}
+
+\begin{frame}
+
+\frametitle{Implemented algorithms}
+
+\begin{itemize}
+	\item DAGification
+	\item EliminateTautologies
+	\item RecycleUnits
+	\item RecyclePivots
+	\begin{itemize} 
+		\item RecyclePivotsWithIntersection
+	\end{itemize}
+	\item ReduceAndReconstruct
+	\item LowerUnits
+	\item LowerUnivalents
+	\item Split
+	\begin{itemize}
+		\item CottonSplit
+		\item MultiSplit
+		\item RecursiveSplit
+	\end{itemize}
+	\item Subsumption algorithms
+	\item Pebbling algorithms
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}
+
+\frametitle{My project}
+
+\begin{subpart}{Google Summer of Code}
+	\item Three month coding project
+	\item Paid by Google
+	\item Subsumption, RecursiveSplit, Pebbling
+\end{subpart}
+
+\begin{subpart}{EMCL Project}
+	\item Paper about Pebbling
+\end{subpart}
+
+\begin{subpart}{This years GSoC}
+	\item Extend algorithms to First Order Logic
+	\item \scriptsize{http://www.iue.tuwien.ac.at/cse/index.php/gsoc/2014/ideas/153-skeptik.html}\normalsize{ }
+	\item Registration deadline: 21st March
+\end{subpart}
+
+\end{frame}
+
+\begin{frame}
+
+\frametitle{Conclusion}
+
+\begin{subpart}{Motivation}
+	\item Smaller proof libraries
+	\item Faster proof checking
+	\item Smaller unsat cores; better interpolants
+	\item Easier combination of deductive system
+\end{subpart}
+
+\begin{subpart}{Length compression}
+	\item Many different algorithms
+\end{subpart}
+
+\begin{subpart}{Space compression}
+	\item Bottom-Up better than Top-Down
+	\item Find better heuristics
+\end{subpart}
+
+\end{frame}
+
+\begin{frame}
+
+\center Thank you for your attention !
+\center Questions ?
+
+\end{frame}
+
+\end{document}
