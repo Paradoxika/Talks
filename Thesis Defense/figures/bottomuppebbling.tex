@@ -1,0 +1,96 @@
+\begin{tikzpicture}[node distance=1cm]
+		\rootnodeBW;
+
+		\proofnodeBW[above left=of root,xshift=-1.5cm]{n4};
+		\proofnodeBW[above right=of root,xshift=1.5cm]{n15};
+		\draw[proof edge] (root) -- (n4);
+		\draw[proof edge] (root) -- (n15);
+				
+		\proofnodeBWHidden[above =of root,yshift=0.5cm]{n11};
+
+		\proofnodeBWHidden[above left=of n4]{h1};
+		\proofnodeBWHidden[above right=of n15]{h2};
+		\proofnodeBWHidden[above left=of n11]{h3};
+		\proofnodeBWHidden[above right=of n11]{h4};
+		
+		\proofnodeBWHidden[above left=of h1]{n3};
+		\proofnodeBWHidden[above right=of h2]{n14};
+		\proofnodeBWHidden[right=of n3,xshift=1.6cm]{n7};
+		\proofnodeBWHidden[left=of n14,xshift=-1.6cm]{n10};
+
+		\proofnodeBWHidden[above left of=n3]{n1};
+		\proofnodeBWHidden[above right of=n3]{n2};
+		\proofnodeBWHidden[above left of=n7]{n5};
+		\proofnodeBWHidden[above right of=n7]{n6};
+		
+		\proofnodeBWHidden[above left of=n10]{n8};
+		\proofnodeBWHidden[above right of=n10]{n9};
+		
+		\proofnodeBWHidden[above left of=n14]{n12};
+		\proofnodeBWHidden[above right of=n14]{n13};
+			
+		\waitingnode<2-32>{root};
+		\whitenode<2->{n11};
+		\whitenode<2->{n3};
+		\whitenode<2->{n14};
+		\draw<2->[proof edge] (n4) -- (n3);
+		\draw<2->[proof edge] (n4) -- (n11);
+		\draw<2->[proof edge] (n15) -- (n11);
+		\draw<2->[proof edge] (n15) -- (n14);
+		
+		\waitingnode<3->{n15};
+		\whitenode<3->{n10};
+		\whitenode<3->{n7};
+		\whitenode<3->{n12};
+		\whitenode<3->{n13};
+		\draw<3->[proof edge] (n14) -- (n12);
+		\draw<3->[proof edge] (n14) -- (n13);
+		\draw<3->[proof edge] (n11) -- (n7);
+		\draw<3->[proof edge] (n11) -- (n10);
+		
+		
+		\waitingnode<4-7>{n14};
+		
+		\blacknode<5-7>{n12};
+		\blacknode<6,7>{n13};
+		\blacknode<7-22>{n14};
+		
+		\waitingnode<9-20>{n11};
+		\whitenode<9->{n5};
+		\whitenode<9->{n6};
+		\whitenode<9->{n8};
+		\whitenode<9->{n9};
+		\draw<9->[proof edge] (n7) -- (n5);
+		\draw<9->[proof edge] (n7) -- (n6);
+		\draw<9->[proof edge] (n10) -- (n8);
+		\draw<9->[proof edge] (n10) -- (n9);
+		
+		\waitingnode<10-13>{n7};
+		\blacknode<11-13>{n6};
+		\blacknode<12,13>{n5};
+		\blacknode<13-20>{n7};
+		
+		\waitingnode<15-18>{n10};
+		\blacknode<16-18>{n8};
+		\blacknode<17,18>{n9};
+		\blacknode<18-20>{n10};
+		
+		\blacknode<20-30>{n11};
+		\blacknode<22->{n15};
+		
+		\waitingnode<24-31>{n4};
+		\whitenode<24->{n1};
+		\whitenode<24->{n2};
+		\draw<24->[proof edge] (n3) -- (n1);
+		\draw<24->[proof edge] (n3) -- (n2);
+		
+		\waitingnode<25-28>{n3};
+		\blacknode<26-28>{n1};
+		\blacknode<27,28>{n2};
+		\blacknode<28-30>{n3};
+		
+		\blacknode<30->{n4};
+		
+		\blacknode<32>{root};
+		
+	\end{tikzpicture}

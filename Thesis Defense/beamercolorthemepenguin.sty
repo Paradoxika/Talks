@@ -1,0 +1,45 @@
+% "penguin" color theme for LaTeX/beamer
+%
+% Copyright 2008 by Adrian Prantl <adrian@complang.tuwien.ac.at>.
+% Based on "crane" by Til Tantau
+%
+% This program can be redistributed and/or modified under the terms
+% of the GNU Public License, version 2 or later.
+
+\mode<presentation>
+
+\definecolor{penguinyellow}{RGB}{254,253,239}
+\definecolor{penguinblue}{RGB}{26,117,207}
+\definecolor{penguindark}{RGB}{0,69,87}
+%\definecolor{penguindark}{RGB}{0,0,0}
+
+
+\setbeamercolor{structure}{fg=penguinyellow}
+
+\setbeamercolor{palette primary}{fg=penguinyellow,bg=penguinblue!70}
+\setbeamercolor{palette secondary}{fg=penguinyellow,bg=penguinblue!80}
+\setbeamercolor{palette tertiary}{fg=penguinyellow,bg=penguinblue!90}
+\setbeamercolor{palette quaternary}{fg=penguinyellow,bg=penguinblue}
+
+\setbeamercolor{titlelike}{parent=palette quaternary}
+
+\setbeamercolor{block title}{bg=penguinblue}
+\setbeamercolor{block title alerted}{use=alerted text,fg=penguinyellow,bg=alerted text.fg!75!bg}
+\setbeamercolor{block title example}{use=example text,fg=penguinyellow,bg=example text.fg!75!bg}
+
+\setbeamercolor{block body}{parent=normal text,use=block title,bg=block title.bg!25!bg}
+\setbeamercolor{block body alerted}{parent=normal text,use=block title alerted,bg=block title alerted.bg!25!bg}
+\setbeamercolor{block body example}{parent=normal text,use=block title example,bg=block title example.bg!25!bg}
+
+\setbeamercolor{sidebar}{bg=penguinblue!70}
+  
+\setbeamercolor{palette sidebar primary}{fg=penguinyellow}
+\setbeamercolor{palette sidebar secondary}{fg=penguinyellow!75}
+\setbeamercolor{palette sidebar tertiary}{fg=penguinyellow!75}
+\setbeamercolor{palette sidebar quaternary}{fg=penguinyellow}
+
+\setbeamercolor*{separation line}{}
+\setbeamercolor*{fine separation line}{}
+
+\mode
+<all>

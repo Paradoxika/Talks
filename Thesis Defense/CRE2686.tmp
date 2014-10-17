@@ -1,0 +1,592 @@
+% -*- coding: utf-8 -*-
+\documentclass{beamer}
+\usepackage[utf8]{inputenc}
+
+\usetheme{complang}
+
+% Have Page n/N in the lower left corner
+% \setbeamertemplate{footline}
+% {%
+% \begin{beamercolorbox}[wd=0.5\textwidth,ht=3ex,dp=1.5ex,
+%    leftskip=.5em,rightskip=.5em]{author in head/foot}%
+% \usebeamerfont{author in head/foot}%
+% \insertframenumber/\inserttotalframenumber\hfill\insertshortauthor%
+% \end{beamercolorbox}%
+% \vspace*{-4.5ex}\hspace*{0.5\textwidth}%
+% \begin{beamercolorbox}[wd=0.5\textwidth,ht=3ex,dp=1.5ex,
+%    left,leftskip=.5em]{title in head/foot}%
+% \usebeamerfont{title in head/foot}%
+% \insertshorttitle%
+% \end{beamercolorbox}%
+% }
+
+%\usepackage{pifont}
+%\usepackage{amstext}
+\usepackage{amsmath}
+%\usepackage{logic}
+% \usepackage{proof}
+\usepackage{xcolor}
+\usepackage{listings}
+\usepackage{hyperref}
+
+\usepackage{tikz}
+\usetikzlibrary{arrows,automata,positioning}
+\usetikzlibrary{fit}
+\usepackage{drawproof}
+
+% Colors
+\definecolor{myblue}{rgb}{0.089, 0.089, 0.58}
+\definecolor{myred}{rgb}{0.77, 0.05, 0.16}
+\definecolor{mygreen}{rgb}{0.05, 0.77, 0.16}
+\definecolor{myyellow}{rgb}{0.77, 0.77, 0.16}
+\definecolor{vertfonce}{HTML}{347003}
+
+\setbeamercolor{local structure}{fg=black}
+
+% Arrows
+\newcommand{\redarrow}{{\color{myred} \Pisymbol{pzd}{217}}}
+\newcommand{\redresarrow}{{\large\color{myred} \Pisymbol{pzd}{229}}}
+\newcommand{\ra}{\hspace{1cm}\redarrow}
+\newcommand{\rad}{\begin{rotate}{-90}{\Large\color{myred} 
+      \Pisymbol{pzd}{225}}\end{rotate}}
+\newcommand{\fatredarrow}{\hspace{1cm}{\color{myred}\Large \Pisymbol{pzd}{225}}}
+
+%% Result
+%\newcommand{\resbox}[1]{
+  %\begin{itemize}
+  %\item[\redresarrow] #1
+  %\end{itemize}
+%}
+
+
+%-------TITLE-----------------------------------------------------------
+\title{
+  Space and Congruence Compression of Proofs  
+}
+
+\author{
+  Andreas Fellner
+}
+
+\institute[TU Wien]{
+	\includegraphics[width=3cm]{figures/INF_Logo_typo_grau.png} \hspace{1cm} 
+	\includegraphics[width=2cm]{logo-complang} \\[1cm]
+	\Large{European Master in Computational Logic} \\[1cm]
+  %\Large{Computational Logic}
+  %\begin{tabular}{cc}
+    %\includegraphics[width=3cm]{figures/INF_Logo_typo_grau.png} &
+		%\begin{tabular}{c}   
+      %European Master in \\
+      %Computational Logic \\
+      %\\
+      %\\
+    %\end{tabular} \\
+		%\includegraphics[width=2cm]{logo-complang} & \\   
+  %\end{tabular}
+}
+
+\date{Master Thesis Presentation\\ Vienna, $23^{rd}$ of September 2014}
+%-----------------------------------------------------------------------
+
+\begin{document}
+\rm % Use ROMAN fonts
+
+%\section{}
+
+\begin{frame}
+
+\maketitle
+
+\end{frame}
+
+\begin{frame}
+
+\centering Space and Congruence Compression of Proofs
+
+\end{frame}
+
+\begin{frame}
+
+\centering Space and Congruence Compression of \textbf{\huge{Proofs}}
+
+\end{frame}
+
+\begin{frame}
+
+\frametitle{Resolution}
+
+\centering{
+ Resolution Rule \par
+	\only<1>{$$\frac{C \vee x \quad D \vee \neg x}{C \vee D}$$}
+	\only<2>{
+		\vspace{1cm}
+		\begin{tikzpicture}[node distance = 2cm]
+			\proofnode{cd}{$C,D$};
+			\proofnode[above right of= cd]{d}{$D,\neg x$};
+			\proofnode[above left of = cd]{c}{$C,x$};
+			\drawchildren{cd}{c}{d};
+		\end{tikzpicture}
+	}
+}
+
+\end{frame}
+
+\begin{frame}
+
+\frametitle{Example}
+
+$$ (x_1 \vee x_2 \vee \neg x_3) \wedge (x_1 \vee x_2) \wedge (x_1 \vee x_3) \wedge (\neg x_1) $$
+
+\uncover<2->{
+	\include{figures/resolutionexample2}
+}
+\end{frame}
+
+\begin{frame}
+
+\frametitle{Example}
+
+$$ (x_1 \vee x_2 \vee \neg x_3) \wedge (x_1 \vee x_2) \wedge (x_1 \vee x_3) \wedge (\neg x_1) $$
+
+	\include{figures/resolutionexample}
+\end{frame}
+
+\begin{frame}
+
+\centering Space and Congruence \textbf{\huge{Compression}} of Proofs
+
+\end{frame}
+
+\begin{frame}
+
+\frametitle{Proof Compression}
+
+\begin{itemize}
+
+	\item Smaller proofs
+	\item Smaller unsat cores, interpolants
+	\item Easier proof processing
+	\item Easier trusted interaction of deductive systems
+	\item Proof generalization
+
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}
+
+\frametitle{Synthesizing Multiple Boolean Functions using Interpolation on a Single Proof}
+
+\begin{itemize}
+	\item Georg Hofferek, et al, 2013, TU Graz
+\end{itemize}
+
+\begin{block}{Method}
+	\begin{enumerate}
+		\item Obtain proof of unsatisfiability of a formula in the SMT theory of uninterpreted functions
+		\item Modify proof
+		\item Extract one interpolant from the proof
+		\item Obtain multiple interpolants from the one that represent the desired boolean functions
+	\end{enumerate}
+\end{block}
+
+\uncover<2->{
+\begin{itemize}
+	\item Worst case exponential runtime in proof size
+\end{itemize}
+}
+
+\uncover<3->{
+\begin{block}{Proof Compression}
+	\begin{itemize}
+		\item Input proof: 1,870,407 nodes
+		\item Output proof: 868,760 nodes (53,6\% compression)
+	\end{itemize}
+\end{block}
+}
+
+\end{frame}
+
+\section{Congruence}
+
+\begin{frame}
+
+\centering Space and \textbf{\huge{Congruence}} Compression of Proofs
+
+\end{frame}
+
+\begin{frame}
+
+\frametitle{Example}
+
+\begin{block}{Knowledge}
+	\begin{enumerate}
+		\item $f(a) = a$
+		\item $a = b$
+		\item $b = f(b)$
+		\item $f(a) \neq f(b)$
+	\end{enumerate}
+\end{block}
+
+%\begin{itemize}
+%\uncover<2->{\item Unsatisfiable!\\}
+%\uncover<3->{\item Proof: Equality is transitive, therefore from $f(a) = a$, $a = b$ and $b = f(b)$ follows $f(a) = f(b)$, which contradicts $f(a) \neq f(b)$}
+%\uncover<4->{\item Another Proof: $f(.)$ is a function, therefore from $a = b$ follows $f(a) = f(b)$, which contradicts $f(a) \neq f(b)$}
+%\end{itemize}
+
+\uncover<2->{{\color{red} Unsatisfiable!\\}}
+\uncover<3,4>{
+	\begin{block}{Proof} 
+		Equality is transitive, therefore from $f(a) = a$, $a = b$ and $b = f(b)$ follows $f(a) = f(b)$, 
+		which contradicts $f(a) \neq f(b)$
+	\end{block}
+}
+\uncover<4>{
+	\begin{block}{A different Proof} 
+		$f(.)$ is a function, therefore from $a = b$ follows $f(a) = f(b)$, 
+		which contradicts $f(a) \neq f(b)$
+	\end{block}
+}
+%\uncover<5->{
+%\centering
+%\begin{tabular}{c c}
+	%\input{figures/proof} & Test 546 \\
+%\end{tabular}
+%}
+\end{frame}
+
+\begin{frame}
+
+\frametitle{A proof}
+
+\input{figures/proof}
+
+\end{frame}
+
+\begin{frame}
+
+\frametitle{A different proof}
+
+\input{figures/differentproof}
+
+\end{frame}
+
+\begin{frame}
+
+\frametitle{Definitions}
+
+\uncover<2->{
+\begin{block}{Ground Terms}
+	\begin{itemize}
+		\item Constants $a,b,c, \ldots$
+		\item Compound Terms $f(t_1,\ldots,t_n)$
+	\end{itemize}
+\end{block}
+}
+\uncover<3->{
+\begin{block}{Congruence Relation $R$}
+	\begin{itemize}
+		\item \makebox[2cm]{Reflexive:\hfill} $\forall t (t,t) \in R$
+		\item \makebox[2cm]{Symmetric:\hfill} $(s,t) \in R \Rightarrow (t,s) \in R$
+		\item \makebox[2cm]{Transitive:\hfill} $(t_1, t_2) \in R \ldots (t_{m-1}, t_m) \in R \Rightarrow (t_1, t_m) \in R$
+		\item \makebox[2cm]{Compatible:\hfill} $\forall i (t_i,s_i) \in R \Rightarrow (f(t_1, \dots, t_n), f(s_1, \dots, s_n)) \in R$
+	\end{itemize}
+\end{block}
+}
+\uncover<4->{
+\begin{block}{Congruence Closure $E^*$ of set of equations $E$}
+	\begin{itemize}
+		\item Smallest Congruence Relation containing $E$
+		\item Computable in $O(n \log(n))$
+		\item $E$ is explanation for $(s,t) \in E^*$
+	\end{itemize}
+\end{block}
+}
+\end{frame}
+
+\begin{frame}
+
+\frametitle{Example continued}
+
+\begin{block}{Knowledge}
+	\begin{enumerate}
+		\item $f(a) = a$
+		\item $a = b$
+		\item $b = f(b)$
+		\item $f(a) \neq f(b)$
+	\end{enumerate}
+\end{block}
+
+\uncover<2->{
+\begin{block}{Explanation for $f(a) = f(b)$}
+	$\{$ \visible<2>{$f(a) = a,$} \uncover<2->{$a = b$} \visible<2-3>{$,b = f(b)$} $\}$
+\end{block}
+}
+\uncover<5->{Short explanation $\leadsto$ short (sub)proof}
+\end{frame}
+
+\begin{frame}
+
+\frametitle{Short Explanation Decision Problem}
+
+\centering Given a set of input equations $E$, a target equation $s = t$ and $k \in \mathbb{N}$, does there exist an explanation $E' \subseteq E$ of $s = t$ with $|E'| \leq k$?
+%\centering Given a set of input equations $E$, a target equation $s = t$ and $k \in \mathbb{N}$, does there exist a set $E' \subseteq E$ with $|E'| \leq k$ and $E'$ is an explanation for $s=t$?
+
+\uncover<2->{\vspace{1cm} \centering\alert{\textbf{NP-complete}}}
+
+\end{frame}
+
+\begin{frame}
+
+\frametitle{NP-completeness proof sketch}
+
+\begin{block}{From a propositional logic formula $\Phi$ obtain $\ldots$}
+
+	\begin{itemize}
+		\item a set of equations $E_{\Phi}$
+		\item a target equation $s_{\Phi} = t_{\Phi}$
+		\item $k_{\Phi} \in \mathbb{N}$
+	\end{itemize}
+\end{block}
+
+\begin{block}{such that $\ldots$}
+	$\Phi$ is satisfiable if and only if there is an explanation $E' \subseteq E_{\Phi}$ of $s_{\Phi} = t_{\Phi}$ with $|E'| \leq k_{\Phi}$
+\end{block}
+
+%\begin{itemize}
+	%\item Translate propositional logic formula $\Phi$
+%\end{itemize}
+
+\end{frame}
+
+\begin{frame}
+
+\frametitle{NP-completeness proof sketch example}
+
+\begin{block}{Formula}
+$$(x_1 \vee x_2 \vee \neg x_3) \wedge (\neg x_2 \vee x_3) \wedge (\neg x_1 \vee \neg x_2)$$
+\end{block}
+\only<1-8>{
+\begin{block}{Translation to equations}
+	\input{figures/npexamplebig}
+\uncover<8>{
+\input{figures/npassignment}
+}
+\end{block}
+}
+
+\only<9>{
+\begin{block}{Small subset corresponding to satisfying assignment}
+\input{figures/npexplanation}
+\end{block}
+}
+\end{frame}
+
+%\begin{frame}
+%
+%\frametitle{Experimental Results}
+%
+%\end{frame}
+
+\begin{frame}
+
+\centering \textbf{\huge{Space}} and Congruence Compression of Proofs
+
+\end{frame}
+
+%\begin{frame}
+%
+%\frametitle{Space Compression}
+%
+%\begin{block}{Space measure of a proof}
+	%Maximal amount of nodes that have to be kept in memory at once while processing the proof
+%\end{block}
+%
+%%\vspace{-2mm}
+%\begin{block}{Deletion information}
+	%\begin{itemize}
+		%\item Extra lines in proof output
+		%\item Example: $y$ is the last child of $x$
+		%\begin{itemize}
+			%\item Read and check node $x$\\
+			%$\ldots$
+			%\item Read and check node $y$
+			%\item Delete node $x$\\
+			%$\ldots$
+		%\end{itemize}
+	%\end{itemize}
+%\end{block}
+%
+%%\vspace{-4mm}
+%%\begin{subpart}{Interesting scenario}
+	%%\item Proof checker has much less memory than proof producer
+%%\end{subpart}
+%
+%\end{frame}
+
+%\begin{frame}
+%
+%\frametitle{Black Pebbling Game}
+%
+%\textit{A pebble is a small stone}
+%
+%%I think to pebble is not a real word, but it's shorter and easiert than "put a pebble on"
+%\begin{subpart}{Rules}
+	%\item If all premises of a node $p$ are pebbled, $p$ may be pebbled
+	%\item Nodes can be unpebbled at any time
+	%\item Each node can be pebbled only once
+%\end{subpart}
+%
+%\begin{subpart}{Goal}
+	%\item Pebble some node $v$
+%\end{subpart}
+%
+%\begin{subpart}{Pebbling problem}
+	%\item For a given DAG and a node $v$, can $v$ be pebbled using no more than $n$ pebbles in total?
+	%\item PSPACE-complete (John R. Gilbert et al., 1980)
+%\end{subpart}
+%
+%\end{frame}
+
+%\begin{frame}
+	%\frametitle{Pebbling Game Example}
+	%\centering
+	%\begin{tikzpicture}[node distance=1.2cm]
+			%\rootnode;
+			%\withchildren{root} {n5}{$a$}  {n6}{$\dual{a}$};
+			%\addchildren{n5}   {n3}{$\dual{b}$} {n4}{$a,b$};
+			%\drawchildren{n5} {n3} {n4};
+			%\withchildren{n3} {n1}{$\dual{a},\dual{b}$} {n2}{$a$};
+	%\end{tikzpicture}
+%\end{frame}
+
+\begin{frame}
+
+Is it possible to remove parts of the proof from memory during proof processing?
+
+\vspace{1cm}
+
+\uncover<2->{Which parts?}
+
+\end{frame}
+
+\begin{frame}
+	\frametitle{Space Measure Example}
+	\include{figures/spaceexample}
+	\uncover<22>{\alert{Good Traversal Orders are key!}}
+\end{frame}
+
+\begin{frame}
+
+\frametitle{Space Measure}
+
+\begin{block}{Space measure of a proof and a traversal order}
+	Maximal amount of nodes that have to be kept in memory at once while processing the proof following the traversal order
+\end{block}
+
+\end{frame}
+
+\begin{frame}
+
+\frametitle{Construct Traversal Orders}
+
+\begin{block}{Construct Optimal Order}
+
+\begin{itemize}
+
+\item NP-complete
+\item Optimal strategy in some pebbling game
+
+\end{itemize}
+
+\end{block}
+
+\begin{block}{Construct Good Order}
+
+\begin{itemize}
+	\item Top-Down
+	\item Bottom-Up
+	\item Heuristics
+\end{itemize}
+
+\end{block}
+
+\end{frame}
+
+%\begin{frame}
+	%\frametitle{Greedy Pebbling}
+	%
+	%\begin{block}{Topological Order + Deletion Information}
+		%Correspond to a strategy for the pebbling game
+	%\end{block}
+	%
+	%\begin{subpart}{Top-Down}
+		%\item Select node out of all pebbleable nodes
+		%\item Corresponds to playing the game
+	%\end{subpart}
+	%
+	%\begin{subpart}{Bottom-Up}
+		%\item Recursively queue up premises
+	%\end{subpart}
+	%
+	%\begin{block}{Heuristics}
+	%\end{block}
+	%
+%\end{frame}
+
+\begin{frame}
+	\frametitle{Construct Order Top-Down}
+	\centering
+	Maximum number of nodes in memory:
+		\alt<1>{0}{\alt<2>{1}{\alt<3>{2}{\alt<4-7>{3}{\alt<8-11>{4}{\alt<12-15>{5}{6}}}}}} \\[1cm]
+	\include{figures/topdownpebbling}
+\end{frame}
+
+\begin{frame}
+	\frametitle{Construct Order Bottom-Up}
+	\centering
+	Maximum number of nodes in memory:
+		\alt<1-4>{0}{\alt<5>{1}{\alt<6>{2}{\alt<7-12>{3}{\alt<13-17>{4}{5}}}}} \\[1cm]
+	\include{figures/bottomuppebbling}
+\end{frame}
+
+\begin{frame}
+
+\centering \textbf{\huge{Experiments \& Conclusion}}
+
+\end{frame}
+
+\begin{frame}
+
+\frametitle{Experimental Results}
+
+\begin{block}{Congruence Compression}
+	\begin{itemize}
+		\item ~ 2\% average effective compression in proof length
+		\item ~ 28\% compression in explanation length
+	\end{itemize}
+\end{block}
+
+\begin{block}{Space Compression}
+	\begin{itemize}
+		\item Bottom-Up outperforms Top-Down
+		\item Average space measure is 44.1 times smaller than proof length
+	\end{itemize}
+\end{block}
+
+\end{frame}
+
+\begin{frame}
+
+\frametitle{Conclusion}
+
+\begin{itemize}
+	\item Proofs can be compressed in length and space
+	\item Finding the shortest explanation is NP-complete
+	\item Proof production is tricky
+	\item Construct traversal orders Bottom-Up
+\end{itemize}
+
+\end{frame}
+
+\end{document}

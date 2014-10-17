@@ -1,0 +1,164 @@
+% -*- coding: utf-8 -*-
+\documentclass{beamer}
+\usepackage[utf8]{inputenc}
+
+\usetheme{complang}
+
+% Have Page n/N in the lower left corner
+% \setbeamertemplate{footline}
+% {%
+% \begin{beamercolorbox}[wd=0.5\textwidth,ht=3ex,dp=1.5ex,
+%    leftskip=.5em,rightskip=.5em]{author in head/foot}%
+% \usebeamerfont{author in head/foot}%
+% \insertframenumber/\inserttotalframenumber\hfill\insertshortauthor%
+% \end{beamercolorbox}%
+% \vspace*{-4.5ex}\hspace*{0.5\textwidth}%
+% \begin{beamercolorbox}[wd=0.5\textwidth,ht=3ex,dp=1.5ex,
+%    left,leftskip=.5em]{title in head/foot}%
+% \usebeamerfont{title in head/foot}%
+% \insertshorttitle%
+% \end{beamercolorbox}%
+% }
+
+%\usepackage{pifont}
+%\usepackage{amstext}
+%\usepackage{amsmath}
+%\usepackage{logic}
+% \usepackage{proof}
+\usepackage{xcolor}
+\usepackage{listings}
+\usepackage{hyperref}
+
+% Colors
+\definecolor{myblue}{rgb}{0.089, 0.089, 0.58}
+\definecolor{myred}{rgb}{0.77, 0.05, 0.16}
+\definecolor{mygreen}{rgb}{0.05, 0.77, 0.16}
+\definecolor{myyellow}{rgb}{0.77, 0.77, 0.16}
+
+% Arrows
+\newcommand{\redarrow}{{\color{myred} \Pisymbol{pzd}{217}}}
+\newcommand{\redresarrow}{{\large\color{myred} \Pisymbol{pzd}{229}}}
+\newcommand{\ra}{\hspace{1cm}\redarrow}
+\newcommand{\rad}{\begin{rotate}{-90}{\Large\color{myred} 
+      \Pisymbol{pzd}{225}}\end{rotate}}
+\newcommand{\fatredarrow}{\hspace{1cm}{\color{myred}\Large \Pisymbol{pzd}{225}}}
+
+% Result
+\newcommand{\resbox}[1]{
+  \begin{itemize}
+  \item[\redresarrow] #1
+  \end{itemize}
+}
+
+
+%-------TITLE-----------------------------------------------------------
+\title[The complang style]{
+  The Complang style for beamer presentations\footnote{
+    \raggedright\tiny\rm
+    This work has been partially supported by the Austrian Science
+    Fund (Fonds zur F{\"o}rderung der wissenschaftlichen Forschung)
+    under contract P18925-N13, \emph{Compiler Support for Timing
+    Analysis}, \url{http://costa.tuwien.ac.at/}}  
+}
+
+\author[Adrian Prantl (TU Wien)]{
+  Adrian Prantl\\
+  \scriptsize adrian@complang.tuwien.ac.at
+}
+
+\institute[TU Wien]{
+  \begin{tabular}{lcr}
+    \includegraphics[width=2cm]{logo-inform} &
+
+    \begin{tabular}{c}   
+      Institut für Computersprachen \\
+      Technische Universität Wien \\
+      \\
+      \\
+    \end{tabular} & 
+
+  \includegraphics[width=2cm]{logo-complang} \\    
+  \end{tabular}
+}
+
+\date{\today}
+%-----------------------------------------------------------------------
+
+\begin{document}
+\rm % Use ROMAN fonts
+
+\frame{\titlepage}
+
+%\section[outline]{Outline}
+%\frame{\tableofcontents}
+
+\frame{
+  \frametitle{Motivation}
+  \begin{block}{The Complang Style}
+    \begin{columns}
+      \begin{column}{7cm}
+        \begin{itemize}
+        \item Nicer colors
+        \item Fewer boxes
+        \item More room for your content!
+        \end{itemize}
+      \end{column}
+      \begin{column}{4cm}
+        \includegraphics[width=3cm]{logo-complang}
+      \end{column}
+    \end{columns}
+  \end{block}
+  \resbox{An overall great style for your presentation!}
+}
+%-----------------------------------------------------------------------
+
+\begin{frame}[fragile]
+  \frametitle{A Listing}
+  \begin{example}
+    {
+      % Font size for listings
+      \definecolor{specparam}{rgb}{.5,0,.5}
+      \definecolor{classcol}{rgb}{.1,.1,.4}
+      % The table gets distractingly colourful!?
+      \definecolor{methodcol}{rgb}{.1,.4,.1}
+      \definecolor{commentcol}{rgb}{0,.7,0}
+      \definecolor{gray}{rgb}{.2,.2,.2}
+
+      \lstset{language=C++,
+        basicstyle=\small\ttfamily,
+        keywordstyle=\color{classcol},
+        commentstyle=\color{commentcol},
+        commentstyle=\color{gray}, 
+        stringstyle=\ttfamily\color{classcol},
+        emph={[2]bubble_sort,[1]return},
+        emphstyle={[2]\color{methodcol}},
+        emphstyle={[1]\color{classcol}} % functions/methods to be colorized
+      }
+
+\begin{lstlisting}
+void bubble_sort(int* a, int n) {
+  int i,j;
+  for (i = 0; i < n; i++) {
+    for (j = 0; j < i; j++) {
+      if (a[i] > a[j]) SWAP(a[i],a[j]);
+    }
+  }
+}
+\end{lstlisting}
+    }
+  \end{example}
+\end{frame}
+
+%-----------------------------------------------------------------------
+
+\frame{
+  \frametitle{Thank You}
+  Thank you for using the complang style!
+  \vspace{3cm}
+
+  Bug reports \& feature requests:\\
+  \redarrow {\tt adrian@complang.tuwien.ac.at}
+}
+%-----------------------------------------------------------------------
+
+\end{document}

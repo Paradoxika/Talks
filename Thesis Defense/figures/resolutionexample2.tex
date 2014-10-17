@@ -1,0 +1,42 @@
+\centering
+\begin{tikzpicture}[node distance=1.5cm]
+
+	\uncover<7->{\rootnode;}
+	
+	\uncover<6->{\proofnode[above left of=root]{n6}{$x_3$};}
+	
+	\proofnode[above right of=root]{ghost}{};
+	
+	\uncover<5->{
+		\proofnode[above right of=ghost]{n8}{$\neg x_3$};
+		\proofnode[above right of=n8]{n7} {$x_1,\neg x_3$};
+	}
+	
+	\uncover<4->{
+		\proofnode[above right of=n6]{n5} {$\neg x_2$};
+		\proofnode[above right of=n5]{n4} {$x_1,\neg x_2$};
+	}
+	
+	\uncover<3->{
+		\proofnode[above left of=n6]{n3}{$x_2,x_3$};
+		\proofnode[above left of=n3]{n1}{$x_1,x_2,x_3$};
+	}
+	
+	\uncover<2->{\proofnode[above right of=n3]{n2} {$\neg x_1$};}
+	
+	\uncover<3->{\drawchildren{n3}{n1}{n2};}
+	
+	\uncover<4->{\drawchildren{n5}{n2}{n4};}
+	
+	\uncover<5->{\drawchildren{n8}{n7}{n2};}
+	
+	\uncover<6->{\drawchildren{n6}{n3}{n5};}
+	
+	\uncover<7->{\drawchildren{root}{n6}{n8};}
+	
+	\uncover<8->{
+		\node[right of=root, xshift = 2cm, align=left](length){Length: 9\\Best Space: 4};
+		%\node[below of=length](space){Space: 5};
+	}
+	
+\end{tikzpicture}
