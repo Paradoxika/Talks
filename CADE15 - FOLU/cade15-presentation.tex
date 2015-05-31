@@ -1,0 +1,229 @@
+% !TEX TS-program = pdflatex
+% !TEX encoding = UTF-8 Unicode
+
+% This file is a template using the "beamer" package to create slides for a talk or presentation
+% - Giving a talk on some subject.
+% - The talk is between 15min and 45min long.
+% - Style is ornate.
+
+% MODIFIED by Jonathan Kew, 2008-07-06
+% The header comments and encoding in this file were modified for inclusion with TeXworks.
+% The content is otherwise unchanged from the original distributed with the beamer package.
+
+\documentclass{beamer}
+
+
+% Copyright 2004 by Till Tantau <tantau@users.sourceforge.net>.
+%
+% In principle, this file can be redistributed and/or modified under
+% the terms of the GNU Public License, version 2.
+%
+% However, this file is supposed to be a template to be modified
+% for your own needs. For this reason, if you use this file as a
+% template and not specifically distribute it as part of a another
+% package/program, I grant the extra permission to freely copy and
+% modify this file as you see fit and even to delete this copyright
+% notice. 
+
+
+\mode<presentation>
+{
+  \usetheme{Madrid}
+  % or ...
+
+ \usecolortheme{dolphin}
+
+  \setbeamercovered{transparent}
+  % or whatever (possibly just delete it)
+}
+
+
+\usepackage[english]{babel}
+% or whatever
+
+\usepackage[utf8]{inputenc}
+% or whatever
+
+\usepackage{times}
+\usepackage[T1]{fontenc}
+% Or whatever. Note that the encoding and the font should match. If T1
+% does not look nice, try deleting the line with the fontenc.
+
+
+\title[First Order Lower Units] % (optional, use only with long paper titles)
+{Towards the Compression of First-Order Resolution Proofs by Lowering Unit Clauses}
+
+%\subtitle{Presentation Subtitle}
+
+\author[Gorzny, Woltzenlogel-Paleo] % (optional, use only with lots of authors)
+{J. Gorzny\inst{1} \and B. Woltzenlogel-Paleo\inst{2}}
+% - Use the \inst{?} command only if the authors have different
+%   affiliation.
+
+\institute[] % (optional, but mostly needed)
+{
+  \inst{1}%
+  University of Victoria
+  \and
+  \inst{2}%
+  Vienna University of Technology}
+% - Use the \inst command only if there are several affiliations.
+% - Keep it simple, no one is interested in your street address.
+
+\date[CADE15] % (optional)
+{6 August 2015}
+
+%\subject{Talks}
+% This is only inserted into the PDF information catalog. Can be left
+% out. 
+
+
+
+% If you have a file called "university-logo-filename.xxx", where xxx
+% is a graphic format that can be processed by latex or pdflatex,
+% resp., then you can add a logo as follows:
+
+% \pgfdeclareimage[height=0.5cm]{university-logo}{university-logo-filename}
+% \logo{\pgfuseimage{university-logo}}
+
+
+
+% Delete this, if you do not want the table of contents to pop up at
+% the beginning of each subsection:
+%\AtBeginSubsection[]
+%{
+%  \begin{frame}<beamer>{Outline}
+%    \tableofcontents[currentsection,currentsubsection]
+%  \end{frame}
+%}
+
+
+% If you wish to uncover everything in a step-wise fashion, uncomment
+% the following command: 
+
+%\beamerdefaultoverlayspecification{<+->}
+
+
+\begin{document}
+
+\begin{frame}
+  \titlepage
+\end{frame}
+
+%\begin{frame}{Outline}
+%  \tableofcontents
+  % You might wish to add the option [pausesections]
+%\end{frame}
+
+
+% Since this a solution template for a generic talk, very little can
+% be said about how it should be structured. However, the talk length
+% of between 15min and 45min and the theme suggest that you stick to
+% the following rules:  
+
+% - Exactly two or three sections (other than the summary).
+% - At *most* three subsections per section.
+% - Talk about 30s to 2min per frame. So there should be between about
+%   15 and 30 frames, all told.
+
+\section{Introduction}
+
+%\subsection[Short First Subsection Name]{First Subsection Name}
+
+\begin{frame}{Proof Compression Motivation}
+an accessible, good motivational example for proof compression
+\end{frame}
+
+\begin{frame}{Propositional Proof Representation/Definition}
+introduction to proofs as we're going to see them, ideally formally and with a small example
+\end{frame}
+
+\begin{frame}{Resolution}
+a quick introduction to resolution, with a small propositional example
+\end{frame}
+
+\begin{frame}{Deletion}
+how deleting subproofs or edges in proofs affect them
+\end{frame}
+
+\begin{frame}{Redundancy}
+types of redundancy we hope to remove, small examples (before/after proofs; not animated)
+\end{frame}
+
+\begin{frame}{First-Order Proofs}
+key differences from propositional case; example of first order proofs
+\end{frame}
+
+\begin{frame}{Unification/Unifying Resolution}
+definition (incl. mgu); example of unifying resolution
+\end{frame}
+
+\begin{frame}{Contraction}
+definition; small example
+\end{frame}
+
+\section{Propositional Algorithm}
+
+\begin{frame}{LowerUnits}
+brief high level description; complexity\\
+probably not pseudo-code
+\end{frame}
+
+\begin{frame}{Propositional Example}
+quick, clear example of LU (animated), perhaps showing how one of the redundancies described before is fixed
+\end{frame}
+
+\section{First-Order Algorithm}
+
+\begin{frame}{First Order Challenges I}
+example 1 demonstrated
+\end{frame}
+
+\begin{frame}{First Order Challenges II}
+example 2 demonstrated; definition of pre-deletion unification property
+\end{frame}
+
+\begin{frame}{First Order Challenges III}
+example 2 demonstrated; definition of post-deletion unification property
+\end{frame}
+
+\begin{frame}{First Order Lower Units Ideas/Principles}
+briefly mention all ideas, e.g. quadratic time naive approach to deal with both properties
+\end{frame}
+
+\begin{frame}{Simple/Greedy First Order Lower Units}
+introduce simpler idea, make compromises explicit and list benefits\\
+high level description\\
+(probably not pseudo-code, but list \# of traversals, complexity, etc)
+\end{frame}
+
+\begin{frame}{First Order Example}
+small, animated example
+\end{frame}
+
+\section{Experiment Results}
+
+\begin{frame}{Experiment Setup}
+proof sources, systems used, etc.
+\end{frame}
+
+\begin{frame}{Results I}
+at least one or two of the more informative graphs
+\end{frame}
+
+\begin{frame}{Results II}
+text summary of results (numbers, percentages, times, etc)
+\end{frame}
+
+\section*{Summary}
+
+\begin{frame}{Conclusion}
+summary\\
+future work (FORPI)\\
+source link\\
+\end{frame}
+
+
+\end{document}
+
+
