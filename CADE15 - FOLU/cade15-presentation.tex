@@ -12,6 +12,11 @@
 
 \documentclass{beamer}
 
+\definecolor{vertmoyen}{HTML}{FFFF00}
+\definecolor{vertclair}{HTML}{FFFF00}
+\definecolor{vertfonce}{HTML}{FFFF00}
+\definecolor{deletecol}{HTML}{FF0000}
+\definecolor{addcolor} {HTML}{9E0270}
 
 % Copyright 2004 by Till Tantau <tantau@users.sourceforge.net>.
 %
@@ -48,6 +53,61 @@
 \usepackage[T1]{fontenc}
 % Or whatever. Note that the encoding and the font should match. If T1
 % does not look nice, try deleting the line with the fontenc.
+\usepackage{bussproofs}
+\newcommand{\Resolution}[2]{\RightLabel{\footnotesize{$#1$}} \BinaryInfC{$#2$}}
+
+\usepackage[vlined]{algorithm2e}
+
+\usepackage{amsmath}
+
+%\newcommand{\recalltoc}{\frame{\tableofcontents[sectionstyle=show/shaded,subsectionstyle=show/show/hide]}}
+
+\newcommand{\dual}[1]{\ensuremath{\bar{#1}}}
+\newcommand{\dn}[2]{#1 \setminus (#2)}
+\newcommand{\set}[2]{\ensuremath{\left\{#1\mid#2\right\}}}
+
+
+\usepackage{tikz}
+\usetikzlibrary{positioning}
+
+\tikzstyle{proof edge}=[->,thick,cap=round]
+\tikzstyle{deleted edge}=[proof edge, dashed, color=deletecol]
+
+\newcommand{\proofnode}[3][]{
+  \node [anchor=mid, #1] (#2) {#3}
+}
+
+\newcommand{\rootnode}[1][]{
+  \proofnode[#1]{root}{$\bot$}
+}
+
+\newcommand<>{\edgewithlabel}[3]{
+  \draw#4 [proof edge, color=vertfonce] (#1) -- (#2) node [above, pos=0.3] {\footnotesize #3}
+}
+
+\newcommand<>{\drawchildren}[3]{
+  \draw#4 [proof edge] (#1) -- (#2);
+  \draw#4 [proof edge] (#1) -- (#3)
+}
+
+\newcommand{\addchildren}[5]{
+  \proofnode[above left  of=#1]{#2}{#3};
+  \proofnode[above right of=#1]{#4}{#5}
+}
+
+\newcommand{\withchildren}[5]{
+  \addchildren{#1}{#2}{#3}{#4}{#5};
+  \drawchildren{#1}{#2}{#4}
+}
+
+\newcommand<>{\crossnode}[2][]{
+  \draw#3 [color=deletecol,thick,cap=round,#1] (#2.mid) ++(10:0.3) -- ++(190:0.6);
+}
+
+\newcommand<>{\marknode}[2][.33cm and .29cm]{
+  \draw#3 [color=vertclair,line width=1pt] (#2) ellipse (#1);
+}
+\usepackage{booktabs}
 
 
 \title[First Order Lower Units] % (optional, use only with long paper titles)
@@ -165,9 +225,18 @@ Given two proofs $\psi_L$ and $\psi_R$ with conclusions $\Gamma_L$ and $\Gamma_R
 \end{frame}
 
 \begin{frame}{A Propositional Proof}
-a small example to illustrate the definitions from the last two slides\\
-the example should be redundant, so that we can show it again after the next slide in it's more minimal state\\
-ideally minimized via LU, so that we can show the transformation later
+%a small example to illustrate the definitions from the last two slides\\
+%the example should be redundant, so that we can show it again after the next slide in it's more minimal state\\
+%ideally minimized via LU, so that we can show the transformation later
+      \centering
+      \begin{tikzpicture}[node distance=1.2cm]
+        \rootnode;
+        \withchildren{root} {r9}{\dual{c}}  {r6}{c};
+     \proofnode[above right of=r6] {r5} {a,c};
+        \withchildren{r5}  {r4}{b} {r2}{a,\dual{b},c};
+        \withchildren{r4}   {r1}{\dual{a}} {r3}{a,b};
+        \drawchildren {r6} {r1} {r5};
+      \end{tikzpicture}
 \end{frame}
 
 
@@ -241,7 +310,112 @@ probably not pseudo-code
 \end{frame}
 
 \begin{frame}{Propositional Example}
-quick, clear example of LU (animated), perhaps showing how one of the redundancies described before is fixed
+%quick, clear example of LU (animated), perhaps showing how one of the redundancies described before is fixed
+\begin{columns}
+\column{0.5\textwidth}
+      \begin{center}
+      \begin{tikzpicture}[node distance=1.2cm]
+        \rootnode;
+        \withchildren{root} {r9}{\dual{c}}  {r6}{c};
+     \proofnode[above left of=r9] {r8} {a,\dual{c}};
+     \proofnode[above of=r8] {r7} {a,\dual{b},\dual{c}};
+     \proofnode[above right of=r6] {r5} {a,c};
+      \draw[proof edge] (r9) -- (r1);
+        \withchildren{r5}  {r4}{b} {r2}{a,\dual{b},c};
+        \withchildren{r4}   {r1}{\dual{a}} {r3}{a,b};
+        \drawchildren {r6} {r1} {r5};
+      \draw[proof edge] (r9) -- (r1);
+      \draw[proof edge] (r9) -- (r8);
+      \draw[proof edge] (r8) -- (r7);
+      \draw[proof edge] (r8) -- (r4);
+      \end{tikzpicture}
+\end{center}
+\column{0.5\textwidth}
+  \only<1-3>{
+      \begin{center}
+      \begin{tikzpicture}[node distance=1.2cm]
+ \proofnode {root}{\alt<3>{a,\dual{b}}{$\bot$}};
+%        \withchildren{root} {r9}{\dual{c}}  {r6}{c};
+ \proofnode[above right of=root] {r6}{c};
+ \proofnode[above left of=root] {r9}{\dual{c}};
+     \proofnode[above right of=r6] {r5} {a,c};
+     \proofnode[above right of=r5] {r2} {a,\dual{b},c};
+     \proofnode[above left of=r5] {r4} {b};
+     \proofnode[above left of=r4] {r1} {\dual{a}};
+     \proofnode[above right of=r4] {r3} {a,b};
+     \proofnode[above left of=r9] {r8} {a,\dual{c}};
+     \proofnode[above of=r8] {r7} {a,\dual{b},\dual{c}};
+
+\marknode<2>{r4};
+\marknode<2->{r1};
+\marknode<3>{r3};
+
+      \draw<-1>[proof edge] (r9) -- (r1);
+      \draw<-1>[proof edge] (r9) -- (r8);
+      \draw<-1>[proof edge] (r8) -- (r7);
+      \draw<-1>[proof edge] (r8) -- (r4);
+      \draw<-2>[proof edge] (root) -- (r6);
+      \draw<-2>[proof edge] (root) -- (r9);
+      \draw<-1>[proof edge] (r6) -- (r1);
+      \draw<-1>[proof edge] (r6) -- (r5);
+      \draw<-1>[proof edge] (r5) -- (r4);
+      \draw<-1>[proof edge] (r5) -- (r2);
+      \draw<-1>[proof edge] (r4) -- (r1);
+      \draw<-1>[proof edge] (r4) -- (r3);
+
+      \draw<2>[deleted edge] (r9) -- (r1);
+      \draw<-2>[proof edge] (r9) -- (r8);
+      \draw<-2>[proof edge] (r8) -- (r7);
+      \draw<2>[deleted edge] (r8) -- (r4);
+      \draw<2>[deleted edge] (r6) -- (r1);
+      \draw<-2>[proof edge] (r6) -- (r5);
+      \draw<2>[deleted edge] (r5) -- (r4);
+      \draw<-2>[proof edge] (r5) -- (r2);
+      \draw<2>[deleted edge] (r4) -- (r1);
+      \draw<2>[proof edge] (r4) -- (r3);
+
+%      \draw<3>[proof edge] (r4) -- (r3);
+      \draw<3>[proof edge] (root) -- (r7);
+      \draw<3>[proof edge] (root) -- (r2);
+
+\crossnode<3>{r9}
+\crossnode<3>{r4}
+\crossnode<3>{r6}
+\crossnode<3>{r8}
+\crossnode<3>{r5}
+      \draw<3>[deleted edge] (r4) -- (r3);
+
+%        \drawchildren {r6} {r1} {r5};
+
+%      \draw<2->[deleted edge] (r1) -- (r6);
+%      \draw<-3>[proof edge] (r9) -- (r6);
+%      \draw<4>[deleted edge] (r9) -- (r6);
+      \end{tikzpicture}
+\end{center}
+}
+  \only<4->{
+      \begin{center}
+      \begin{tikzpicture}[node distance=1.2cm]
+     \proofnode{n2} {\alt<6->{$\bot$}{}};
+     \proofnode [above left of=n2]{n1} {\alt<5->{a}{}};
+     \proofnode [above right of=n2]{n3} {\alt<6->{\dual{a}}{}};
+     \proofnode [above right of=n1]{n4} {\alt<5->{a,b}{}};
+ \proofnode [above left of=n1]{root}{\alt<3->{a,\dual{b}}{$\bot$}};
+     \proofnode[above right of=root] {r2} {a,\dual{b},c};
+     \proofnode[above left of=root] {r7} {a,\dual{b},\dual{c}};
+
+      \draw<4->[proof edge] (root) -- (r7);
+      \draw<4->[proof edge] (root) -- (r2);
+\marknode<5>{n4};
+\marknode<6>{n3};
+      \draw<5->[proof edge] (n1) -- (root);
+      \draw<5->[proof edge] (n1) -- (n4);
+      \draw<6->[proof edge] (n2) -- (n1);
+      \draw<6->[proof edge] (n2) -- (n3);
+      \end{tikzpicture}
+\end{center}
+}
+\end{columns}
 \end{frame}
 
 \section{First-Order Algorithm}
