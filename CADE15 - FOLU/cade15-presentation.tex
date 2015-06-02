@@ -55,8 +55,8 @@
 
 %\subtitle{Presentation Subtitle}
 
-\author[Gorzny, Woltzenlogel-Paleo] % (optional, use only with lots of authors)
-{J. Gorzny\inst{1} \and B. Woltzenlogel-Paleo\inst{2}}
+\author[Gorzny, Woltzenlogel Paleo] % (optional, use only with lots of authors)
+{J. Gorzny\inst{1} \and B. Woltzenlogel Paleo\inst{2}}
 % - Use the \inst{?} command only if the authors have different
 %   affiliation.
 
@@ -134,13 +134,42 @@
 an accessible, good motivational example for proof compression
 \end{frame}
 
-\begin{frame}{Propositional Proof Representation/Definition}
-introduction to proofs as we're going to see them, ideally formally and with a small example
+\begin{frame}{(Propositional) Proofs}
+%introduction to proofs as we're going to see them, ideally formally and with a small example
+
+\begin{definition}[Proof]
+A directed acyclic graph $\langle V,E,\Gamma \rangle$, where
+\begin{itemize}
+\item $V$ is a set of nodes
+\item $E$ is a set of edges labeled by literals
+\item $\Gamma$ (the proof clause) is inductively constructible using \emph{axiom} and \emph{resolution} nodes
+\end{itemize}
+\end{definition}
+
+\begin{definition}[Axiom]
+A proof with a single node (so $E=\emptyset$)
+\end{definition}
 \end{frame}
 
-\begin{frame}{Resolution}
-a quick introduction to resolution, with a small propositional example
+\begin{frame}{(Propositional) Resolution}
+%a quick introduction to resolution, with a small propositional example
+\begin{definition}[Resolution]
+Given two proofs $\psi_L$ and $\psi_R$ with conclusions $\Gamma_L$ and $\Gamma_R$ with some literal $l$ such that $\overline{l}\in \Gamma_L$ and $l\in \Gamma_R$, the resolution proof $\psi$ of $\psi_L$ and $\psi_R$ on $l$, denoted $\psi=\psi_L \psi_R$ is such that:
+\begin{itemize}
+\item $\psi$'s nodes are the union of the nodes of $\psi_L$ and $\psi_R$, and a new root node
+\item there is an edge from $\rho(\psi)$ to $\rho(\psi_L)$ labeled with $\overline{l}$
+\item there is an edge from $\rho(\psi)$ to $\rho(\psi_R)$ labeled with $l$
+\item $\psi$'s conclusion is $(\Gamma_L\setminus\{\overline{l}\})\cup(\Gamma_R\setminus\{l\})$
+\end{itemize}
+\end{definition}
 \end{frame}
+
+\begin{frame}{A Propositional Proof}
+a small example to illustrate the definitions from the last two slides\\
+the example should be redundant, so that we can show it again after the next slide in it's more minimal state\\
+ideally minimized via LU, so that we can show the transformation later
+\end{frame}
+
 
 \begin{frame}{Deletion}
 how deleting subproofs or edges in proofs affect them
@@ -151,15 +180,57 @@ types of redundancy we hope to remove, small examples (before/after proofs; not 
 \end{frame}
 
 \begin{frame}{First-Order Proofs}
-key differences from propositional case; example of first order proofs
+%key differences from propositional case; example of first order proofs
+\begin{definition}[First-Order Proof]
+A directed acyclic graph $\langle V,E,\Gamma \rangle$, where
+\begin{itemize}
+\item $V$ is a set of nodes
+\item $E$ is a set of edges labeled by literals {\bf and substitutions}
+\item $\Gamma$ (the proof clause) is inductively constructible using \emph{axiom}, {\bf\emph{(first order) resolution}}, {\bf and \emph{contraction}} nodes
+\end{itemize}
+\end{definition}
+
+Axioms are unchanged
 \end{frame}
 
-\begin{frame}{Unification/Unifying Resolution}
-definition (incl. mgu); example of unifying resolution
+\begin{frame}{Substitutions and Unifiers}
+\begin{definition}[Substitution]
+A mapping $\{X_1\setminus t_1, X_2\setminus t_2,\ldots\}$ from variables $X_1,X_2,\ldots$ to terms $t_1,t_2,\ldots$
+\end{definition}
+
+%example here
+
+\begin{definition}[Unifier]
+A set of literals in a substitution that makes all literals in the set equal
+\end{definition}
+
+%example here
+\end{frame}
+
+\begin{frame}{First Order (Unifying) Resolution}
+%definition (incl. mgu); ?
+%example of unifying resolution ?
+\begin{definition}[First Order Resolution]
+Given two proofs $\psi_L$ and $\psi_R$ with conclusions $\Gamma_L$ and $\Gamma_R$ with some literal $l$ such that $l_L\in \Gamma_L$ and $l_R\in \Gamma_R$, and $\sigma_L$ and $\sigma_R$ are substitutions usch that $l_L\sigma_L=\overline{l_R}\sigma_R$, and the variables in $(\Gamma_L\setminus l_L)\sigma_L$ and $(\Gamma_R\setminus l_R)\sigma_R$ are disjoint, then the resolution proof $\psi$ of $\psi_L$ and $\psi_R$ on $l$, denoted $\psi=\psi_L \psi_R$ is such that:
+\begin{itemize}
+\item $\psi$'s nodes are the union of the nodes of $\psi_L$ and $\psi_R$, and a new root node
+\item there is an edge from $\rho(\psi)$ to $\rho(\psi_L)$ labeled with $l_L$ and $\sigma_L$
+\item there is an edge from $\rho(\psi)$ to $\rho(\psi_R)$ labeled with $l_R$ and $\sigma_R$
+\item $\psi$'s conclusion is $(\Gamma_L\setminus l_L)\sigma_L\cup (\Gamma_R\setminus l_R)\sigma_R$
+\end{itemize}
+\end{definition}
 \end{frame}
 
 \begin{frame}{Contraction}
-definition; small example
+%definition; small example
+\begin{definition}[Contraction]
+If $\psi'$ is a proof and $\sigma$ is a unifier of $\{l_1,\ldots,l_n\}\subset \Gamma'$, then a contraction $\psi$ is a proof where
+\begin{itemize}
+\item $\psi$'s nodes are the union of the nodes of $\psi'$ and a new node $v$
+\item There is an edge from $\rho(\psi')$ to $v$ labeled with $\{l_1,\ldots,l_n\}$ and $\sigma$
+\item The conclusion is $(\Gamma'\setminus \{l_1,\ldots,l_n\})\sigma \cup \{l\}$, where $l=l_k\sigma$ for $k\in \{1,\ldots,n\}$
+\end{itemize}
+\end{definition}
 \end{frame}
 
 \section{Propositional Algorithm}
