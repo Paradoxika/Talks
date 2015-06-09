@@ -150,8 +150,8 @@
 % is a graphic format that can be processed by latex or pdflatex,
 % resp., then you can add a logo as follows:
 
-% \pgfdeclareimage[height=0.5cm]{university-logo}{university-logo-filename}
-% \logo{\pgfuseimage{university-logo}}
+ \pgfdeclareimage[height=1cm]{university-logo}{images/GoogleSummer_2014logo}
+ \logo{\pgfuseimage{university-logo}}
 
 
 
@@ -202,6 +202,8 @@
 an accessible, good motivational example for proof compression
 \end{frame}
 
+{
+  \setbeamercolor{background canvas}{bg=lightgray}
 \begin{frame}{(Propositional) Proofs}
 %introduction to proofs as we're going to see them, ideally formally and with a small example
 
@@ -218,7 +220,10 @@ A directed acyclic graph $\langle V,E,\Gamma \rangle$, where
 A proof with a single node (so $E=\emptyset$)
 \end{definition}
 \end{frame}
+}
 
+{
+  \setbeamercolor{background canvas}{bg=lightgray}
 \begin{frame}{(Propositional) Resolution}
 %a quick introduction to resolution, with a small propositional example
 \begin{definition}[Resolution]
@@ -231,6 +236,7 @@ Given two proofs $\psi_L$ and $\psi_R$ with conclusions $\Gamma_L$ and $\Gamma_R
 \end{itemize}
 \end{definition}
 \end{frame}
+}
 
 \begin{frame}{A Propositional Proof}
 %a small example to illustrate the definitions from the last two slides\\
@@ -255,15 +261,22 @@ Given two proofs $\psi_L$ and $\psi_R$ with conclusions $\Gamma_L$ and $\Gamma_R
       \end{tikzpicture}
 \end{frame}
 
-
+{
+  \setbeamercolor{background canvas}{bg=lightgray}
 \begin{frame}{Deletion}
 how deleting subproofs or edges in proofs affect them
 \end{frame}
+}
 
+{
+  \setbeamercolor{background canvas}{bg=lightgray}
 \begin{frame}{Redundancy}
 types of redundancy we hope to remove, small examples (before/after proofs; not animated)
 \end{frame}
+}
 
+{
+  \setbeamercolor{background canvas}{bg=lightgray}
 \begin{frame}{First-Order Proofs}
 %key differences from propositional case; example of first order proofs
 \begin{definition}[First-Order Proof]
@@ -277,7 +290,10 @@ A directed acyclic graph $\langle V,E,\Gamma \rangle$, where
 
 Axioms are unchanged
 \end{frame}
+}
 
+{
+  \setbeamercolor{background canvas}{bg=lightgray}
 \begin{frame}{Substitutions and Unifiers}
 \begin{definition}[Substitution]
 A mapping $\{X_1\setminus t_1, X_2\setminus t_2,\ldots\}$ from variables $X_1,X_2,\ldots$ to terms $t_1,t_2,\ldots$
@@ -291,7 +307,10 @@ A mapping $\{X_1\setminus t_1, X_2\setminus t_2,\ldots\}$ from variables $X_1,X_
 
 %example here
 \end{frame}
+}
 
+{
+  \setbeamercolor{background canvas}{bg=lightgray}
 \begin{frame}{First Order (Unifying) Resolution}
 %definition (incl. mgu); ?
 %example of unifying resolution ?
@@ -305,7 +324,10 @@ Given two proofs $\psi_L$ and $\psi_R$ with conclusions $\Gamma_L$ and $\Gamma_R
 \end{itemize}
 \end{definition}
 \end{frame}
+}
 
+{
+  \setbeamercolor{background canvas}{bg=lightgray}
 \begin{frame}{Contraction}
 %definition; small example
 \begin{definition}[Contraction]
@@ -317,6 +339,7 @@ If $\psi'$ is a proof and $\sigma$ is a unifier of $\{l_1,\ldots,l_n\}\subset \G
 \end{itemize}
 \end{definition}
 \end{frame}
+}
 
 \section{Propositional Algorithm}
 
