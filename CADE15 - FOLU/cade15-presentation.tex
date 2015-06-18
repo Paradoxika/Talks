@@ -344,8 +344,23 @@ If $\psi'$ is a proof and $\sigma$ is a unifier of $\{l_1,\ldots,l_n\}\subset \G
 \section{Propositional Algorithm}
 
 \begin{frame}{LowerUnits}
-brief high level description; complexity\\
-probably not pseudo-code
+\begin{definition}[Unit]
+A unit is a subproof with a conclusion having exactly 1 literal
+\end{definition}
+\begin{theorem}
+A unit can always be lowered
+\end{theorem}
+\vspace{0.5cm}
+Compression is achieved by delaying resolution with unit subproofs.\\
+\vspace{0.5cm}
+Two Traversals
+\begin{itemize}
+\item $\uparrow$ Collect units with more than one resolvent
+\item $\downarrow$ Delete units and reintroduce them at the bottom of the proof
+\end{itemize}
+
+%brief high level description; complexity\\
+%probably not pseudo-code
 \end{frame}
 
 \begin{frame}{Propositional Example}
@@ -596,14 +611,42 @@ $\eta$ unit, $l\in \eta$, such that $l$ is resolved with literals $l_1,\ldots,l_
 \end{center}
 \end{frame}
 
-\begin{frame}{First Order Lower Units Ideas/Principles}
-briefly mention all ideas, e.g. quadratic time naive approach to deal with both properties
+\begin{frame}{First Order Lower Units Challenges}
+%briefly mention all ideas, e.g. quadratic time naive approach to deal with both properties
+%Doesn't appear linear: can't handle pre-deletion and post-deletion in a constant number of traversals
+
+\begin{itemize}
+\item Deletion changes literals
+\item Unit collection depends on if contraction is possible after propagation down the proof
+\end{itemize}
+\vspace{0.5cm}
+Deletion of units require knowledge of proof after deletion, and deletion depends on what will be lowered.
+\vspace{0.5cm}
+\begin{itemize}
+\item $O(n^2)$ solution to have full knowledge
+\item Difficult bookkeeping required for implementation
+\end{itemize}
+
 \end{frame}
 
-\begin{frame}{Simple/Greedy First Order Lower Units}
-introduce simpler idea, make compromises explicit and list benefits\\
-high level description\\
-(probably not pseudo-code, but list \# of traversals, complexity, etc)
+\begin{frame}{Greedy First Order Lower Units - A Quicker Alternative}
+%introduce simpler idea, make compromises explicit and list benefits\\
+%high level description\\
+%(probably not pseudo-code, but list \# of traversals, complexity, etc)
+\begin{itemize}
+ \item Ignore post-deletion satisfaction 
+ \item Focus on pre-deletion satisfaction 
+ \item Greedy contraction
+\end{itemize}
+\vspace{0.5cm}
+\pause
+Faster run-time (linear; one traversal)\\
+Easier to implement
+\vspace{0.5cm}
+\pause
+\begin{itemize}
+\item Doesn't always compress (returns original proof sometimes)
+\end{itemize}
 \end{frame}
 
 \begin{frame}{First Order Example}
@@ -651,9 +694,9 @@ Time to compress proofs: \alert{$\approx 5$ seconds}
 Higher compression in longer proofs: 13/18 proofs with length $\ge 30$ nodes successfully compressed.\\
 \vspace{1cm}
 Total compression ratio \alert{11.3\%}: 4429 vs. 3929 nodes.\\
-\hspace{1cm}\alert{18.4\%} for 100 longest proofs.
+\hspace{1cm}\alert{18.4\%} for 100 longest proofs.\\
 \vspace{1cm}
-
+Only 14/308 proofs were returned untouched
 \end{frame}
 
 \section*{Summary}
