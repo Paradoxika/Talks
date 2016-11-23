@@ -1,0 +1,35 @@
+{
+  \setbeamercolor{background canvas}{bg=lightgray}
+\begin{frame}{(Propositional) Proofs}
+%introduction to proofs as we're going to see them, ideally formally and with a small example
+
+\begin{definition}[Proof]
+A directed acyclic graph $\langle V,E,\Gamma \rangle$, where
+\begin{itemize}
+\item $V$ is a set of nodes
+\item $E$ is a set of edges labeled by literals
+\item $\Gamma$ (the proof clause) is inductively constructible using \emph{axiom} and \emph{resolution} nodes
+\end{itemize}
+\end{definition}
+
+\begin{definition}[Axiom]
+A proof with a single node (so $E=\emptyset$)
+\end{definition}
+\end{frame}
+}
+
+{
+  \setbeamercolor{background canvas}{bg=lightgray}
+\begin{frame}{(Propositional) Resolution}
+%a quick introduction to resolution, with a small propositional example
+\begin{definition}[Resolution]
+Given two proofs $\psi_L$ and $\psi_R$ with conclusions $\Gamma_L$ and $\Gamma_R$ with some literal $l$ such that $\overline{l}\in \Gamma_L$ and $l\in \Gamma_R$, the resolution proof $\psi$ of $\psi_L$ and $\psi_R$ on $l$, denoted $\psi=\psi_L \psi_R$ is such that:
+\begin{itemize}
+\item $\psi$'s nodes are the union of the nodes of $\psi_L$ and $\psi_R$, and a new root node
+\item there is an edge from $\rho(\psi)$ to $\rho(\psi_L)$ labeled with $\overline{l}$
+\item there is an edge from $\rho(\psi)$ to $\rho(\psi_R)$ labeled with $l$
+\item $\psi$'s conclusion is $(\Gamma_L\setminus\{\overline{l}\})\cup(\Gamma_R\setminus\{l\})$
+\end{itemize}
+\end{definition}
+\end{frame}
+}
