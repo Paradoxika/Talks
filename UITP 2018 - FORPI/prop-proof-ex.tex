@@ -1,0 +1,22 @@
+\begin{frame}{A Propositional Proof}
+%a small example to illustrate the definitions from the last two slides\\
+%the example should be redundant, so that we can show it again after the next slide in it's more minimal state\\
+%ideally minimized via LU, so that we can show the transformation later
+      \centering
+      \begin{tikzpicture}[node distance=1.2cm]
+        \rootnode;
+        \withchildren{root} {r9}{\dual{c}}  {r6}{c};
+     \proofnode[above left of=r9] {r8} {a,\dual{c}};
+     \proofnode[above of=r8] {r7} {a,\dual{b},\dual{c}};
+     \proofnode[above right of=r6] {r5} {a,c};
+
+        \withchildren{r5}  {r4}{b} {r2}{a,\dual{b},c};
+        \withchildren{r4}   {r1}{\dual{a}} {r3}{a,b};
+        \drawchildren {r6} {r1} {r5};
+      \draw[proof edge] (r9) -- (r1);
+      \draw[proof edge] (r9) -- (r1);
+      \draw[proof edge] (r9) -- (r8);
+      \draw[proof edge] (r8) -- (r7);
+      \draw[proof edge] (r8) -- (r4);
+      \end{tikzpicture}
+\end{frame}

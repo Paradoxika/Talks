@@ -1,0 +1,207 @@
+%\section{Propositional Algorithm}
+
+\begin{frame}{Lowering Units}
+\begin{definition}[Unit]
+A unit clause is a subproof with a conclusion clause (final clause) having exactly 1 literal
+\end{definition}
+\begin{theorem}[\cite{fontaine2011compression}]
+A unit clause can always be lowered
+\end{theorem}
+\vspace{0.5cm}
+Compression is achieved by delaying resolution with unit clause subproofs.\\
+\vspace{0.5cm}
+
+
+%brief high level description; complexity\\
+%probably not pseudo-code
+\end{frame}
+
+\begin{frame}{LowerUnits}
+Two Traversals of the proof
+\begin{itemize}
+\item $\uparrow$ Collect units with more than one resolvent
+\item $\downarrow$ Delete units and reintroduce them at the bottom of the proof
+\end{itemize}
+
+\end{frame}
+
+\input{prop-example}
+
+%\section{First-Order Algorithm}
+
+\begin{frame}{First-Order Change: Helpful Contractions}
+\begin{columns}
+\column{0.5\textwidth}
+      \begin{center}
+      \begin{tikzpicture}[node distance=2cm]
+     \proofnode {root} {$\bot$};
+     \proofnode[above right of=root] {n5} {$\eta_5$: $p(X)\e$};
+ \proofnode[above left of=n5] {n3} {$\eta_3$: $\e q(Z)$};
+ \proofnode[above right of=n5] {n4} {$\eta_4$: $p(X), q(Z)\e$};
+ \proofnode[above right of=n3] {n1} {$\eta_1$: $p(W)\e q(Z)$};
+ \proofnode[above left of=n3] {n2} { \alt<2->{{\color{red}$\eta_2$: $\e p(Y)$ }} {$\eta_2$: $\e p(Y)$}};
+      \draw[proof edge] (root) .. controls (n3.south west) ..  (n2);
+      \draw[proof edge] (root) -- (n5);
+      \draw[proof edge] (n5) -- (n3);
+      \draw[proof edge] (n5) -- (n4);
+      \draw[proof edge] (n3) -- (n1);
+      \draw[proof edge] (n3) -- (n2);
+%\marknode<2->{n2};
+      \end{tikzpicture}
+\end{center}
+\column{0.5\textwidth}
+\begin{center}
+\only<3->{
+      \begin{tikzpicture}[node distance=2cm]
+     \proofnode {n5} {$\eta_5': p(X),p(Y)\e$};
+ \proofnode[above right of=n5] {n4} {$\eta_4'$: $p(X),q(Z)\e $};
+ \proofnode[above left of=n5] {n1} {$\eta_1'$: $p(W)\e q(Z)$\hspace*{0.5cm}};
+ \proofnode[below left of=n5] {n5c} {\alt<4->{$\lfloor\eta_5'\rfloor$: $p(U)\e$}{}};
+ \proofnode[below right of=n5] {n2} {\alt<5->{$\eta_2'$: $\e p(Y)$}{}};
+ \proofnode[below right of=n5c] {root} {\alt<5->{$\bot$}{}};
+      \draw[proof edge] (n5) -- (n1);
+      \draw[proof edge] (n5) -- (n4);
+      \draw<4->[proof edge] (n5c) -- (n5);
+      \draw<5->[proof edge] (root) -- (n2);
+      \draw<5->[proof edge] (root) -- (n5c);
+
+      \end{tikzpicture}
+}
+\end{center}
+\end{columns}
+
+\end{frame}
+
+\begin{frame}{First-Order Challenge: Pre-Deletion Check}
+%example 2 demonstrated; definition of pre-deletion unification property
+%\begin{columns}
+%\column{0.5\textwidth}
+\begin{center}
+      \begin{tikzpicture}[node distance=2cm,background rectangle/.style={fill=blue!10}, show background rectangle]
+     \proofnode {root} {$\bot$};
+ \proofnode[above right of=root] {n2} {$\eta_2$: $\e q(Y)$};
+ \proofnode[above left of=root] {n1} {$\eta_1$: $q(Y) \e$};
+ \proofnode[above left of=n1] {n5} {$\eta_5$: $q(Y) \e p(a)$};
+ \proofnode[above right of=n1] {n4} {\alt<2->{{\color{red}$\eta_4$: $p(X) \e $ }}{$\eta_4$: $p(X) \e $}};
+ \proofnode[above right of=n2] {n3} {$\eta_3$: $\e p(b),q(Y) $};
+      \draw[proof edge] (root) -- (n1);
+      \draw[proof edge] (root)  -- (n2);
+      \draw[proof edge] (n1) -- (n5);
+      \draw[proof edge] (n1) -- (n4);
+      \draw[proof edge] (n2) -- (n4);
+      \draw[proof edge] (n2) -- (n3);
+%\marknode<2->{n4};
+      \end{tikzpicture}\\
+%\vspace{3cm}
+%\end{center}
+%\column{0.5\textwidth}
+%\begin{center}
+%\vspace*{2cm}
+\only<3-4>{
+      \begin{tikzpicture}[node distance=2.25cm]
+     \proofnode {root} {$\eta$: $\e p(a),p(b)$};
+ \proofnode[above left of=root] {n5} {$\eta_5'$: $q(Y) \e p(a)$};
+ \proofnode[above right of=root] {n3} {$\eta_3'$: $\e p(b),q(Y) $};
+ \proofnode[below=0.5 of root] {n} {\alt<4->{$\lfloor\eta \rfloor$}{}};
+      \draw[proof edge] (root) -- (n5);
+      \draw[proof edge] (root) -- (n3);
+\draw<4->[proof edge] (n) -- (root);
+\crossnode<4->{n}
+      \end{tikzpicture}
+}
+\only<5->{
+\begin{definition}[Pre-Deletion Property]
+$\eta$ unit, $l\in \eta$, such that $l$ is resolved with literals $l_1,\ldots,l_n$ in a proof $\psi$. $\eta$ satisfies the \emph{pre-deletion unifiability} property in $\psi$ if $l_1,\ldots,l_n$ and $\overline{l}$ are unifiable.
+\end{definition}
+}
+\end{center}
+%\end{columns}
+
+\end{frame}
+
+\begin{frame}{First-Order Challenge: Post-Deletion Check}
+%example 3 demonstrated; definition of post-deletion unification property
+\begin{center}
+      \begin{tikzpicture}[node distance=2.5cm,background rectangle/.style={fill=blue!10}, show background rectangle]
+
+     \proofnode {root} {$\bot$};
+% \proofnode[above right=0.5cm and 0.05cm of root] {n5} {$\eta_5$: $p(U,q(W,b)) \e$};
+% \proofnode[above left=0.5cm and 0.05cm of n5] {n3} {$\eta_3$: $r(V),p(U,q(V,b)) \e$};
+% \proofnode[above right=0.5cm and 1pt of n5] {n4} {$\eta_4$: $\e r(W)$};
+% \proofnode[above right=0.5cm and 0.05cm of n3] {n1} {$\eta_1$: $r(Y),p(X,q(Y, b)),p(X,Y)\e $};
+% \proofnode[above left=0.5cm and 0.05cm of n3] {n2} {$\eta_2$: $\e p(U,V)$};
+ \proofnode[above left=0.25cm of root] {n5} {$\eta_5$: $p(U,q(W,b)) \e$};
+ \proofnode[above right=0.25cm and -2cm of n5] {n3} {$\eta_3$: $r(V),p(U,q(V,b)) \e$};
+ \proofnode[above left=0.25cm and -1cm of n5] {n4} {$\eta_4$: $\e r(W)$};
+ \proofnode[above left=0.25cm and -2cm of n3] {n1} {$\eta_1$: $r(Y),p(X,q(Y, b)),p(X,Y)\e $};
+ \proofnode[above right=0.25cm and -1cm of n3] {n2} {\alt<2-> {{\color{red} $\eta_2$: $\e p(U,V)$}} {$\eta_2$: $\e p(U,V)$}};
+      \draw[proof edge] (root) .. controls (n3.south east) .. (n2);
+      \draw[proof edge] (root) -- (n5);
+      \draw[proof edge] (n5) -- (n4);
+      \draw[proof edge] (n5) -- (n3);
+      \draw[proof edge] (n3) -- (n2);
+      \draw[proof edge] (n3) -- (n1);
+%\marknode<2->{n1};
+      \end{tikzpicture}\\
+\only<3-4>{
+\vspace{0.5cm}
+      \begin{tikzpicture}[node distance=1.5cm]
+ \proofnode {n5} {$\eta_5'$: $p(X,q(W,b)), p(X,W) \e$};
+ \proofnode[above right of=n5] {n1} {$\eta_1'$: $r(Y),p(X,q(Y, b)),p(X,Y)\e $};
+ \proofnode[left=1cm of n1] {n4} {$\eta_4'$: $\e r(W)$};
+ \proofnode[below=0.5cm of n5] {n} {\alt<4->{$\lfloor \eta_5'\rfloor$}{}};
+
+      \draw[proof edge] (n5) -- (n1);
+      \draw[proof edge] (n5) -- (n4);
+      \draw<4->[proof edge] (n) -- (n5);
+\crossnode<4->{n}
+
+      \end{tikzpicture}
+}
+\only<5->{
+\begin{definition}[Post-Deletion Property]
+$\eta$ unit, $l\in \eta$, such that $l$ is resolved with literals $l_1,\ldots,l_n$ in a proof $\psi$. $\eta$ satisfies the \emph{post-deletion unifiability} property in $\psi$ if $l_1^{\dagger\downarrow},\ldots,l_n^{\dagger\downarrow}$ and $\overline{l^\dagger}$ are unifiable, where $l^\dagger$ is the literal in $\psi'=\psi\setminus\{\eta\}$ corresponding to $l$ in $\psi$, and $l^{\dagger\downarrow}$ is the descendant of $l^\dagger$ in the roof of $\psi'$.
+\end{definition}
+}
+\end{center}
+\end{frame}
+
+\begin{frame}{First-Order Lower Units Challenges}
+%briefly mention all ideas, e.g. quadratic time naive approach to deal with both properties
+%Doesn't appear linear: can't handle pre-deletion and post-deletion in a constant number of traversals
+
+\begin{itemize}
+\item Deletion changes literals
+\item Unit collection depends on whether contraction is possible after propagation down the proof
+\end{itemize}
+\vspace{0.5cm}
+Deletion of units require knowledge of proof after deletion, and deletion depends on what will be lowered.
+\vspace{0.5cm}
+\begin{itemize}
+\item $O(n^2)$ solution to have full knowledge
+\item Difficult bookkeeping required for implementation
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}{Greedy First-Order Lower Units - A Quicker Alternative}
+%introduce simpler idea, make compromises explicit and list benefits\\
+%high level description\\
+%(probably not pseudo-code, but list \# of traversals, complexity, etc)
+\begin{itemize}
+ \item Ignore post-deletion satisfaction 
+ \item Focus on pre-deletion satisfaction 
+ \item Greedy contraction
+\end{itemize}
+\vspace{0.5cm}
+\pause
+Faster run-time (linear; one traversal)\\
+Easier to implement
+\vspace{0.5cm}
+\pause
+\begin{itemize}
+\item Doesn't always compress (returns original proof sometimes)
+\end{itemize}
+\end{frame}
+
+\input{folu-example}

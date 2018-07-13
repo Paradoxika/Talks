@@ -1,0 +1,284 @@
+\begin{frame}{First-Order Example}
+%small, animated example
+\begin{center}
+\only<1>{
+      \begin{tikzpicture}[node distance=1.5cm]
+     \proofnode {root} {$\bot$};
+ \proofnode[above left of=root] {n10} {$\eta_{10}$: $p(a) \e$};
+ \proofnode[above left of=n10] {n9} {$\eta_9$: $t(Z) \e$};
+ \proofnode[above right of=n10] {n8} {\hspace{1cm}$\eta_8$: $p(a) \e t(Z)$};
+ \proofnode[above left of=n8] {n7} {$\eta_7$: $q(X), p(a) \e t(Z)$\hspace*{1.0cm}};
+ \proofnode[above right of=n8] {n6} {\hspace{1.5cm}$\eta_6$:  $\e q(X), t(Z) $};
+ \proofnode[above left of=n6] {n5} {$\eta_5$:  $p(V) \e q(X), t(Z)$};
+ \proofnode[above left of=n5] {n4} {$\eta_4$:  $r(X), p(V) \e q(Y), t(Z)$\hspace*{2.5cm}};
+ \proofnode[above right of=n5] {n3} {\hspace{3cm}$\eta_3$:  $\e q(X), r(Y), t(Z) $};
+ \proofnode[above left of=n3] {n2} {$\eta_2$:  $p(W) \e q(X), r(Y), t(Z)$\hspace*{2.0cm}};
+ \proofnode[above right=0.5cm and 0cm of n3] {n1} {$\eta_1$:  $\e p(a) $};
+      \draw[proof edge] (n8) -- (n7);
+      \draw[proof edge] (n8) -- (n6);
+
+      \draw[proof edge] (root) -- (n10);
+      \draw[proof edge] (n10) -- (n9);
+      \draw[proof edge] (n10) -- (n8);
+      \draw[proof edge] (n6) -- (n5);
+      \draw[proof edge] (n5) -- (n4);
+      \draw[proof edge] (n5) -- (n3);
+      \draw[proof edge] (n3) -- (n2);
+      \draw[proof edge] (n3) -- (n1);
+      \draw[proof edge] (n6) .. controls (n3.south east) .. (n1);
+      \draw[proof edge] (root) .. controls (n6.south east) .. (n1);
+%\marknode<2->{n1};
+      \end{tikzpicture}
+
+}
+\only<2>{
+      \begin{tikzpicture}[node distance=1.5cm]
+     \proofnode {root} {$\bot$};
+ \proofnode[above left of=root] {n10} {$\eta_{10}$: ${\color{blue}p(a)} \e$};
+ \proofnode[above left of=n10] {n9} {$\eta_9$: $t(Z) \e$};
+ \proofnode[above right of=n10] {n8} {\hspace{1cm}$\eta_8$: $p(a) \e t(Z)$};
+ \proofnode[above left of=n8] {n7} {$\eta_7$: $q(X), p(a) \e t(Z)$\hspace*{1.0cm}};
+ \proofnode[above right of=n8] {n6} {\hspace{1.5cm}$\eta_6$:  $\e q(X), t(Z) $};
+ \proofnode[above left of=n6] {n5} {$\eta_5$:  ${\color{blue}p(V)} \e q(X), t(Z)$};
+ \proofnode[above left of=n5] {n4} {$\eta_4$:  $r(X), p(V) \e q(Y), t(Z)$\hspace*{2.5cm}};
+ \proofnode[above right of=n5] {n3} {\hspace{3cm}$\eta_3$:  $\e q(X), r(Y), t(Z) $};
+ \proofnode[above left of=n3] {n2} {$\eta_2$:  ${\color{blue}p(W)} \e q(X), r(Y), t(Z)$\hspace*{2.0cm}};
+ \proofnode[above right=0.5cm and 0cm of n3] {n1} {{\color{red} $\eta_1$:  $\e p(a) $ }};
+      \draw[proof edge] (n8) -- (n7);
+      \draw[proof edge] (n8) -- (n6);
+
+      \draw[proof edge] (root) -- (n10);
+      \draw[proof edge] (n10) -- (n9);
+      \draw[proof edge] (n10) -- (n8);
+      \draw[proof edge] (n6) -- (n5);
+      \draw[proof edge] (n5) -- (n4);
+      \draw[proof edge] (n5) -- (n3);
+      \draw[proof edge] (n3) -- (n2);
+      \draw[proof edge] (n3) -- (n1);
+      \draw[proof edge] (n6) .. controls (n3.south east) .. (n1);
+      \draw[proof edge] (root) .. controls (n6.south east) .. (n1);
+%\marknode<2->{n1};
+      \end{tikzpicture}
+{\color{blue} $\sigma=\{W\rightarrow a, V\rightarrow a\}$}
+}
+\only<3>{
+
+       \begin{tikzpicture}[node distance=1.5cm]
+     \proofnode {root} {$\bot$};
+ \proofnode[above left of=root] {n10} {$\eta_{10}$: $p(a) \e$};
+ \proofnode[above left of=n10] {n9} {$\eta_9$: $t(Z) \e$};
+ \proofnode[above right of=n10] {n8} {\hspace{1cm}$\eta_8$: $p(a) \e t(Z)$};
+ \proofnode[above left of=n8] {n7} {$\eta_7$: $q(X), p(a) \e t(Z)$\hspace*{1.0cm}};
+ \proofnode[above right of=n8] {n6} {\hspace{1.5cm}$\eta_6$:  $\e q(X), t(Z) $};
+ \proofnode[above left of=n6] {n5} {$\eta_5$:  $p(V) \e q(X), t(Z)$};
+ \proofnode[above left of=n5] {n4} {$\eta_4$:  $r(X), p(V) \e q(Y), t(Z)$\hspace*{2.5cm}};
+ \proofnode[above right of=n5] {n3} {\hspace{3cm}$\eta_3$:  $\e q(X), r(Y), t(Z) $};
+ \proofnode[above left of=n3] {n2} {$\eta_2$:  $p(W) \e q(X), r(Y), t(Z)$\hspace*{2.0cm}};
+ \proofnode[above right=0.5cm and 0cm of n3] {n1} {{\color{red} $\eta_1$:  $\e p(a) $ }};
+      \draw[proof edge] (n8) -- (n7);
+      \draw[proof edge] (n8) -- (n6);
+
+      \draw[proof edge] (root) -- (n10);
+      \draw[proof edge] (n10) -- (n9);
+      \draw[proof edge] (n10) -- (n8);
+      \draw[proof edge] (n6) -- (n5);
+      \draw[proof edge] (n5) -- (n4);
+      \draw[proof edge] (n5) -- (n3);
+      \draw[proof edge, color=blue] (n2) -- (n3) node [midway,left=0.5cm, fill=white] {$\{W\rightarrow a\}$};
+      \draw[proof edge, color=red] (n3) -- (n1);
+      \draw[proof edge] (n6) .. controls (n3.south east) .. (n1);
+      \draw[proof edge] (root) .. controls (n6.south east) .. (n1);
+
+      \end{tikzpicture}
+
+}
+
+\only<4>{
+
+       \begin{tikzpicture}[node distance=1.5cm]
+     \proofnode {root} {$\bot$};
+ \proofnode[above left of=root] {n10} {$\eta_{10}$: $p(a) \e$};
+ \proofnode[above left of=n10] {n9} {$\eta_9$: $t(Z) \e$};
+ \proofnode[above right of=n10] {n8} {\hspace{1cm}$\eta_8$: $p(a) \e t(Z)$};
+ \proofnode[above left of=n8] {n7} {$\eta_7$: $q(X), p(a) \e t(Z)$\hspace*{1.0cm}};
+ \proofnode[above right of=n8] {n6} {\hspace{1.5cm}$\eta_6$:  $\e q(X), t(Z) $};
+ \proofnode[above left of=n6] {n5} {{\color{blue}$\eta_5'$:  $p(V),p(a) \e q(X), t(Z)$}};
+ \proofnode[above left of=n5] {n4} {$\eta_4$:  $r(X), p(V) \e q(Y), t(Z)$\hspace*{2.5cm}};
+ \proofnode[above right of=n5] {n3} {\hspace{3cm}$\eta_3'$:  $p(a) \e q(X), r(Y), t(Z)$};
+ \proofnode[above left of=n3] {n2} {\hspace*{2.0cm}};
+ \proofnode[above right=0.5cm and 0cm of n3] {n1} {{\color{red} $\eta_1$:  $\e p(a) $ }};
+      \draw[proof edge] (n8) -- (n7);
+      \draw[proof edge] (n8) -- (n6);
+
+      \draw[proof edge] (root) -- (n10);
+      \draw[proof edge] (n10) -- (n9);
+      \draw[proof edge] (n10) -- (n8);
+      \draw[proof edge] (n6) -- (n5);
+      \draw[proof edge] (n5) -- (n4);
+      \draw[proof edge] (n5) -- (n3);
+      \draw[proof edge] (n6) .. controls (n3.south east) .. (n1);
+      \draw[proof edge] (root) .. controls (n6.south east) .. (n1);
+%\marknode<4>{n5};
+      \end{tikzpicture}
+
+}
+
+\only<5>{
+
+       \begin{tikzpicture}[node distance=1.5cm]
+     \proofnode {root} {$\bot$};
+ \proofnode[above left of=root] {n10} {$\eta_{10}$: $p(a) \e$};
+ \proofnode[above left of=n10] {n9} {$\eta_9$: $t(Z) \e$};
+ \proofnode[above right of=n10] {n8} {\hspace{1cm}$\eta_8$: $p(a) \e t(Z)$};
+ \proofnode[above left of=n8] {n7} {$\eta_7$: $q(X), p(a) \e t(Z)$\hspace*{1.0cm}};
+ \proofnode[above right of=n8] {n6} {\hspace{1.5cm}$\eta_6$:  $\e q(X), t(Z) $};
+ \proofnode[above left of=n6] {n5} {$\eta_5'$:  $p(V),p(a) \e q(X), t(Z)$};
+ \proofnode[above left of=n5] {n4} {$\eta_4$:  $r(X), p(V) \e q(Y), t(Z)$\hspace*{2.5cm}};
+ \proofnode[above right of=n5] {n3} {\hspace{3cm}$\eta_3$:  $p(a) \e q(X), r(Y), t(Z)$};
+ \proofnode[above left of=n3] {n2} {\hspace*{2.0cm}};
+ \proofnode[above right=0.5cm and 0cm of n3] {n1} {{\color{red} $\eta_1$:  $\e p(a) $ }};
+      \draw[proof edge] (n8) -- (n7);
+      \draw[proof edge] (n8) -- (n6);
+
+      \draw[proof edge] (root) -- (n10);
+      \draw[proof edge] (n10) -- (n9);
+      \draw[proof edge] (n10) -- (n8);
+      \draw[proof edge] (n5) -- (n4);
+      \draw[proof edge] (n5) -- (n3);
+      \draw[proof edge, color=blue] (n5) -- (n6) node [midway,left=0.5cm, fill=white] {$\{V\rightarrow a\}$};
+      \draw[proof edge, color=red] (n6) .. controls (n3.south east) .. (n1);
+      \draw[proof edge] (root) .. controls (n6.south east) .. (n1);
+
+      \end{tikzpicture}
+
+}
+
+\only<6>{
+
+       \begin{tikzpicture}[node distance=1.5cm]
+     \proofnode {root} {$\bot$};
+ \proofnode[above left of=root] {n10} {$\eta_{10}$: $p(a) \e$};
+ \proofnode[above left of=n10] {n9} {$\eta_9$: $t(Z) \e$};
+ \proofnode[above right of=n10] {n8} {\hspace{1cm}$\eta_8$: $p(a) \e t(Z)$};
+ \proofnode[above left of=n8] {n7} {$\eta_7$: $q(X), p(a) \e t(Z)$\hspace*{1.0cm}};
+ \proofnode[above=0.25cm of n6] {n6p} {{\color{blue}\hspace{3cm}$\eta_6'$:  $p(a), p(a) \e q(X), t(Z) $}};
+ \proofnode[above right of=n8] {n6} {{\color{blue}\hspace{3cm}$\lfloor\eta_6'\rfloor$:   $p(a) \e q(X), t(Z)$}};
+ \proofnode[above left of=n6] {n5} {};
+ \proofnode[above left of=n5] {n4} {$\eta_4$:  $r(X), p(V) \e q(Y), t(Z)$\hspace*{2.5cm}};
+ \proofnode[above right of=n5] {n3} {\hspace{3cm}$\eta_3$:  $p(a) \e q(X), r(Y), t(Z)$};
+ \proofnode[above left of=n3] {n2} {\hspace*{2.0cm}};
+ \proofnode[above right=0.5cm and 0cm of n3] {n1} {{\color{red} $\eta_1$:  $\e p(a) $ }};
+      \draw[proof edge] (n8) -- (n7);
+      \draw[proof edge] (n8) -- (n6);
+
+      \draw[proof edge] (root) -- (n10);
+      \draw[proof edge] (n10) -- (n9);
+      \draw[proof edge] (n10) -- (n8);
+      \draw[proof edge] (n6p) -- (n4);
+      \draw[proof edge] (n6) -- (n6p);
+      \draw[proof edge] (n6p) -- (n3);
+      \draw[proof edge] (root) .. controls (n6.south east) .. (n1);
+
+%\marknode<6>{n6};
+      \end{tikzpicture}
+
+}
+
+\only<7>{
+
+       \begin{tikzpicture}[node distance=1.5cm]
+     \proofnode {root} {$\bot$};
+ \proofnode[above left of=root] {n10} {$\eta_{10}$: $p(a) \e$};
+ \proofnode[above left of=n10] {n9} {$\eta_9$: $t(Z) \e$};
+ \proofnode[above right of=n10] {n8} {\hspace{1cm}$\eta_8$: $p(a) \e t(Z)$};
+ \proofnode[above left of=n8] {n7} {$\eta_7$: $q(X), p(a) \e t(Z)$\hspace*{1.0cm}};
+ \proofnode[above=0.25cm of n6] {n6p} {\hspace{3cm}$\eta_6'$:  $p(a), p(a) \e q(X), t(Z) $};
+ \proofnode[above right of=n8] {n6} {\hspace{3cm}$\lfloor\eta_6'\rfloor$:   $p(a) \e q(X), t(Z)$};
+ \proofnode[above left of=n6] {n5} {};
+ \proofnode[above left of=n5] {n4} {$\eta_4$:  $r(X), p(V) \e q(Y), t(Z)$\hspace*{2.5cm}};
+ \proofnode[above right of=n5] {n3} {\hspace{3cm}$\eta_3$:  $p(a) \e q(X), r(Y), t(Z)$};
+ \proofnode[above left of=n3] {n2} {\hspace*{2.0cm}};
+ \proofnode[above right=0.5cm and 0cm of n3] {n1} {{\color{red} $\eta_1$:  $\e p(a) $ }};
+      \draw[proof edge] (n8) -- (n7);
+      \draw[proof edge] (n8) -- (n6);
+
+      \draw[proof edge, color=blue] (n10) -- (root) node [midway,left=0.5cm, fill=white] {$\emptyset$};
+      \draw[proof edge] (n10) -- (n9);
+      \draw[proof edge] (n10) -- (n8);
+      \draw[proof edge] (n6p) -- (n4);
+      \draw[proof edge] (n6) -- (n6p);
+      \draw[proof edge] (n6p) -- (n3);
+      \draw[proof edge, color=red] (root) .. controls (n6.south east) .. (n1);
+
+%\marknode<7>{n8};
+      \end{tikzpicture}
+
+}
+
+\only<8>{
+
+       \begin{tikzpicture}[node distance=1.5cm]
+     \proofnode {root} {$\eta_{10}$: $p(a) \e$};
+ \proofnode[above left of=root] {n10} {};
+ \proofnode[above left of=n10] {n9} {$\eta_9$: $t(Z) \e$};
+ \proofnode[above right of=n10] {n8} {\hspace{1cm}$\eta_8$: $p(a) \e t(Z)$};
+ \proofnode[above left of=n8] {n7} {$\eta_7$: $q(X), p(a) \e t(Z)$\hspace*{1.0cm}};
+ \proofnode[above=0.25cm of n6] {n6p} {\hspace{3cm}$\eta_6'$:  $p(a), p(a) \e q(X), t(Z) $};
+ \proofnode[above right of=n8] {n6} {\hspace{3cm}$\lfloor\eta_6'\rfloor$:   $p(a) \e q(X), t(Z)$};
+ \proofnode[above left of=n6] {n5} {};
+ \proofnode[above left of=n5] {n4} {$\eta_4$:  $r(X), p(V) \e q(Y), t(Z)$\hspace*{2.5cm}};
+ \proofnode[above right of=n5] {n3} {\hspace{3cm}$\eta_3$:  $p(a) \e q(X), r(Y), t(Z)$};
+ \proofnode[above left of=n3] {n2} {\hspace*{2.0cm}};
+ \proofnode[above right=0.5cm and 0cm of n3] {n1} {{\color{red} $\eta_1$:  $\e p(a) $ }};
+      \draw[proof edge] (n8) -- (n7);
+      \draw[proof edge] (n8) -- (n6);
+
+
+      \draw[proof edge] (root) -- (n9);
+      \draw[proof edge] (root) -- (n8);
+      \draw[proof edge] (n6p) -- (n4);
+      \draw[proof edge] (n6) -- (n6p);
+      \draw[proof edge] (n6p) -- (n3);
+
+
+%\marknode<7>{n8};
+      \end{tikzpicture}
+
+}
+
+\only<9>{
+
+       \begin{tikzpicture}[node distance=1.5cm]
+     \proofnode {root} {$\eta_{10}$: $p(a) \e$};
+ \proofnode[above left of=root] {n10} {};
+ \proofnode[above left of=n10] {n9} {$\eta_9$: $t(Z) \e$};
+ \proofnode[above right of=n10] {n8} {\hspace{1cm}$\eta_8$: $p(a) \e t(Z)$};
+ \proofnode[above left of=n8] {n7} {$\eta_7$: $q(X), p(a) \e t(Z)$\hspace*{1.0cm}};
+ \proofnode[above=0.25cm of n6] {n6p} {\hspace{3cm}$\eta_6'$:  $p(a), p(a) \e q(X), t(Z) $};
+ \proofnode[above right of=n8] {n6} {\hspace{3cm}$\lfloor\eta_6'\rfloor$:   $p(a) \e q(X), t(Z)$};
+ \proofnode[above left of=n6] {n5} {};
+ \proofnode[above left of=n5] {n4} {$\eta_4$:  $r(X), p(V) \e q(Y), t(Z)$\hspace*{2.5cm}};
+ \proofnode[above right of=n5] {n3} {\hspace{3cm}$\eta_3$:  $p(a) \e q(X), r(Y), t(Z)$};
+ \proofnode[above left of=n3] {n2} {\hspace*{2.0cm}};
+ \proofnode[above right=0.5cm and 0cm of n3] {n1} {$\eta_1$:  $\e p(a) $};
+     \proofnode[below right of=root] {newroot} {$\bot$};
+      \draw[proof edge] (n8) -- (n7);
+      \draw[proof edge] (n8) -- (n6);
+
+
+      \draw[proof edge] (root) -- (n9);
+      \draw[proof edge] (root) -- (n8);
+      \draw[proof edge] (n6p) -- (n4);
+      \draw[proof edge] (n6) -- (n6p);
+      \draw[proof edge] (n6p) -- (n3);;
+      \draw[proof edge] (newroot) .. controls (n6.south east) .. (n1);
+      \draw[proof edge] (newroot) -- (root);
+
+%\marknode<7>{n8};
+      \end{tikzpicture}
+
+}
+
+\end{center}
+
+\end{frame}

@@ -1,0 +1,47 @@
+\begin{frame}{Contraction}
+%definition; small example
+\begin{definition}[Contraction]
+If $\psi'$ is a proof and $\sigma$ is a unifier of $\{l_1,\ldots,l_n\}\subset \Gamma'$, then a contraction $\psi$ is a proof where
+\begin{itemize}
+\item $\psi$'s nodes are the union of the nodes of $\psi'$ and a new node $v$
+\item There is an edge from $\rho(\psi')$ to $v$ labeled with $\{l_1,\ldots,l_n\}$ and $\sigma$
+\item The conclusion is $(\Gamma'\setminus \{l_1,\ldots,l_n\})\sigma \cup \{l\}$, where $l=l_k\sigma$ for $k\in \{1,\ldots,n\}$
+\end{itemize}
+\end{definition}
+\end{frame}
+
+\begin{frame}{Contraction Example}
+\only<1>{
+\begin{center}
+      \begin{tikzpicture}[node distance=2cm]
+ \proofnode[above of=root] {n1} {$\eta_1$: $p(X,Y), p(a,Z), p(a,f(b)) \e q(Z)$};
+ \proofnode{root} {$\psi$: $p(a,f(b))\e q(f(b))$};
+ 
+             \draw[proof edge] (root) -- (n1);
+ \end{tikzpicture}\\\vspace{1cm}
+ $\sigma = \{X\rightarrow a, Y\rightarrow f(b), Z\rightarrow f(b)\}$\\
+ \end{center}
+ }
+ \only<2>{
+ \begin{center}
+      \begin{tikzpicture}[node distance=2cm]
+ \proofnode[above of=root] {n1} {$\eta_1$: $p(X,Y), p(X,Z), p(U,V) \e q(Z)$};
+ \proofnode{root} {$\psi$: $p(X,Z)\e q(Z)$};
+ 
+             \draw[proof edge] (root) -- (n1);
+ \end{tikzpicture}\\\vspace{1cm}
+ $\sigma = \{Y\rightarrow Z, U\rightarrow Z, V\rightarrow Z\}$\\
+ \end{center}
+ }
+ \only<3>{
+ \begin{center}
+      \begin{tikzpicture}[node distance=2cm]
+ \proofnode[above of=root] {n1} {$\eta_1$: $p(X,Y), p(a,Z), p(a,f(b)) \e q(Z)$};
+ \proofnode{root} {$\psi$: $p(X,Y), p(a,f(b))\e q(f(b))$};
+ 
+             \draw[proof edge] (root) -- (n1);
+ \end{tikzpicture}\\\vspace{1cm}
+ $\sigma = \{Z\rightarrow f(b)\}$\\
+ \end{center}
+ }
+\end{frame}

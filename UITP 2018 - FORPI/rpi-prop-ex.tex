@@ -1,0 +1,90 @@
+\begin{frame}{Propositional Example}
+%quick, clear example of LU (animated), perhaps showing how one of the redundancies described before is fixed
+\begin{columns}
+\column{0.5\textwidth}
+      \begin{center}
+      \begin{tikzpicture}[node distance=1.2cm]
+        \rootnode;
+        \withchildren{root} {r9}{b}  {r6}{\dual{b}};
+         \withchildren{r6} {r1}{\dual{a}}  {r2}{a\dual{b}};
+                  \withchildren{r1} {r3}{\dual{b}}  {r4}{\dual{a}b};
+  %   \proofnode[above left of=r9] {r8} {a,\dual{c}};
+       % \drawchildren {r6} {r1} {r5};
+      %\draw[proof edge] (r9) -- (r1);
+      \end{tikzpicture}
+\end{center}
+\column{0.5\textwidth}
+  \only<1-5>{
+      \begin{center}
+
+      \begin{tikzpicture}[node distance=1.2cm]
+        \rootnode;
+        \proofnode[above left of=root]{r9}{b};
+        \proofnode[above right of=root] {r6}{\dual{b}};
+         \proofnode[above left of=r6]{r1}{\dual{a}};
+         \proofnode[above right of=r6] {r2}{a\dual{b}};
+          \proofnode[above left of=r1] {r3}{\dual{b}};
+    \proofnode[above right of=r1] {r4}{\dual{a}b};
+      \draw[proof edge] (root) -- (r9);
+            \draw[proof edge] (root) -- (r6);
+                  \draw[proof edge] (r6) -- (r1);
+                        \draw[proof edge] (r6) -- (r2);
+                              \draw[proof edge] (r1) -- (r3);
+                                                            \draw[proof edge] (r1) -- (r4);
+
+\proofnode[left of=r9]{ra}{\alt<-1>{\color{white}$\{b\}$}{$\{b\}$}};
+\proofnode[right of=r6]{rb}{\alt<-1>{\color{white}$\{\dual{b}\}$}{$\{\dual{b}\}$}};
+
+\proofnode[left of=r1]{rc}{\alt<-2>{\color{white}$\{\dual{a}\dual{b}\}$}{$\{\dual{a}\dual{b}\}$}};
+\proofnode[right of=r2]{rd}{\alt<-2>{\color{white}$\{a\dual{b}\}$}{$\{a\dual{b}\}$}};
+
+\proofnode[left of=r3]{re}{\alt<-3>{\color{white}$\{\dual{a}b\dual{b}\}$}{$\{\dual{a}{\color{red}\dual{b}}\}$}};
+\proofnode[right of=r4]{rf}{\alt<-3>{\color{white}$\{ab\}$}{$\{ab\}$}};
+\crossnode<5>{r4};
+\marknode<5>{r1};
+      \end{tikzpicture}\\
+      $\uparrow$ safe literal collection
+\end{center}
+}
+  \only<6>{
+      \begin{center}
+
+      \begin{tikzpicture}[node distance=1.2cm]
+        \rootnode;
+        \proofnode[above left of=root]{r9}{b};
+        \proofnode[above right of=root] {r6}{b};
+
+         \proofnode[above right of=r6] {r2}{a\dual{b}};
+
+    \proofnode[above left of=r6] {r4}{\dual{b}};
+      \draw[proof edge] (root) -- (r9);
+            \draw[proof edge] (root) -- (r6);
+                        \draw[proof edge,color=red] (r6) -- (r2);
+
+                                                            \draw[proof edge, color=red] (r6) -- (r4);
+\crossnode<6>{r2};
+\crossnode<6>{r6};
+
+      \end{tikzpicture}\\
+      $\downarrow$ regularization
+\end{center}
+
+}
+  \only<7>{
+      \begin{center}
+      \begin{tikzpicture}[node distance=1.2cm]
+        \rootnode;
+        \proofnode[above left of=root]{r9}{b};
+    \proofnode[above right of=root] {r4}{\dual{b}};
+      \draw[proof edge] (root) -- (r9);
+            \draw[proof edge] (root) -- (r4);
+
+      \end{tikzpicture}\\
+$\downarrow$ regularization
+\end{center}
+
+}
+
+
+\end{columns}
+\end{frame}
